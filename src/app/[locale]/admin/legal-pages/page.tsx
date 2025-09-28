@@ -27,7 +27,7 @@ export default async function LegalPagesAdminPage({
   await requireSuperAdmin();
   const { locale } = await params;
   
-  let legalPages = [];
+  let legalPages: Awaited<ReturnType<typeof getLegalPages>> = [];
   try {
     legalPages = await getLegalPages();
   } catch (error) {
