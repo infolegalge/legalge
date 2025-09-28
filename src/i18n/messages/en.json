@@ -1,0 +1,118 @@
+{
+  "site": {
+    "title": "LLC Legal Sandbox Georgia",
+    "tagline": "Innovating legal services in Georgia"
+  },
+  "nav": {
+    "practice": "Practice areas",
+    "specialists": "Specialists",
+    "news": "News",
+    "contact": "Contact"
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "hero": {
+    "cta_primary": "Contact us",
+    "cta_secondary": "See practice areas"
+  },
+  "practice": {
+    "title": "Practice areas",
+    "description": "Explore our legal practices"
+  },
+  "lawyers": {
+    "title": "Lawyers",
+    "description": "Meet our team"
+  },
+  "specialists": {
+    "title": "Specialists",
+    "description": "Meet our legal specialists and experts",
+    "search_placeholder": "Search specialists...",
+    "filter": "Filter",
+    "total_specialists": "Total Specialists",
+    "company_specialists": "Company Specialists",
+    "solo_practitioners": "Solo Practitioners",
+    "no_specialists": "No specialists found",
+    "no_specialists_description": "We're working on adding our specialist profiles. Check back soon!",
+    "specializations": "Specializations",
+    "languages": "Languages",
+    "bio": "Biography",
+    "services": "Services",
+    "contact_cta_title": "Get in Touch",
+    "contact_cta_description": "Ready to work with this specialist?",
+    "send_email": "Send Email",
+    "call": "Call"
+  },
+  "companies": {
+    "title": "Companies",
+    "description": "Legal companies and firms in our network",
+    "total_companies": "Total Companies",
+    "total_specialists": "Total Specialists",
+    "no_companies": "No companies found",
+    "no_companies_description": "We're working on adding company profiles. Check back soon!",
+    "specialists": "Specialists",
+    "about": "About",
+    "no_specialists": "No specialists",
+    "no_specialists_description": "This company doesn't have any specialists listed yet.",
+    "practice_areas": "Practice Areas",
+    "search_specialists": "Search specialists...",
+    "all_specializations": "All Specializations",
+    "no_specialists_found": "No specialists found",
+    "no_specialists_found_description": "Try adjusting your search or filter criteria.",
+    "latest_updates": "Latest Updates from",
+    "see_all_posts": "See all posts",
+    "contact_cta_title": "Ready to Work With Us?",
+    "contact_cta_description": "Get in touch with our team of legal specialists for expert advice and representation.",
+    "contact_company": "Contact Company",
+    "schedule_consultation": "Schedule Consultation"
+  },
+  "common": {
+    "home": "Home",
+    "back_to_specialists": "Back to Specialists",
+    "back_to_companies": "Back to Companies"
+  },
+  "news": {
+    "title": "News",
+    "description": "Updates and articles"
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Text us",
+    "name": "Name",
+    "email": "Contact email",
+    "message": "Message",
+    "submit": "Send",
+    "office": "Head Office",
+    "address": "Address",
+    "phone": "Telephone",
+    "email_contact": "Email",
+    "hours": "Working hours",
+    "get_directions": "Get Directions",
+    "view_on_osm": "View on OSM"
+  },
+  "auth": {
+    "sign_in": "Sign in",
+    "sign_up": "Sign up",
+    "sign_out": "Sign out"
+  },
+  "header": {
+    "cms": "CMS",
+    "request_access": "Request Access"
+  },
+  "specialist": {
+    "languages": "Languages spoken",
+    "bio": "Bio",
+    "philosophy": "Philosophy",
+    "focus_areas": "Focus areas",
+    "representative_matters": "Representative Matters",
+    "teaching_writing": "Teaching, Writing & Speaking",
+    "credentials": "Credentials & Memberships",
+    "values": "Values & How We Work",
+    "courses": "Courses",
+    "workshops": "Workshops",
+    "writing_topics": "Writing Topics"
+  }
+}
+
+

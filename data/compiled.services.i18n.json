@@ -1,0 +1,1864 @@
+{
+  "counts": {
+    "practices": 25,
+    "services": 276
+  },
+  "practices": [
+    {
+      "slug": "aviation-and-maritime-law",
+      "en": "Aviation and Maritime Law",
+      "ka": "ავიაციის და საზღვაო სამართალი",
+      "ru": "Авиационное и морское право",
+      "services": [
+        {
+          "slug": "aircraft-vessel-registration",
+          "en": "Aircraft/Vessel Registration",
+          "ka": "საჰაერო/საზღვაო ხომალდის რეგისტრაცია",
+          "ru": "Регистрация воздушных/морских судов"
+        },
+        {
+          "slug": "aviation-compliance",
+          "en": "Aviation Compliance",
+          "ka": "საავიაციო შესაბამისობა",
+          "ru": "Соответствие авиационным нормам"
+        },
+        {
+          "slug": "aviation-licensing",
+          "en": "Aviation Licensing",
+          "ka": "საავიაციო ლიცენზირება",
+          "ru": "Лицензирование в авиации"
+        },
+        {
+          "slug": "aviation-safety",
+          "en": "Aviation Safety",
+          "ka": "საავიაციო უსაფრთხოება",
+          "ru": "Безопасность полетов"
+        },
+        {
+          "slug": "charter-agreements",
+          "en": "Charter Agreements",
+          "ka": "ჩარტერული ხელშეკრულებები",
+          "ru": "Договоры фрахтования"
+        },
+        {
+          "slug": "international-maritime-law",
+          "en": "International Maritime Law",
+          "ka": "საერთაშორისო საზღვაო სამართალი",
+          "ru": "Международное морское право"
+        },
+        {
+          "slug": "maritime-crew-law",
+          "en": "Maritime Crew Law",
+          "ka": "საზღვაო ეკიპაჟის სამართალი",
+          "ru": "Право, регулирующее труд моряков"
+        },
+        {
+          "slug": "passenger-rights",
+          "en": "Passenger Rights",
+          "ka": "მგზავრთა უფლებები",
+          "ru": "Права пассажиров"
+        },
+        {
+          "slug": "port-regulation",
+          "en": "Port Regulation",
+          "ka": "საპორტო რეგულაციები",
+          "ru": "Портовое регулирование"
+        },
+        {
+          "slug": "shipping-law",
+          "en": "Shipping Law",
+          "ka": "საზღვაო გადაზიდვების სამართალი",
+          "ru": "Морское право"
+        }
+      ]
+    },
+    {
+      "slug": "banks-and-finances",
+      "en": "Banks and Finances",
+      "ka": "ბანკები და ფინანსები",
+      "ru": "Банки и финансы",
+      "services": [
+        {
+          "slug": "aml-compliance",
+          "en": "AML Compliance",
+          "ka": "AML-თან შესაბამისობა",
+          "ru": "Соблюдение законодательства по борьбе с отмыванием денег (ПОД)"
+        },
+        {
+          "slug": "asset-management",
+          "en": "Asset Management",
+          "ka": "აქტივების მართვა",
+          "ru": "Управление активами"
+        },
+        {
+          "slug": "bank-compliance-audits",
+          "en": "Bank Compliance Audits",
+          "ka": "საბანკო შესაბამისობის აუდიტი",
+          "ru": "Комплаенс-аудиты банков"
+        },
+        {
+          "slug": "banking-disputes",
+          "en": "Banking Disputes",
+          "ka": "საბანკო დავები",
+          "ru": "Банковские споры"
+        },
+        {
+          "slug": "cross-border-finance",
+          "en": "Cross-Border Finance",
+          "ka": "ტრანსსასაზღვრო დაფინანსება",
+          "ru": "Трансграничное финансирование"
+        },
+        {
+          "slug": "derivatives",
+          "en": "Derivatives",
+          "ka": "დერივატივები",
+          "ru": "Деривативы"
+        },
+        {
+          "slug": "fintech-law",
+          "en": "Fintech Law",
+          "ka": "ფინტექის სამართალი",
+          "ru": "Право в сфере финансовых технологий (Fintech)"
+        },
+        {
+          "slug": "loan-agreements",
+          "en": "Loan Agreements",
+          "ka": "სასესხო ხელშეკრულებები",
+          "ru": "Кредитные договоры"
+        },
+        {
+          "slug": "payments-e-money",
+          "en": "Payments & E-Money",
+          "ka": "გადახდები და ელექტრონული ფული",
+          "ru": "Платежи и электронные деньги"
+        },
+        {
+          "slug": "private-banking",
+          "en": "Private Banking",
+          "ka": "კერძო საბანკო მომსახურება",
+          "ru": "Частное банковское обслуживание"
+        },
+        {
+          "slug": "securities-law",
+          "en": "Securities Law",
+          "ka": "ფასიანი ქაღალდების სამართალი",
+          "ru": "Право ценных бумаг"
+        }
+      ]
+    },
+    {
+      "slug": "corporate-governance-and-business-compliance",
+      "en": "Corporate Governance and Business Compliance",
+      "ka": "კორპორატიული მმართველობა და ბიზნეს შესაბამისობა",
+      "ru": "Корпоративное управление и комплаенс",
+      "services": [
+        {
+          "slug": "board-advisory",
+          "en": "Board Advisory",
+          "ka": "საბჭოს კონსულტაცია",
+          "ru": "Консультирование совета директоров"
+        },
+        {
+          "slug": "compliance-risk",
+          "en": "Compliance & Risk",
+          "ka": "შესაბამისობა და რისკი",
+          "ru": "Комплаенс и риски"
+        },
+        {
+          "slug": "compliance-audits",
+          "en": "Compliance Audits",
+          "ka": "შესაბამისობის აუდიტი",
+          "ru": "Комплаенс-аудиты"
+        },
+        {
+          "slug": "corporate-reporting",
+          "en": "Corporate Reporting",
+          "ka": "კორპორაციული ანგარიშგება",
+          "ru": "Корпоративная отчетность"
+        },
+        {
+          "slug": "corporate-restructuring",
+          "en": "Corporate Restructuring",
+          "ka": "კორპორაციული რესტრუქტურიზაცია",
+          "ru": "Корпоративная реструктуризация"
+        },
+        {
+          "slug": "csr-compliance",
+          "en": "CSR Compliance",
+          "ka": "კორპორაციული სოციალური პასუხისმგებლობის შესაბამისობა",
+          "ru": "Соответствие требованиям КСО"
+        },
+        {
+          "slug": "ethics-anti-corruption",
+          "en": "Ethics & Anti-Corruption",
+          "ka": "ეთიკა და ანტიკორუფცია",
+          "ru": "Этика и противодействие коррупции"
+        },
+        {
+          "slug": "executive-compensation",
+          "en": "Executive Compensation",
+          "ka": "ხელმძღვანელების ანაზღაურება",
+          "ru": "Компенсация руководящим сотрудникам"
+        },
+        {
+          "slug": "governance-disputes",
+          "en": "Governance Disputes",
+          "ka": "მმართველობითი დავები",
+          "ru": "Споры в сфере управления"
+        },
+        {
+          "slug": "governance-frameworks",
+          "en": "Governance Frameworks",
+          "ka": "მმართველობის ჩარჩოები",
+          "ru": "Структуры управления"
+        },
+        {
+          "slug": "governance-training",
+          "en": "Governance Training",
+          "ka": "მმართველობის ტრენინგი",
+          "ru": "Обучение по вопросам управления"
+        },
+        {
+          "slug": "privacy-compliance",
+          "en": "Privacy Compliance",
+          "ka": "კონფიდენციალურობასთან შესაბამისობა",
+          "ru": "Соблюдение законодательства о конфиденциальности"
+        },
+        {
+          "slug": "shareholder-rights",
+          "en": "Shareholder Rights",
+          "ka": "აქციონერთა უფლებები",
+          "ru": "Права акционеров"
+        },
+        {
+          "slug": "whistleblower-law",
+          "en": "Whistleblower Law",
+          "ka": "მამხილებლის კანონი",
+          "ru": "Защита информаторов"
+        }
+      ]
+    },
+    {
+      "slug": "criminal-defense-and-white-collar-crime",
+      "en": "Criminal Defense and White-Collar Crime",
+      "ka": "სისხლის სამართლაი და თაღლითობის დავები",
+      "ru": "Уголовная защита и должностные преступления",
+      "services": [
+        {
+          "slug": "bribery-corruption",
+          "en": "Bribery & Corruption",
+          "ka": "მექრთამეობა და კორუფცია",
+          "ru": "Взяточничество и коррупция"
+        },
+        {
+          "slug": "criminal-appeals",
+          "en": "Criminal Appeals",
+          "ka": "სისხლის სამართლის აპელაციები",
+          "ru": "Уголовные апелляции"
+        },
+        {
+          "slug": "cybercrime-defense",
+          "en": "Cybercrime Defense",
+          "ka": "კიბერდანაშაულისგან დაცვა",
+          "ru": "Защита по делам о киберпреступности"
+        },
+        {
+          "slug": "executive-defense",
+          "en": "Executive Defense",
+          "ka": "ხელმძღვანელი პირების დაცვა",
+          "ru": "Защита руководителей"
+        },
+        {
+          "slug": "fraud-financial-crimes",
+          "en": "Fraud & Financial Crimes",
+          "ka": "თაღლითობა და ფინანსური დანაშაულები",
+          "ru": "Мошенничество и финансовые преступления"
+        },
+        {
+          "slug": "plea-bargaining",
+          "en": "Plea Bargaining",
+          "ka": "საპროცესო შეთანხმება",
+          "ru": "Сделка со следствием"
+        },
+        {
+          "slug": "pre-trial-defense",
+          "en": "Pre-Trial Defense",
+          "ka": "წინასასამართლო დაცვა",
+          "ru": "Досудебная защита"
+        },
+        {
+          "slug": "risk-prevention",
+          "en": "Risk Prevention",
+          "ka": "რისკების პრევენცია",
+          "ru": "Предотвращение рисков"
+        },
+        {
+          "slug": "tax-crimes",
+          "en": "Tax Crimes",
+          "ka": "საგადასახადო დანაშაულები",
+          "ru": "Налоговые преступления"
+        },
+        {
+          "slug": "white-collar-compliance",
+          "en": "White-Collar Compliance",
+          "ka": "\"თეთრი საყელოს\" დანაშაულებებთან შესაბამისობა",
+          "ru": "Комплаенс в сфере должностных преступлений"
+        }
+      ]
+    },
+    {
+      "slug": "crypto-law",
+      "en": "Crypto Law",
+      "ka": "კრიპტოვალუტის სამართალი",
+      "ru": "Крипто-право",
+      "services": [
+        {
+          "slug": "ai-blockchain-law",
+          "en": "AI & Blockchain Law",
+          "ka": "ხელოვნური ინტელექტისა და ბლოკჩეინის სამართალი",
+          "ru": "Право в сфере ИИ и блокчейна"
+        },
+        {
+          "slug": "aml-kyc-for-crypto",
+          "en": "AML/KYC for Crypto",
+          "ka": "AML/KYC კრიპტო სფეროსთვის",
+          "ru": "AML/KYC для криптовалют"
+        },
+        {
+          "slug": "asset-recovery",
+          "en": "Asset Recovery",
+          "ka": "აქტივების დაბრუნება",
+          "ru": "Возврат активов"
+        },
+        {
+          "slug": "cross-border-crypto",
+          "en": "Cross-Border Crypto",
+          "ka": "ტრანსსასაზღვრო კრიპტო ტრანზაქციები",
+          "ru": "Трансграничные операции с криптовалютой"
+        },
+        {
+          "slug": "crypto-compliance",
+          "en": "Crypto Compliance",
+          "ka": "კრიპტო რეგულაციებთან შესაბამისობა",
+          "ru": "Комплаенс в сфере криптовалют"
+        },
+        {
+          "slug": "crypto-cybersecurity",
+          "en": "Crypto Cybersecurity",
+          "ka": "კრიპტო კიბერუსაფრთხოება",
+          "ru": "Кибербезопасность в сфере криптовалют"
+        },
+        {
+          "slug": "crypto-dispute-resolution",
+          "en": "Crypto Dispute Resolution",
+          "ka": "კრიპტო დავების გადაწყვეტა",
+          "ru": "Разрешение споров в сфере криптовалют"
+        },
+        {
+          "slug": "crypto-estate-planning",
+          "en": "Crypto Estate Planning",
+          "ka": "კრიპტო აქტივების სამემკვიდრეო დაგეგმვა",
+          "ru": "Планирование наследования криптоактивов"
+        },
+        {
+          "slug": "crypto-ip",
+          "en": "Crypto IP",
+          "ka": "კრიპტო ინტელექტუალური საკუთრება",
+          "ru": "Интеллектуальная собственность в сфере криптовалют"
+        },
+        {
+          "slug": "crypto-licensing",
+          "en": "Crypto Licensing",
+          "ka": "კრიპტო ლიცენზირება",
+          "ru": "Лицензирование криптовалютной деятельности"
+        },
+        {
+          "slug": "crypto-m-a",
+          "en": "Crypto M&A",
+          "ka": "კრიპტო M&A",
+          "ru": "Слияния и поглощения в крипто-сфере"
+        },
+        {
+          "slug": "crypto-tax",
+          "en": "Crypto Tax",
+          "ka": "კრიპტო დაბეგვრა",
+          "ru": "Налогообложение криптовалют"
+        },
+        {
+          "slug": "dao-governance",
+          "en": "DAO Governance",
+          "ka": "DAO-ს მართვა",
+          "ru": "Управление ДАО"
+        },
+        {
+          "slug": "defi-risk-advisory",
+          "en": "DeFi Risk Advisory",
+          "ka": "DeFi რისკების კონსულტაცია",
+          "ru": "Консультирование по рискам в DeFi"
+        },
+        {
+          "slug": "regulatory-advocacy",
+          "en": "Regulatory Advocacy",
+          "ka": "მარეგულირებელი ადვოკატირება",
+          "ru": "Защита интересов в регуляторных органах"
+        },
+        {
+          "slug": "smart-contracts-legal-review",
+          "en": "Smart Contracts Legal Review",
+          "ka": "სმარტ კონტრაქტების იურიდიული ანალიზი",
+          "ru": "Юридическая экспертиза смарт-контрактов"
+        },
+        {
+          "slug": "ssi-legal-frameworks",
+          "en": "SSI Legal Frameworks",
+          "ka": "SSI-ის სამართლებრივი ჩარჩო",
+          "ru": "Правовые основы SSI"
+        },
+        {
+          "slug": "token-offerings",
+          "en": "Token Offerings",
+          "ka": "ტოკენების შეთავაზება",
+          "ru": "Предложения токенов"
+        },
+        {
+          "slug": "tokenization",
+          "en": "Tokenization",
+          "ka": "ტოკენიზაცია",
+          "ru": "Токенизация"
+        }
+      ]
+    },
+    {
+      "slug": "education-law",
+      "en": "Education Law",
+      "ka": "განათლების სამართალი",
+      "ru": "Образовательное право",
+      "services": [
+        {
+          "slug": "academic-discipline",
+          "en": "Academic Discipline",
+          "ka": "აკადემიური დისციპლინა",
+          "ru": "Академическая дисциплина"
+        },
+        {
+          "slug": "cross-border-accreditation",
+          "en": "Cross-Border Accreditation",
+          "ka": "ტრანსსასაზღვრო აკრედიტაცია",
+          "ru": "Трансграничная аккредитация"
+        },
+        {
+          "slug": "curriculum-law",
+          "en": "Curriculum Law",
+          "ka": "სასწავლო პროგრამის სამართალი",
+          "ru": "Право, регулирующее учебные программы"
+        },
+        {
+          "slug": "edtech-compliance",
+          "en": "EdTech Compliance",
+          "ka": "საგანმანათლებლო ტექნოლოგიების შესაბამისობა",
+          "ru": "Соответствие нормам в сфере образовательных технологий"
+        },
+        {
+          "slug": "education-ppps",
+          "en": "Education PPPs",
+          "ka": "საგანმანათლებლო სახელმწიფო-კერძო პარტნიორობა",
+          "ru": "Государственно-частное партнерство в образовании"
+        },
+        {
+          "slug": "foreign-school-advisory",
+          "en": "Foreign School Advisory",
+          "ka": "უცხოური სკოლის კონსულტაცია",
+          "ru": "Консультирование для иностранных школ"
+        },
+        {
+          "slug": "school-licensing",
+          "en": "School Licensing",
+          "ka": "სკოლის ლიცენზირება",
+          "ru": "Лицензирование школ"
+        },
+        {
+          "slug": "special-education-compliance",
+          "en": "Special Education Compliance",
+          "ka": "სპეციალური განათლების შესაბამისობა",
+          "ru": "Соответствие нормам специального образования"
+        },
+        {
+          "slug": "student-rights",
+          "en": "Student Rights",
+          "ka": "მოსწავლის/სტუდენტის უფლებები",
+          "ru": "Права студентов/учащихся"
+        },
+        {
+          "slug": "teacher-law",
+          "en": "Teacher Law",
+          "ka": "მასწავლებლის სამართალი",
+          "ru": "Право, регулирующее деятельность учителей"
+        }
+      ]
+    },
+    {
+      "slug": "environmental-and-energy-law",
+      "en": "Environmental and Energy Law",
+      "ka": "გარემოსდაცვითი და ენერგიის სამართალი",
+      "ru": "Экологическое и энергетическое право",
+      "services": [
+        {
+          "slug": "carbon-trading",
+          "en": "Carbon Trading",
+          "ka": "ნახშირბადით ვაჭრობა",
+          "ru": "Торговля углеродными квотами"
+        },
+        {
+          "slug": "energy-project-advisory",
+          "en": "Energy Project Advisory",
+          "ka": "ენერგეტიკული პროექტების კონსულტაცია",
+          "ru": "Консультирование по энергетическим проектам"
+        },
+        {
+          "slug": "environmental-hearings",
+          "en": "Environmental Hearings",
+          "ka": "გარემოსდაცვითი მოსმენები",
+          "ru": "Экологические слушания"
+        },
+        {
+          "slug": "environmental-litigation",
+          "en": "Environmental Litigation",
+          "ka": "გარემოსდაცვითი დავები",
+          "ru": "Экологические судебные споры"
+        },
+        {
+          "slug": "environmental-permits",
+          "en": "Environmental Permits",
+          "ka": "გარემოსდაცვითი ნებართვები",
+          "ru": "Экологические разрешения"
+        },
+        {
+          "slug": "esg-compliance",
+          "en": "ESG Compliance",
+          "ka": "ESG შესაბამისობა",
+          "ru": "Соответствие стандартам ESG"
+        },
+        {
+          "slug": "eu-green-deal",
+          "en": "EU Green Deal",
+          "ka": "ევროკავშირის მწვანე შეთანხმება",
+          "ru": "\"Зеленый курс\" ЕС"
+        },
+        {
+          "slug": "mining-resources",
+          "en": "Mining & Resources",
+          "ka": "მოპოვებითი მრეწველობა და რესურსები",
+          "ru": "Горнодобывающая промышленность и ресурсы"
+        },
+        {
+          "slug": "water-law",
+          "en": "Water Law",
+          "ka": "წყლის სამართალი",
+          "ru": "Водное право"
+        }
+      ]
+    },
+    {
+      "slug": "family-law",
+      "en": "Family Law",
+      "ka": "საოჯახო სამართალი",
+      "ru": "Семейное право",
+      "services": [
+        {
+          "slug": "adoption",
+          "en": "Adoption",
+          "ka": "შვილად აყვანა",
+          "ru": "Усыновление/удочерение"
+        },
+        {
+          "slug": "alimony",
+          "en": "Alimony",
+          "ka": "ალიმენტი",
+          "ru": "Алименты"
+        },
+        {
+          "slug": "asset-division",
+          "en": "Asset Division",
+          "ka": "ქონების გაყოფა",
+          "ru": "Раздел имущества"
+        },
+        {
+          "slug": "child-custody",
+          "en": "Child Custody",
+          "ka": "მეურვეობა ბავშვზე",
+          "ru": "Опека над детьми"
+        },
+        {
+          "slug": "cross-border-family-disputes",
+          "en": "Cross-Border Family Disputes",
+          "ka": "ტრანსსასაზღვრო საოჯახო დავები",
+          "ru": "Трансграничные семейные споры"
+        },
+        {
+          "slug": "divorce-separation",
+          "en": "Divorce & Separation",
+          "ka": "განქორწინება და მეუღლეთა განცალკევება",
+          "ru": "Развод и раздельное проживание"
+        },
+        {
+          "slug": "domestic-violence",
+          "en": "Domestic Violence",
+          "ka": "ოჯახში ძალადობა",
+          "ru": "Домашнее насилие"
+        },
+        {
+          "slug": "family-mediation",
+          "en": "Family Mediation",
+          "ka": "საოჯახო მედიაცია",
+          "ru": "Семейная медиация"
+        },
+        {
+          "slug": "prenuptial-agreements",
+          "en": "Prenuptial Agreements",
+          "ka": "საქორწინო კონტრაქტი",
+          "ru": "Брачные договоры"
+        },
+        {
+          "slug": "surrogacy",
+          "en": "Surrogacy",
+          "ka": "სუროგაცია",
+          "ru": "Суррогатное материнство"
+        }
+      ]
+    },
+    {
+      "slug": "healthcare-and-pharmaceutical-law",
+      "en": "Healthcare and Pharmaceutical Law",
+      "ka": "ჯანდაცვის და ფარმაცევტული სამართალი",
+      "ru": "Медицинское и фармацевтическое право",
+      "services": [
+        {
+          "slug": "clinical-trials",
+          "en": "Clinical Trials",
+          "ka": "კლინიკური კვლევები",
+          "ru": "Клинические испытания"
+        },
+        {
+          "slug": "health-data-privacy",
+          "en": "Health Data Privacy",
+          "ka": "ჯანმრთელობის მონაცემთა კონფიდენციალურობა",
+          "ru": "Конфиденциальность медицинских данных"
+        },
+        {
+          "slug": "health-startup-structuring",
+          "en": "Health Startup Structuring",
+          "ka": "ჯანდაცვის სტარტაპის სტრუქტურირება",
+          "ru": "Структурирование стартапов в сфере здравоохранения"
+        },
+        {
+          "slug": "insurance-regulation",
+          "en": "Insurance Regulation",
+          "ka": "სადაზღვევო რეგულირება",
+          "ru": "Регулирование страховой деятельности"
+        },
+        {
+          "slug": "malpractice-defense",
+          "en": "Malpractice Defense",
+          "ka": "სამედიცინო შეცდომისგან დაცვა",
+          "ru": "Защита от врачебных ошибок"
+        },
+        {
+          "slug": "medical-licensing",
+          "en": "Medical Licensing",
+          "ka": "სამედიცინო ლიცენზირება",
+          "ru": "Медицинское лицензирование"
+        },
+        {
+          "slug": "patient-rights",
+          "en": "Patient Rights",
+          "ka": "პაციენტის უფლებები",
+          "ru": "Права пациентов"
+        },
+        {
+          "slug": "pharma-labeling",
+          "en": "Pharma Labeling",
+          "ka": "ფარმაცევტული მარკირება",
+          "ru": "Маркировка фармацевтических препаратов"
+        },
+        {
+          "slug": "pharmacy-licensing",
+          "en": "Pharmacy Licensing",
+          "ka": "სააფთიაქო ლიცენზირება",
+          "ru": "Лицензирование аптек"
+        },
+        {
+          "slug": "telemedicine",
+          "en": "Telemedicine",
+          "ka": "ტელემედიცინა",
+          "ru": "Телемедицина"
+        }
+      ]
+    },
+    {
+      "slug": "honor-reputation-protection",
+      "en": "Honor & Reputation Protection",
+      "ka": "პატივის და ღირსების დაცვა",
+      "ru": "Защита чести и репутации",
+      "services": [
+        {
+          "slug": "business-reputation",
+          "en": "Business Reputation",
+          "ka": "ბიზნეს რეპუტაცია",
+          "ru": "Деловая репутация"
+        },
+        {
+          "slug": "defamation-cases",
+          "en": "Defamation Cases",
+          "ka": "ცილისწამების საქმეები",
+          "ru": "Дела о клевете"
+        },
+        {
+          "slug": "false-accusation-defense",
+          "en": "False Accusation Defense",
+          "ka": "ცრუ ბრალდებისგან დაცვა",
+          "ru": "Защита от ложных обвинений"
+        },
+        {
+          "slug": "media-compliance",
+          "en": "Media Compliance",
+          "ka": "მედიის შესაბამისობა",
+          "ru": "Соответствие требованиям в медиа-сфере"
+        },
+        {
+          "slug": "online-reputation",
+          "en": "Online Reputation",
+          "ka": "ონლაინ რეპუტაცია",
+          "ru": "Репутация в интернете"
+        },
+        {
+          "slug": "public-figure-protection",
+          "en": "Public Figure Protection",
+          "ka": "საჯარო პირის დაცვა",
+          "ru": "Защита публичных лиц"
+        },
+        {
+          "slug": "right-of-reply",
+          "en": "Right of Reply",
+          "ka": "პასუხის უფლება",
+          "ru": "Право на ответ"
+        }
+      ]
+    },
+    {
+      "slug": "international-law",
+      "en": "International Law",
+      "ka": "საერთაშორისო სამართალი",
+      "ru": "Международное право",
+      "services": [
+        {
+          "slug": "cross-border-contracts",
+          "en": "Cross-Border Contracts",
+          "ka": "ტრანსსასაზღვრო ხელშეკრულებები",
+          "ru": "Трансграничные договоры"
+        },
+        {
+          "slug": "extradition-mlats",
+          "en": "Extradition & MLATs",
+          "ka": "ექსტრადიცია და სამართლებრივი ურთიერთდახმარება",
+          "ru": "Экстрадиция и договоры о взаимной правовой помощи"
+        },
+        {
+          "slug": "human-rights-law",
+          "en": "Human Rights Law",
+          "ka": "ადამიანის უფლებათა სამართალი",
+          "ru": "Право в области прав человека"
+        },
+        {
+          "slug": "international-arbitration",
+          "en": "International Arbitration",
+          "ka": "საერთაშორისო არბიტრაჟი",
+          "ru": "Международный арбитраж"
+        },
+        {
+          "slug": "international-investment",
+          "en": "International Investment",
+          "ka": "საერთაშორისო ინვესტიციები",
+          "ru": "Международные инвестиции"
+        },
+        {
+          "slug": "jurisdiction-conflicts",
+          "en": "Jurisdiction Conflicts",
+          "ka": "იურისდიქციული კონფლიქტები",
+          "ru": "Юрисдикционные конфликты"
+        },
+        {
+          "slug": "treaty-law",
+          "en": "Treaty Law",
+          "ka": "საერთაშორისო ხელშეკრულებების სამართალი",
+          "ru": "Договорное право"
+        }
+      ]
+    },
+    {
+      "slug": "ip-trademark-inventions",
+      "en": "IP, Trademark, Inventions",
+      "ka": "IP, სასაქონლო ნიშანი, გამოგონებები",
+      "ru": "Интеллектуальная собственность, товарные знаки, изобретения",
+      "services": [
+        {
+          "slug": "brand-protection",
+          "en": "Brand Protection",
+          "ka": "ბრენდის დაცვა",
+          "ru": "Защита бренда"
+        },
+        {
+          "slug": "copyright-protection",
+          "en": "Copyright Protection",
+          "ka": "საავტორო უფლებების დაცვა",
+          "ru": "Защита авторских прав"
+        },
+        {
+          "slug": "counterfeit-defense",
+          "en": "Counterfeit Defense",
+          "ka": "კონტრაფაქციისგან დაცვა",
+          "ru": "Защита от контрафакта"
+        },
+        {
+          "slug": "customs-ip-enforcement",
+          "en": "Customs IP Enforcement",
+          "ka": "ინტელექტუალური საკუთრების დაცვა საბაჟოზე",
+          "ru": "Таможенное обеспечение прав интеллектуальной собственности"
+        },
+        {
+          "slug": "invention-assessments",
+          "en": "Invention Assessments",
+          "ka": "გამოგონების შეფასება",
+          "ru": "Оценка изобретений"
+        },
+        {
+          "slug": "ip-due-diligence",
+          "en": "IP Due Diligence",
+          "ka": "ინტელექტუალური საკუთრების Due Diligence",
+          "ru": "Проверка интеллектуальной собственности (Due Diligence)"
+        },
+        {
+          "slug": "ip-licensing",
+          "en": "IP Licensing",
+          "ka": "ინტელექტუალური საკუთრების ლიცენზირება",
+          "ru": "Лицензирование интеллектуальной собственности"
+        },
+        {
+          "slug": "ip-litigation",
+          "en": "IP Litigation",
+          "ka": "დავები ინტელექტუალურ საკუთრებაზე",
+          "ru": "Судебные споры по интеллектуальной собственности"
+        },
+        {
+          "slug": "ip-monetization",
+          "en": "IP Monetization",
+          "ka": "ინტელექტუალური საკუთრების მონეტიზაცია",
+          "ru": "Монетизация интеллектуальной собственности"
+        },
+        {
+          "slug": "ip-strategy",
+          "en": "IP Strategy",
+          "ka": "ინტელექტუალური საკუთრების სტრატეგია",
+          "ru": "Стратегия в области интеллектуальной собственности"
+        },
+        {
+          "slug": "ip-training",
+          "en": "IP Training",
+          "ka": "ინტელექტუალური საკუთრების ტრენინგი",
+          "ru": "Обучение в области интеллектуальной собственности"
+        },
+        {
+          "slug": "patent-filing",
+          "en": "Patent Filing",
+          "ka": "საპატენტო განაცხადის შეტანა",
+          "ru": "Подача патентных заявок"
+        },
+        {
+          "slug": "software-licensing",
+          "en": "Software Licensing",
+          "ka": "პროგრამული უზრუნველყოფის ლიცენზირება",
+          "ru": "Лицензирование программного обеспечения"
+        },
+        {
+          "slug": "trade-secrets",
+          "en": "Trade Secrets",
+          "ka": "კომერციული საიდუმლოება",
+          "ru": "Коммерческая тайна"
+        },
+        {
+          "slug": "trademark-registration",
+          "en": "Trademark Registration",
+          "ka": "სასაქონლო ნიშნის რეგისტრაცია",
+          "ru": "Регистрация товарных знаков"
+        }
+      ]
+    },
+    {
+      "slug": "labor-law",
+      "en": "Labor Law",
+      "ka": "შრომითი სამართალი",
+      "ru": "Трудовое право",
+      "services": [
+        {
+          "slug": "dispute-resolution",
+          "en": "Dispute Resolution",
+          "ka": "დავების გადაწყვეტა",
+          "ru": "Разрешение споров"
+        },
+        {
+          "slug": "diversity-inclusion",
+          "en": "Diversity & Inclusion",
+          "ka": "მრავალფეროვნება და ინკლუზიურობა",
+          "ru": "Разнообразие и инклюзивность"
+        },
+        {
+          "slug": "employee-compensation",
+          "en": "Employee Compensation",
+          "ka": "თანამშრომელთა ანაზღაურება",
+          "ru": "Компенсация работникам"
+        },
+        {
+          "slug": "employment-contracts",
+          "en": "Employment Contracts",
+          "ka": "შრომითი ხელშეკრულებები",
+          "ru": "Трудовые договоры"
+        },
+        {
+          "slug": "employment-law-in-m-a",
+          "en": "Employment Law in M&A",
+          "ka": "შრომითი სამართალი შერწყმისა და შეძენისას (M&A)",
+          "ru": "Трудовое право в сделках M&A"
+        },
+        {
+          "slug": "foreign-worker-law",
+          "en": "Foreign Worker Law",
+          "ka": "უცხოელი თანამშრომლების კანონმდებლობა",
+          "ru": "Законодательство об иностранных работниках"
+        },
+        {
+          "slug": "health-safety-compliance",
+          "en": "Health & Safety Compliance",
+          "ka": "შრომის უსაფრთხოებასთან შესაბამისობა",
+          "ru": "Соблюдение норм охраны труда и техники безопасности"
+        },
+        {
+          "slug": "hr-legal-training",
+          "en": "HR Legal Training",
+          "ka": "იურიდიული ტრენინგი HR-ისთვის",
+          "ru": "Юридическое обучение для HR"
+        },
+        {
+          "slug": "labor-risk-strategy",
+          "en": "Labor Risk Strategy",
+          "ka": "შრომითი რისკების სტრატეგია",
+          "ru": "Стратегия управления трудовыми рисками"
+        },
+        {
+          "slug": "termination-redundancy",
+          "en": "Termination & Redundancy",
+          "ka": "სამსახურიდან გათავისუფლება და შტატის შემცირება",
+          "ru": "Увольнение и сокращение штата"
+        },
+        {
+          "slug": "trade-secret-litigation",
+          "en": "Trade Secret Litigation",
+          "ka": "კომერციული საიდუმლოების დავები",
+          "ru": "Судебные споры по коммерческой тайне"
+        },
+        {
+          "slug": "union-relations",
+          "en": "Union Relations",
+          "ka": "ურთიერთობა პროფკავშირებთან",
+          "ru": "Отношения с профсоюзами"
+        },
+        {
+          "slug": "workplace-investigations",
+          "en": "Workplace Investigations",
+          "ka": "სამუშაო ადგილზე მოკვლევა",
+          "ru": "Расследования на рабочем месте"
+        },
+        {
+          "slug": "workplace-policies",
+          "en": "Workplace Policies",
+          "ka": "სამუშაო ადგილის პოლიტიკა",
+          "ru": "Внутренние трудовые политики"
+        }
+      ]
+    },
+    {
+      "slug": "legallaunch-for-startups",
+      "en": "Legallaunch for Startups",
+      "ka": "LegalLaunch სტარტაპებისთვის",
+      "ru": "Legallaunch для стартапов",
+      "services": [
+        {
+          "slug": "business-formation",
+          "en": "Business Formation",
+          "ka": "ბიზნესის დაფუძნება",
+          "ru": "Регистрация бизнеса"
+        },
+        {
+          "slug": "contract-drafting",
+          "en": "Contract Drafting",
+          "ka": "ხელშეკრულებების შედგენა",
+          "ru": "Составление договоров"
+        },
+        {
+          "slug": "corporate-governance",
+          "en": "Corporate Governance",
+          "ka": "კორპორაციული მართვა",
+          "ru": "Корпоративное управление"
+        },
+        {
+          "slug": "exit-planning",
+          "en": "Exit Planning",
+          "ka": "ბიზნესიდან გასვლის დაგეგმვა",
+          "ru": "Планирование выхода из бизнеса"
+        },
+        {
+          "slug": "hr-legal-advisory",
+          "en": "HR Legal Advisory",
+          "ka": "იურიდიული კონსულტაცია HR საკითხებზე",
+          "ru": "Юридические консультации по кадровым вопросам"
+        },
+        {
+          "slug": "ip-protection",
+          "en": "IP Protection",
+          "ka": "ინტელექტუალური საკუთრების დაცვა",
+          "ru": "Защита интеллектуальной собственности"
+        },
+        {
+          "slug": "regulatory-compliance",
+          "en": "Regulatory Compliance",
+          "ka": "მარეგულირებელ მოთხოვნებთან შესაბამისობა",
+          "ru": "Соответствие нормативным требованиям"
+        },
+        {
+          "slug": "reorganization-support",
+          "en": "Reorganization Support",
+          "ka": "რეორგანიზაციის მხარდაჭერა",
+          "ru": "Поддержка при реорганизации"
+        },
+        {
+          "slug": "risk-management",
+          "en": "Risk Management",
+          "ka": "რისკების მართვა",
+          "ru": "Управление рисками"
+        },
+        {
+          "slug": "shareholder-disputes",
+          "en": "Shareholder Disputes",
+          "ka": "აქციონერთა დავები",
+          "ru": "Акционерные споры"
+        },
+        {
+          "slug": "startup-disputes",
+          "en": "Startup Disputes",
+          "ka": "დავები სტარტაპებში",
+          "ru": "Споры в стартапах"
+        },
+        {
+          "slug": "startup-financing",
+          "en": "Startup Financing",
+          "ka": "სტარტაპის დაფინანსება",
+          "ru": "Финансирование стартапов"
+        },
+        {
+          "slug": "startup-m-a",
+          "en": "Startup M&A",
+          "ka": "სტარტაპების შერწყმა და შეძენა (M&A)",
+          "ru": "Слияния и поглощения стартапов"
+        },
+        {
+          "slug": "startup-tax-planning",
+          "en": "Startup Tax Planning",
+          "ka": "სტარტაპის საგადასახადო დაგეგმვა",
+          "ru": "Налоговое планирование для стартапов"
+        }
+      ]
+    },
+    {
+      "slug": "licenses",
+      "en": "Licenses",
+      "ka": "ლიცენზიები",
+      "ru": "Лицензии",
+      "services": [
+        {
+          "slug": "alcohol-tobacco",
+          "en": "Alcohol & Tobacco",
+          "ka": "ალკოჰოლი და თამბაქო",
+          "ru": "Алкоголь и табак"
+        },
+        {
+          "slug": "business-licensing",
+          "en": "Business Licensing",
+          "ka": "ბიზნესის ლიცენზირება",
+          "ru": "Лицензирование бизнеса"
+        },
+        {
+          "slug": "energy-licensing",
+          "en": "Energy Licensing",
+          "ka": "ენერგეტიკული ლიცენზირება",
+          "ru": "Лицензирование в сфере энергетики"
+        },
+        {
+          "slug": "environmental-health",
+          "en": "Environmental & Health",
+          "ka": "გარემო და ჯანმრთელობა",
+          "ru": "Окружающая среда и здравоохранение"
+        },
+        {
+          "slug": "financial-services",
+          "en": "Financial Services",
+          "ka": "ფინანსური სერვისები",
+          "ru": "Финансовые услуги"
+        },
+        {
+          "slug": "food-beverage",
+          "en": "Food & Beverage",
+          "ka": "საკვები და სასმელი",
+          "ru": "Продукты питания и напитки"
+        },
+        {
+          "slug": "gaming-licensing",
+          "en": "Gaming Licensing",
+          "ka": "სათამაშო ბიზნესის ლიცენზირება",
+          "ru": "Лицензирование игорного бизнеса"
+        },
+        {
+          "slug": "import-export-licensing",
+          "en": "Import/Export Licensing",
+          "ka": "იმპორტისა და ექსპორტის ლიცენზირება",
+          "ru": "Лицензирование импорта/экспорта"
+        },
+        {
+          "slug": "ip-licensing",
+          "en": "IP Licensing",
+          "ka": "ინტელექტუალური საკუთრების ლიცენზირება",
+          "ru": "Лицензирование интеллектуальной собственности"
+        },
+        {
+          "slug": "license-monitoring",
+          "en": "License Monitoring",
+          "ka": "ლიცენზიის მონიტორინგი",
+          "ru": "Мониторинг лицензий"
+        },
+        {
+          "slug": "logistics-licensing",
+          "en": "Logistics Licensing",
+          "ka": "ლოგისტიკის ლიცენზირება",
+          "ru": "Лицензирование логистической деятельности"
+        },
+        {
+          "slug": "professional-licensing",
+          "en": "Professional Licensing",
+          "ka": "პროფესიული ლიცენზირება",
+          "ru": "Профессиональное лицензирование"
+        },
+        {
+          "slug": "real-estate-construction",
+          "en": "Real Estate & Construction",
+          "ka": "უძრავი ქონება და მშენებლობა",
+          "ru": "Недвижимость и строительство"
+        },
+        {
+          "slug": "telecom-licensing",
+          "en": "Telecom Licensing",
+          "ka": "სატელეკომუნიკაციო ლიცენზირება",
+          "ru": "Лицензирование в сфере телекоммуникаций"
+        }
+      ]
+    },
+    {
+      "slug": "litigation-and-dispute-resolution",
+      "en": "Litigation and Dispute Resolution",
+      "ka": "დავები და მათი გადაწყვეტა",
+      "ru": "Судебные споры и разрешение споров",
+      "services": [
+        {
+          "slug": "administrative-litigation",
+          "en": "Administrative Litigation",
+          "ka": "ადმინისტრაციული დავები",
+          "ru": "Административные судебные споры"
+        },
+        {
+          "slug": "appeals",
+          "en": "Appeals",
+          "ka": "აპელაციები",
+          "ru": "Апелляции"
+        },
+        {
+          "slug": "arbitration",
+          "en": "Arbitration",
+          "ka": "არბიტრაჟი",
+          "ru": "Арбитраж"
+        },
+        {
+          "slug": "civil-litigation",
+          "en": "Civil Litigation",
+          "ka": "სამოქალაქო დავები",
+          "ru": "Гражданские судебные споры"
+        },
+        {
+          "slug": "corporate-disputes",
+          "en": "Corporate Disputes",
+          "ka": "კორპორაციული დავები",
+          "ru": "Корпоративные споры"
+        },
+        {
+          "slug": "injunctions",
+          "en": "Injunctions",
+          "ka": "უზრუნველყოფის ღონისძიებები",
+          "ru": "Судебные запреты"
+        },
+        {
+          "slug": "judgment-enforcement",
+          "en": "Judgment Enforcement",
+          "ka": "სასამართლო გადაწყვეტილების აღსრულება",
+          "ru": "Исполнение судебных решений"
+        }
+      ]
+    },
+    {
+      "slug": "migration-to-georgia",
+      "en": "Migration to Georgia",
+      "ka": "მიგრაცია საქართველოში",
+      "ru": "Миграция в Грузию",
+      "services": [
+        {
+          "slug": "business-investment-migration",
+          "en": "Business & Investment Migration",
+          "ka": "ბიზნეს და საინვესტიციო მიგრაცია",
+          "ru": "Бизнес и инвестиционная миграция"
+        },
+        {
+          "slug": "citizenship-acquisition",
+          "en": "Citizenship Acquisition",
+          "ka": "მოქალაქეობის მიღება",
+          "ru": "Получение гражданства"
+        },
+        {
+          "slug": "digital-nomad-visas",
+          "en": "Digital Nomad Visas",
+          "ka": "ციფრული მომთაბარეების ვიზები",
+          "ru": "Визы для цифровых кочевников"
+        },
+        {
+          "slug": "document-legalization",
+          "en": "Document Legalization",
+          "ka": "დოკუმენტის ლეგალიზაცია",
+          "ru": "Легализация документов"
+        },
+        {
+          "slug": "family-reunification",
+          "en": "Family Reunification",
+          "ka": "ოჯახის გაერთიანება",
+          "ru": "Воссоединение семьи"
+        },
+        {
+          "slug": "immigration-compliance",
+          "en": "Immigration Compliance",
+          "ka": "საიმიგრაციო შესაბამისობა",
+          "ru": "Соблюдение иммиграционного законодательства"
+        },
+        {
+          "slug": "migration-disputes-appeals",
+          "en": "Migration Disputes & Appeals",
+          "ka": "საიმიგრაციო დავები და აპელაციები",
+          "ru": "Миграционные споры и апелляции"
+        },
+        {
+          "slug": "property-for-foreigners",
+          "en": "Property for Foreigners",
+          "ka": "ქონება უცხოელებისთვის",
+          "ru": "Недвижимость для иностранцев"
+        },
+        {
+          "slug": "tax-financial-planning",
+          "en": "Tax & Financial Planning",
+          "ka": "საგადასახადო და ფინანსური დაგეგმვა",
+          "ru": "Налоговое и финансовое планирование"
+        },
+        {
+          "slug": "translation-interpretation",
+          "en": "Translation & Interpretation",
+          "ka": "თარგმანი და თარჯიმანი",
+          "ru": "Письменный и устный перевод"
+        },
+        {
+          "slug": "visa-residency-applications",
+          "en": "Visa & Residency Applications",
+          "ka": "ვიზა და ბინადრობის განაცხადები",
+          "ru": "Заявления на визу и вид на жительство"
+        },
+        {
+          "slug": "work-permits",
+          "en": "Work Permits",
+          "ka": "სამუშაო ნებართვები",
+          "ru": "Разрешения на работу"
+        }
+      ]
+    },
+    {
+      "slug": "military-and-national-security-law",
+      "en": "Military and National Security Law",
+      "ka": "სამხედრო და ეროვნული უსაფრთხოების სამართალი",
+      "ru": "Военное право и право национальной безопасности",
+      "services": [
+        {
+          "slug": "cybersecurity-defense",
+          "en": "Cybersecurity Defense",
+          "ka": "კიბერუსაფრთხოების დაცვა",
+          "ru": "Защита в сфере кибербезопасности"
+        },
+        {
+          "slug": "defense-contracts",
+          "en": "Defense Contracts",
+          "ka": "თავდაცვის კონტრაქტები",
+          "ru": "Оборонные контракты"
+        },
+        {
+          "slug": "emergency-law",
+          "en": "Emergency Law",
+          "ka": "საგანგებო მდგომარეობის სამართალი",
+          "ru": "Законодательство о чрезвычайных ситуациях"
+        },
+        {
+          "slug": "export-control",
+          "en": "Export Control",
+          "ka": "ექსპორტის კონტროლი",
+          "ru": "Экспортный контроль"
+        },
+        {
+          "slug": "ihl-geneva-convention",
+          "en": "IHL & Geneva Convention",
+          "ka": "საერთაშორისო ჰუმანიტარული სამართალი და ჟენევის კონვენცია",
+          "ru": "Международное гуманитарное право и Женевская конвенция"
+        },
+        {
+          "slug": "military-service-law",
+          "en": "Military Service Law",
+          "ka": "სამხედრო სამსახურის კანონი",
+          "ru": "Закон о военной службе"
+        },
+        {
+          "slug": "military-tribunals",
+          "en": "Military Tribunals",
+          "ka": "სამხედრო ტრიბუნალები",
+          "ru": "Военные трибуналы"
+        },
+        {
+          "slug": "national-security-clearance",
+          "en": "National Security Clearance",
+          "ka": "ეროვნული უსაფრთხოების ნებართვა",
+          "ru": "Допуск к государственной тайне"
+        },
+        {
+          "slug": "personnel-rights",
+          "en": "Personnel Rights",
+          "ka": "პერსონალის უფლებები",
+          "ru": "Права личного состава"
+        },
+        {
+          "slug": "sanctions-law",
+          "en": "Sanctions Law",
+          "ka": "სანქციების სამართალი",
+          "ru": "Санкционное право"
+        }
+      ]
+    },
+    {
+      "slug": "non-profit-and-ngo-law",
+      "en": "Non-Profit and NGO Law",
+      "ka": "არაკომერციული, არასამერმეო იურიდიული პირები",
+      "ru": "Право некоммерческих и неправительственных организаций (НПО)",
+      "services": [
+        {
+          "slug": "bylaws-governance",
+          "en": "Bylaws & Governance",
+          "ka": "წესდება და მმართველობა",
+          "ru": "Устав и управление"
+        },
+        {
+          "slug": "grant-compliance",
+          "en": "Grant Compliance",
+          "ka": "საგრანტო შესაბამისობა",
+          "ru": "Соответствие требованиям грантов"
+        },
+        {
+          "slug": "humanitarian-law",
+          "en": "Humanitarian Law",
+          "ka": "ჰუმანიტარული სამართალი",
+          "ru": "Гуманитарное право"
+        },
+        {
+          "slug": "international-ngo-support",
+          "en": "International NGO Support",
+          "ka": "საერთაშორისო არასამთავრობო ორგანიზაციების მხარდაჭერა",
+          "ru": "Поддержка международных НПО"
+        },
+        {
+          "slug": "ngo-defense",
+          "en": "NGO Defense",
+          "ka": "არასამთავრობო ორგანიზაციის დაცვა",
+          "ru": "Защита НПО"
+        },
+        {
+          "slug": "ngo-employment",
+          "en": "NGO Employment",
+          "ka": "დასაქმება არასამთავრობო ორგანიზაციაში",
+          "ru": "Трудовые отношения в НПО"
+        },
+        {
+          "slug": "ngo-formation",
+          "en": "NGO Formation",
+          "ka": "არასამთავრობო ორგანიზაციის დაფუძნება",
+          "ru": "Создание НПО"
+        },
+        {
+          "slug": "strategic-litigation",
+          "en": "Strategic Litigation",
+          "ka": "სტრატეგიული სამართალწარმოება",
+          "ru": "Стратегические судебные процессы"
+        },
+        {
+          "slug": "tax-exemption",
+          "en": "Tax Exemption",
+          "ka": "გადასახადისგან გათავისუფლება",
+          "ru": "Освобождение от налогов"
+        },
+        {
+          "slug": "transparency-advisory",
+          "en": "Transparency Advisory",
+          "ka": "გამჭვირვალობის კონსულტაცია",
+          "ru": "Консультирование по вопросам прозрачности"
+        }
+      ]
+    },
+    {
+      "slug": "permits",
+      "en": "Permits",
+      "ka": "ნებართვები",
+      "ru": "Разрешения",
+      "services": [
+        {
+          "slug": "building-permits",
+          "en": "Building Permits",
+          "ka": "სამშენებლო ნებართვები",
+          "ru": "Разрешения на строительство"
+        },
+        {
+          "slug": "emergency-permits",
+          "en": "Emergency Permits",
+          "ka": "საგანგებო ნებართვები",
+          "ru": "Разрешения на чрезвычайные ситуации"
+        },
+        {
+          "slug": "environmental-permits",
+          "en": "Environmental Permits",
+          "ka": "გარემოსდაცვითი ნებართვები",
+          "ru": "Экологические разрешения"
+        },
+        {
+          "slug": "event-permits",
+          "en": "Event Permits",
+          "ka": "ღონისძიების ნებართვები",
+          "ru": "Разрешения на проведение мероприятий"
+        },
+        {
+          "slug": "filming-permits",
+          "en": "Filming Permits",
+          "ka": "გადაღების ნებართვები",
+          "ru": "Разрешения на съемку"
+        },
+        {
+          "slug": "fire-occupancy-permits",
+          "en": "Fire & Occupancy Permits",
+          "ka": "სახანძრო და საექსპლუატაციო ნებართვები",
+          "ru": "Разрешения на пожарную безопасность и эксплуатацию зданий"
+        },
+        {
+          "slug": "health-safety-permits",
+          "en": "Health & Safety Permits",
+          "ka": "ჯანმრთელობისა და უსაფრთხოების ნებართვები",
+          "ru": "Разрешения в области охраны труда и техники безопасности"
+        },
+        {
+          "slug": "liquor-tobacco-permits",
+          "en": "Liquor/Tobacco Permits",
+          "ka": "ალკოჰოლის/თამბაქოს ნებართვები",
+          "ru": "Разрешения на торговлю алкоголем/табаком"
+        },
+        {
+          "slug": "occupational-permits",
+          "en": "Occupational Permits",
+          "ka": "პროფესიული საქმიანობის ნებართვები",
+          "ru": "Разрешения на осуществление профессиональной деятельности"
+        },
+        {
+          "slug": "signage-permits",
+          "en": "Signage Permits",
+          "ka": "აბრების ნებართვები",
+          "ru": "Разрешения на вывески"
+        },
+        {
+          "slug": "telecom-infrastructure-permits",
+          "en": "Telecom Infrastructure Permits",
+          "ka": "სატელეკომუნიკაციო ინფრასტრუქტურის ნებართვები",
+          "ru": "Разрешения на телекоммуникационную инфраструктуру"
+        },
+        {
+          "slug": "transport-permits",
+          "en": "Transport Permits",
+          "ka": "სატრანსპორტო ნებართვები",
+          "ru": "Разрешения на транспортную деятельность"
+        },
+        {
+          "slug": "utility-permits",
+          "en": "Utility Permits",
+          "ka": "კომუნალური ნებართვები",
+          "ru": "Разрешения на коммунальные услуги"
+        },
+        {
+          "slug": "zoning-permits",
+          "en": "Zoning Permits",
+          "ka": "ზონირების ნებართვები",
+          "ru": "Разрешения на зонирование"
+        }
+      ]
+    },
+    {
+      "slug": "personal-data-protection",
+      "en": "Personal Data Protection",
+      "ka": "პერსონალური მონაცემების დაცვა",
+      "ru": "Защита персональных данных",
+      "services": [
+        {
+          "slug": "cross-border-transfers",
+          "en": "Cross-Border Transfers",
+          "ka": "ტრანსსასაზღვრო გადაცემა",
+          "ru": "Трансграничная передача данных"
+        },
+        {
+          "slug": "data-breach-response",
+          "en": "Data Breach Response",
+          "ka": "მონაცემთა დარღვევაზე რეაგირება",
+          "ru": "Реагирование на утечки данных"
+        },
+        {
+          "slug": "data-compliance",
+          "en": "Data Compliance",
+          "ka": "მონაცემთა შესაბამისობა",
+          "ru": "Соответствие требованиям по обработке данных"
+        },
+        {
+          "slug": "data-subject-rights",
+          "en": "Data Subject Rights",
+          "ka": "მონაცემთა სუბიექტის უფლებები",
+          "ru": "Права субъектов данных"
+        },
+        {
+          "slug": "dpo-support",
+          "en": "DPO Support",
+          "ka": "მონაცემთა დაცვის ოფიცრის მხარდაჭერა",
+          "ru": "Поддержка инспектора по защите данных (DPO)"
+        },
+        {
+          "slug": "employee-data",
+          "en": "Employee Data",
+          "ka": "თანამშრომელთა მონაცემები",
+          "ru": "Данные сотрудников"
+        },
+        {
+          "slug": "regulatory-defense",
+          "en": "Regulatory Defense",
+          "ka": "მარეგულირებელი დაცვა",
+          "ru": "Защита в регуляторных органах"
+        },
+        {
+          "slug": "sectoral-compliance",
+          "en": "Sectoral Compliance",
+          "ka": "სექტორული შესაბამისობა",
+          "ru": "Отраслевое соответствие"
+        }
+      ]
+    },
+    {
+      "slug": "property-law",
+      "en": "Property Law",
+      "ka": "საკუთრება",
+      "ru": "Имущественное право",
+      "services": [
+        {
+          "slug": "agricultural-land",
+          "en": "Agricultural Land",
+          "ka": "სასოფლო-სამეურნეო მიწა",
+          "ru": "Сельскохозяйственные земли"
+        },
+        {
+          "slug": "construction-law",
+          "en": "Construction Law",
+          "ka": "სამშენებლო სამართალი",
+          "ru": "Строительное право"
+        },
+        {
+          "slug": "lease-agreements",
+          "en": "Lease Agreements",
+          "ka": "საიჯარო ხელშეკრულებები",
+          "ru": "Договоры аренды"
+        },
+        {
+          "slug": "mortgages",
+          "en": "Mortgages",
+          "ka": "იპოთეკა",
+          "ru": "Ипотека"
+        },
+        {
+          "slug": "property-tax-planning",
+          "en": "Property Tax Planning",
+          "ka": "ქონების გადასახადის დაგეგმვა",
+          "ru": "Планирование налога на имущество"
+        },
+        {
+          "slug": "real-estate-sales",
+          "en": "Real Estate Sales",
+          "ka": "უძრავი ქონების გაყიდვები",
+          "ru": "Продажа недвижимости"
+        },
+        {
+          "slug": "title-registration",
+          "en": "Title Registration",
+          "ka": "საკუთრების უფლების რეგისტრაცია",
+          "ru": "Регистрация прав собственности"
+        }
+      ]
+    },
+    {
+      "slug": "sports-media-entertainment-law",
+      "en": "Sports, Media & Entertainment Law",
+      "ka": "სპორტის, მედიის და ღონისძიებების სამართალი",
+      "ru": "Спортивное, медийное и развлекательное право",
+      "services": [
+        {
+          "slug": "athlete-contracts",
+          "en": "Athlete Contracts",
+          "ka": "სპორტსმენის კონტრაქტები",
+          "ru": "Контракты со спортсменами"
+        },
+        {
+          "slug": "content-distribution",
+          "en": "Content Distribution",
+          "ka": "კონტენტის დისტრიბუცია",
+          "ru": "Распространение контента"
+        },
+        {
+          "slug": "copyrights-for-creatives",
+          "en": "Copyrights for Creatives",
+          "ka": "საავტორო უფლებები შემოქმედებითი სფეროსთვის",
+          "ru": "Авторские права для творческих деятелей"
+        },
+        {
+          "slug": "event-law",
+          "en": "Event Law",
+          "ka": "ღონისძიებების სამართალი",
+          "ru": "Правовое сопровождение мероприятий"
+        },
+        {
+          "slug": "influencer-law",
+          "en": "Influencer Law",
+          "ka": "ინფლუენსერების სამართალი",
+          "ru": "Правовое регулирование деятельности инфлюенсеров"
+        },
+        {
+          "slug": "media-licensing",
+          "en": "Media Licensing",
+          "ka": "მედია ლიცენზირება",
+          "ru": "Лицензирование в медиа-сфере"
+        },
+        {
+          "slug": "online-content-takedowns",
+          "en": "Online Content Takedowns",
+          "ka": "ონლაინ კონტენტის წაშლა",
+          "ru": "Удаление контента в интернете"
+        },
+        {
+          "slug": "reputation-litigation",
+          "en": "Reputation Litigation",
+          "ka": "რეპუტაციული დავები",
+          "ru": "Судебные споры о защите репутации"
+        },
+        {
+          "slug": "sponsorships",
+          "en": "Sponsorships",
+          "ka": "სპონსორობა",
+          "ru": "Спонсорство"
+        },
+        {
+          "slug": "talent-agreements",
+          "en": "Talent Agreements",
+          "ka": "ხელშეკრულებები ტალანტებთან",
+          "ru": "Договоры с талантами"
+        }
+      ]
+    },
+    {
+      "slug": "tax-and-accounting",
+      "en": "Tax and Accounting",
+      "ka": "გადასახადები და ბუღალტერია",
+      "ru": "Налоги и бухгалтерский учет",
+      "services": [
+        {
+          "slug": "accounting-services",
+          "en": "Accounting Services",
+          "ka": "საბუღალტრო მომსახურება",
+          "ru": "Бухгалтерские услуги"
+        },
+        {
+          "slug": "corporate-tax",
+          "en": "Corporate Tax",
+          "ka": "კორპორაციული გადასახადი",
+          "ru": "Корпоративный налог"
+        },
+        {
+          "slug": "estate-planning",
+          "en": "Estate Planning",
+          "ka": "სამემკვიდრეო დაგეგმვა",
+          "ru": "Планирование наследства"
+        },
+        {
+          "slug": "financial-reporting",
+          "en": "Financial Reporting",
+          "ka": "ფინანსური ანგარიშგება",
+          "ru": "Финансовая отчетность"
+        },
+        {
+          "slug": "indirect-tax",
+          "en": "Indirect Tax",
+          "ka": "არაპირდაპირი გადასახადები",
+          "ru": "Косвенные налоги"
+        },
+        {
+          "slug": "international-tax",
+          "en": "International Tax",
+          "ka": "საერთაშორისო დაბეგვრა",
+          "ru": "Международное налогообложение"
+        },
+        {
+          "slug": "m-a-tax",
+          "en": "M&A Tax",
+          "ka": "გადასახადები შერწყმისა და შეძენისას (M&A)",
+          "ru": "Налогообложение при сделках M&A"
+        },
+        {
+          "slug": "payroll-tax",
+          "en": "Payroll Tax",
+          "ka": "საშემოსავლო გადასახადი",
+          "ru": "Налоги на заработную плату"
+        },
+        {
+          "slug": "sme-tax-structuring",
+          "en": "SME Tax Structuring",
+          "ka": "მცირე და საშუალო ბიზნესის საგადასახადო სტრუქტურირება",
+          "ru": "Налоговое структурирование для малого и среднего бизнеса"
+        },
+        {
+          "slug": "tax-audits",
+          "en": "Tax Audits",
+          "ka": "საგადასახადო აუდიტი",
+          "ru": "Налоговые проверки"
+        },
+        {
+          "slug": "tax-filing",
+          "en": "Tax Filing",
+          "ka": "საგადასახადო დეკლარაციის წარდგენა",
+          "ru": "Подача налоговых деклараций"
+        },
+        {
+          "slug": "tax-planning",
+          "en": "Tax Planning",
+          "ka": "საგადასახადო დაგეგმვა",
+          "ru": "Налоговое планирование"
+        },
+        {
+          "slug": "vat-health-checks",
+          "en": "VAT Health Checks",
+          "ka": "დღგ-ს შემოწმება",
+          "ru": "Проверка НДС"
+        },
+        {
+          "slug": "wealth-tax",
+          "en": "Wealth Tax",
+          "ka": "ქონების გადასახადი",
+          "ru": "Налог на богатство"
+        }
+      ]
+    },
+    {
+      "slug": "technology-and-ai-law",
+      "en": "Technology and AI Law",
+      "ka": "ტექნოლოგიების და ხელოვნური ინტელექტის სამართალი",
+      "ru": "Право в сфере технологий и искусственного интеллекта",
+      "services": [
+        {
+          "slug": "ai-labor-law",
+          "en": "AI & Labor Law",
+          "ka": "ხელოვნური ინტელექტი და შრომითი სამართალი",
+          "ru": "ИИ и трудовое право"
+        },
+        {
+          "slug": "ai-ethics",
+          "en": "AI Ethics",
+          "ka": "ხელოვნური ინტელექტის ეთიკა",
+          "ru": "Этика искусственного интеллекта"
+        },
+        {
+          "slug": "ai-liability",
+          "en": "AI Liability",
+          "ka": "ხელოვნური ინტელექტის პასუხისმგებლობა",
+          "ru": "Ответственность за искусственный интеллект"
+        },
+        {
+          "slug": "ai-litigation",
+          "en": "AI Litigation",
+          "ka": "დავები ხელოვნურ ინტელექტთან დაკავშირებით",
+          "ru": "Судебные споры, связанные с ИИ"
+        },
+        {
+          "slug": "ai-generated-ip",
+          "en": "AI-Generated IP",
+          "ka": "ხელოვნური ინტელექტის მიერ გენერირებული ინტელექტუალური საკუთრება",
+          "ru": "Интеллектуальная собственность, созданная ИИ"
+        },
+        {
+          "slug": "biometric-compliance",
+          "en": "Biometric Compliance",
+          "ka": "ბიომეტრიულ მონაცემებთან შესაბამისობა",
+          "ru": "Соответствие нормам по биометрическим данным"
+        },
+        {
+          "slug": "eu-ai-act-compliance",
+          "en": "EU AI Act Compliance",
+          "ka": "ევროკავშირის ხელოვნური ინტელექტის აქტთან შესაბამისობა",
+          "ru": "Соответствие Закону ЕС об ИИ"
+        },
+        {
+          "slug": "privacy-in-ai",
+          "en": "Privacy in AI",
+          "ka": "კონფიდენციალურობა ხელოვნურ ინტელექტში",
+          "ru": "Конфиденциальность в сфере ИИ"
+        },
+        {
+          "slug": "robot-drone-law",
+          "en": "Robot & Drone Law",
+          "ka": "რობოტებისა და დრონების სამართალი",
+          "ru": "Право робототехники и беспилотников"
+        },
+        {
+          "slug": "software-agreements",
+          "en": "Software Agreements",
+          "ka": "პროგრამული უზრუნველყოფის ხელშეკრულებები",
+          "ru": "Договоры на программное обеспечение"
+        }
+      ]
+    }
+  ]
+}

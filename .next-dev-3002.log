@@ -1,0 +1,65 @@
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'serverComponentsExternalPackages' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ⚠ `experimental.serverComponentsExternalPackages` has been moved to `serverExternalPackages`. Please update your next.config.ts file accordingly.
+   ▲ Next.js 15.5.3 (Turbopack)
+   - Local:        http://localhost:3002
+   - Network:      http://192.168.24.104:3002
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverComponentsExternalPackages
+
+ ✓ Starting...
+ ✓ Compiled middleware in 116ms
+ ✓ Ready in 1042ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1990ms
+ GET / 307 in 2236ms
+ GET / 307 in 73ms
+ GET / 307 in 59ms
+ GET / 307 in 103ms
+ GET / 307 in 90ms
+ GET / 307 in 62ms
+ GET / 307 in 106ms
+ GET / 307 in 52ms
+ GET / 307 in 60ms
+ GET / 307 in 79ms
+ GET / 307 in 58ms
+ GET / 307 in 61ms
+ GET / 307 in 53ms
+ GET / 307 in 67ms
+ GET / 307 in 60ms
+ GET / 307 in 103ms
+ GET / 307 in 56ms
+ GET / 307 in 56ms
+ GET / 307 in 64ms
+ GET / 307 in 57ms
+ GET / 307 in 63ms
+ GET / 307 in 58ms
+ GET / 307 in 57ms
+ GET / 307 in 58ms
+ GET / 307 in 50ms
+ GET / 307 in 55ms
+ GET / 307 in 56ms
+ GET / 307 in 73ms
+ GET / 307 in 82ms
+ GET / 307 in 52ms
+ GET / 307 in 70ms
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 736ms
+ GET /ka 200 in 1422ms
+ GET /en 200 in 106ms
+ GET /ru 200 in 170ms
+ ✓ Compiled /sitemap.xml in 179ms
+ GET /sitemap.xml 200 in 241ms
+ ✓ Compiled /robots.txt in 67ms
+ GET /robots.txt 200 in 102ms
+ ✓ Compiled /api/posts in 296ms
+ GET /api/posts?limit=3 200 in 584ms
+ ✓ Compiled /[locale]/news in 307ms
+ GET /ka/news 200 in 1106ms
+ ✓ Compiled /[locale]/specialists in 334ms
+ GET /ka/specialists 200 in 806ms
+ ✓ Compiled /[locale]/companies in 264ms
+ GET /ka/companies 200 in 678ms
+[?25h

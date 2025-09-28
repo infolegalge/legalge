@@ -1,0 +1,36 @@
+[
+  {
+    "id": "11",
+    "title": "Custom Styles",
+    "slug": "wp-global-styles-listygo",
+    "link": "https://infolegalge-fcztd.wpcomstaging.com/2022/04/05/wp-global-styles-listygo/",
+    "content": "{\"version\": 2, \"isGlobalStylesUserThemeJSON\": true }",
+    "excerpt": "",
+    "creator": "infolegalge",
+    "date": "2022-04-05 03:22:27",
+    "categories": [
+      {
+        "domain": "wp_theme",
+        "nicename": "listygo",
+        "name": "listygo"
+      }
+    ]
+  },
+  {
+    "id": "163",
+    "title": "Custom Styles",
+    "slug": "wp-global-styles-twentytwentyone",
+    "link": "https://infolegalge-fcztd.wpcomstaging.com/2022/05/10/wp-global-styles-twentytwentyone/",
+    "content": "{\"version\": 2, \"isGlobalStylesUserThemeJSON\": true }",
+    "excerpt": "",
+    "creator": "infolegalge",
+    "date": "2022-05-10 09:37:58",
+    "categories": [
+      {
+        "domain": "wp_theme",
+        "nicename": "twentytwentyone",
+        "name": "twentytwentyone"
+      }
+    ]
+  }
+]

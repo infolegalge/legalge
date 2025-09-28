@@ -1,0 +1,50 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            APP_PATH=${{ secrets.APP_PATH }}
+            PORT=${{ secrets.APP_PORT || 3000 }}
+            if [ ! -d "$APP_PATH" ]; then
+              echo "Directory $APP_PATH does not exist" && exit 1
+            fi
+            cd "$APP_PATH"
+            # Ensure git is cleanly synced to main
+            git fetch --all --prune
+            git reset --hard origin/main
+            # Install dependencies and build
+            if command -v npm >/dev/null 2>&1; then
+              npm ci --omit=dev
+              npx prisma generate || true
+              npm run build
+            else
+              echo "npm not found on server; install Node.js 20+" && exit 1
+            fi
+            # Reload or start with pm2
+            if command -v pm2 >/dev/null 2>&1; then
+              pm2 describe legalge >/dev/null 2>&1 && \
+                pm2 reload legalge --update-env || \
+                pm2 start npm --name legalge -- start -- -p "$PORT"
+              pm2 save
+            else
+              echo "pm2 not found; install with: sudo npm i -g pm2" && exit 1
+            fi
+
+

@@ -1,0 +1,254 @@
+[
+  {
+    "id": "82",
+    "taxonomy": "rtcl_location",
+    "slug": "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d",
+    "name": "საქართველო",
+    "parent": ""
+  },
+  {
+    "id": "84",
+    "taxonomy": "rtcl_location",
+    "slug": "%e1%83%91%e1%83%90%e1%83%97%e1%83%a3%e1%83%9b%e1%83%98",
+    "name": "ბათუმი",
+    "parent": "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d"
+  },
+  {
+    "id": "81",
+    "taxonomy": "rtcl_location",
+    "slug": "%e1%83%92%e1%83%9d%e1%83%a0%e1%83%98",
+    "name": "გორი",
+    "parent": "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d"
+  },
+  {
+    "id": "83",
+    "taxonomy": "rtcl_location",
+    "slug": "%e1%83%a5%e1%83%a3%e1%83%97%e1%83%90%e1%83%98%e1%83%a1%e1%83%98",
+    "name": "ქუთაისი",
+    "parent": "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d"
+  },
+  {
+    "id": "78",
+    "taxonomy": "rtcl_category",
+    "slug": "%e1%83%9e%e1%83%a0%e1%83%90%e1%83%a5%e1%83%a2%e1%83%98%e1%83%99%e1%83%98%e1%83%a1-%e1%83%a1%e1%83%a4%e1%83%94%e1%83%a0%e1%83%9d%e1%83%94%e1%83%91%e1%83%98",
+    "name": "პრაქტიკის სფეროები",
+    "parent": ""
+  },
+  {
+    "id": "91",
+    "taxonomy": "following_users",
+    "slug": "alina_listygo",
+    "name": "alina_listygo",
+    "parent": ""
+  },
+  {
+    "id": "61",
+    "taxonomy": "post_status",
+    "slug": "assigned",
+    "name": "Assigned",
+    "parent": ""
+  },
+  {
+    "id": "66",
+    "taxonomy": "ef_editorial_meta",
+    "slug": "assignment",
+    "name": "Assignment",
+    "parent": ""
+  },
+  {
+    "id": "75",
+    "taxonomy": "monsterinsights_note_category",
+    "slug": "blog-post",
+    "name": "Blog Post",
+    "parent": ""
+  },
+  {
+    "id": "69",
+    "taxonomy": "ef_usergroup",
+    "slug": "ef-usergroup-copy-editors",
+    "name": "Copy Editors",
+    "parent": ""
+  },
+  {
+    "id": "63",
+    "taxonomy": "post_status",
+    "slug": "draft",
+    "name": "Draft",
+    "parent": ""
+  },
+  {
+    "id": "65",
+    "taxonomy": "ef_editorial_meta",
+    "slug": "first-draft-date",
+    "name": "First Draft Date",
+    "parent": ""
+  },
+  {
+    "id": "62",
+    "taxonomy": "post_status",
+    "slug": "in-progress",
+    "name": "In Progress",
+    "parent": ""
+  },
+  {
+    "id": "89",
+    "taxonomy": "following_users",
+    "slug": "infolegalge",
+    "name": "infolegalge",
+    "parent": ""
+  },
+  {
+    "id": "85",
+    "taxonomy": "team_department",
+    "slug": "legal-sandbox-georgia",
+    "name": "Legal Sandbox Georgia",
+    "parent": ""
+  },
+  {
+    "id": "86",
+    "taxonomy": "team_department",
+    "slug": "marketing",
+    "name": "Marketing",
+    "parent": ""
+  },
+  {
+    "id": "67",
+    "taxonomy": "ef_editorial_meta",
+    "slug": "needs-photo",
+    "name": "Needs Photo",
+    "parent": ""
+  },
+  {
+    "id": "39",
+    "taxonomy": "elementor_library_type",
+    "slug": "page",
+    "name": "page",
+    "parent": ""
+  },
+  {
+    "id": "64",
+    "taxonomy": "post_status",
+    "slug": "pending",
+    "name": "Pending Review",
+    "parent": ""
+  },
+  {
+    "id": "70",
+    "taxonomy": "ef_usergroup",
+    "slug": "ef-usergroup-photographers",
+    "name": "Photographers",
+    "parent": ""
+  },
+  {
+    "id": "60",
+    "taxonomy": "post_status",
+    "slug": "pitch",
+    "name": "Pitch",
+    "parent": ""
+  },
+  {
+    "id": "76",
+    "taxonomy": "monsterinsights_note_category",
+    "slug": "promotion",
+    "name": "Promotion",
+    "parent": ""
+  },
+  {
+    "id": "71",
+    "taxonomy": "ef_usergroup",
+    "slug": "ef-usergroup-reporters",
+    "name": "Reporters",
+    "parent": ""
+  },
+  {
+    "id": "92",
+    "taxonomy": "elementor_library_type",
+    "slug": "section",
+    "name": "section",
+    "parent": ""
+  },
+  {
+    "id": "72",
+    "taxonomy": "ef_usergroup",
+    "slug": "ef-usergroup-section-editors",
+    "name": "Section Editors",
+    "parent": ""
+  },
+  {
+    "id": "90",
+    "taxonomy": "pp_notify_user",
+    "slug": "sofiodgebuadze",
+    "name": "sofiodgebuadze",
+    "parent": ""
+  },
+  {
+    "id": "88",
+    "taxonomy": "following_users",
+    "slug": "sofiodgebuadze",
+    "name": "sofiodgebuadze",
+    "parent": ""
+  },
+  {
+    "id": "79",
+    "taxonomy": "rtcl_tag",
+    "slug": "specialist",
+    "name": "Specialist",
+    "parent": ""
+  },
+  {
+    "id": "74",
+    "taxonomy": "monsterinsights_note_category",
+    "slug": "website-updates",
+    "name": "Website Updates",
+    "parent": ""
+  },
+  {
+    "id": "68",
+    "taxonomy": "ef_editorial_meta",
+    "slug": "word-count",
+    "name": "Word Count",
+    "parent": ""
+  },
+  {
+    "id": "80",
+    "taxonomy": "rtcl_location",
+    "slug": "%e1%83%97%e1%83%91%e1%83%98%e1%83%9a%e1%83%98%e1%83%a1%e1%83%98",
+    "name": "თბილისი",
+    "parent": "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d"
+  },
+  {
+    "id": "77",
+    "taxonomy": "rtcl_category",
+    "slug": "%e1%83%9b%e1%83%98%e1%83%92%e1%83%a0%e1%83%90%e1%83%aa%e1%83%98%e1%83%90-%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d%e1%83%a8%e1%83%98",
+    "name": "მიგრაცია საქართველოში",
+    "parent": "%e1%83%9e%e1%83%a0%e1%83%90%e1%83%a5%e1%83%a2%e1%83%98%e1%83%99%e1%83%98%e1%83%a1-%e1%83%a1%e1%83%a4%e1%83%94%e1%83%a0%e1%83%9d%e1%83%94%e1%83%91%e1%83%98"
+  },
+  {
+    "id": "87",
+    "taxonomy": "team_department",
+    "slug": "legal-department",
+    "name": "Legal Department",
+    "parent": "legal-sandbox-georgia"
+  },
+  {
+    "id": "4",
+    "taxonomy": "nav_menu",
+    "slug": "copyright-footer-menu",
+    "name": "Copyright Footer Menu",
+    "parent": ""
+  },
+  {
+    "id": "3",
+    "taxonomy": "nav_menu",
+    "slug": "main-menu",
+    "name": "Main Menu",
+    "parent": ""
+  },
+  {
+    "id": "9",
+    "taxonomy": "nav_menu",
+    "slug": "quick-links",
+    "name": "Quick Links",
+    "parent": ""
+  }
+]

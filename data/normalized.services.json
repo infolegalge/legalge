@@ -1,0 +1,1658 @@
+[
+  {
+    "id": "service_migration-to-georgia_visa-residency-applications",
+    "slug": "visa-residency-applications",
+    "title": "Visa & Residency Applications",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_citizenship-acquisition",
+    "slug": "citizenship-acquisition",
+    "title": "Citizenship Acquisition",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_work-permits",
+    "slug": "work-permits",
+    "title": "Work Permits",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_business-investment-migration",
+    "slug": "business-investment-migration",
+    "title": "Business & Investment Migration",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_family-reunification",
+    "slug": "family-reunification",
+    "title": "Family Reunification",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_property-for-foreigners",
+    "slug": "property-for-foreigners",
+    "title": "Property for Foreigners",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_tax-financial-planning",
+    "slug": "tax-financial-planning",
+    "title": "Tax & Financial Planning",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_document-legalization",
+    "slug": "document-legalization",
+    "title": "Document Legalization",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_migration-disputes-appeals",
+    "slug": "migration-disputes-appeals",
+    "title": "Migration Disputes & Appeals",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_translation-interpretation",
+    "slug": "translation-interpretation",
+    "title": "Translation & Interpretation",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_immigration-compliance",
+    "slug": "immigration-compliance",
+    "title": "Immigration Compliance",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_migration-to-georgia_digital-nomad-visas",
+    "slug": "digital-nomad-visas",
+    "title": "Digital Nomad Visas",
+    "parentId": "practice_migration-to-georgia"
+  },
+  {
+    "id": "service_labor-law_employment-contracts",
+    "slug": "employment-contracts",
+    "title": "Employment Contracts",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_workplace-policies",
+    "slug": "workplace-policies",
+    "title": "Workplace Policies",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_dispute-resolution",
+    "slug": "dispute-resolution",
+    "title": "Dispute Resolution",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_union-relations",
+    "slug": "union-relations",
+    "title": "Union Relations",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_workplace-investigations",
+    "slug": "workplace-investigations",
+    "title": "Workplace Investigations",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_health-safety-compliance",
+    "slug": "health-safety-compliance",
+    "title": "Health & Safety Compliance",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_employee-compensation",
+    "slug": "employee-compensation",
+    "title": "Employee Compensation",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_hr-legal-training",
+    "slug": "hr-legal-training",
+    "title": "HR Legal Training",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_diversity-inclusion",
+    "slug": "diversity-inclusion",
+    "title": "Diversity & Inclusion",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_termination-redundancy",
+    "slug": "termination-redundancy",
+    "title": "Termination & Redundancy",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_foreign-worker-law",
+    "slug": "foreign-worker-law",
+    "title": "Foreign Worker Law",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_labor-risk-strategy",
+    "slug": "labor-risk-strategy",
+    "title": "Labor Risk Strategy",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_employment-law-in-m-a",
+    "slug": "employment-law-in-m-a",
+    "title": "Employment Law in M&A",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_labor-law_trade-secret-litigation",
+    "slug": "trade-secret-litigation",
+    "title": "Trade Secret Litigation",
+    "parentId": "practice_labor-law"
+  },
+  {
+    "id": "service_legallaunch-for-startups_business-formation",
+    "slug": "business-formation",
+    "title": "Business Formation",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_ip-protection",
+    "slug": "ip-protection",
+    "title": "IP Protection",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_contract-drafting",
+    "slug": "contract-drafting",
+    "title": "Contract Drafting",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_hr-legal-advisory",
+    "slug": "hr-legal-advisory",
+    "title": "HR Legal Advisory",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_startup-financing",
+    "slug": "startup-financing",
+    "title": "Startup Financing",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_regulatory-compliance",
+    "slug": "regulatory-compliance",
+    "title": "Regulatory Compliance",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_corporate-governance",
+    "slug": "corporate-governance",
+    "title": "Corporate Governance",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_risk-management",
+    "slug": "risk-management",
+    "title": "Risk Management",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_startup-tax-planning",
+    "slug": "startup-tax-planning",
+    "title": "Startup Tax Planning",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_startup-m-a",
+    "slug": "startup-m-a",
+    "title": "Startup M&A",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_exit-planning",
+    "slug": "exit-planning",
+    "title": "Exit Planning",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_startup-disputes",
+    "slug": "startup-disputes",
+    "title": "Startup Disputes",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_reorganization-support",
+    "slug": "reorganization-support",
+    "title": "Reorganization Support",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_legallaunch-for-startups_shareholder-disputes",
+    "slug": "shareholder-disputes",
+    "title": "Shareholder Disputes",
+    "parentId": "practice_legallaunch-for-startups"
+  },
+  {
+    "id": "service_crypto-law_crypto-compliance",
+    "slug": "crypto-compliance",
+    "title": "Crypto Compliance",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_token-offerings",
+    "slug": "token-offerings",
+    "title": "Token Offerings",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_dao-governance",
+    "slug": "dao-governance",
+    "title": "DAO Governance",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-tax",
+    "slug": "crypto-tax",
+    "title": "Crypto Tax",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_aml-kyc-for-crypto",
+    "slug": "aml-kyc-for-crypto",
+    "title": "AML/KYC for Crypto",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_smart-contracts-legal-review",
+    "slug": "smart-contracts-legal-review",
+    "title": "Smart Contracts Legal Review",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-dispute-resolution",
+    "slug": "crypto-dispute-resolution",
+    "title": "Crypto Dispute Resolution",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-ip",
+    "slug": "crypto-ip",
+    "title": "Crypto IP",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-cybersecurity",
+    "slug": "crypto-cybersecurity",
+    "title": "Crypto Cybersecurity",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-licensing",
+    "slug": "crypto-licensing",
+    "title": "Crypto Licensing",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_asset-recovery",
+    "slug": "asset-recovery",
+    "title": "Asset Recovery",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_cross-border-crypto",
+    "slug": "cross-border-crypto",
+    "title": "Cross-Border Crypto",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-m-a",
+    "slug": "crypto-m-a",
+    "title": "Crypto M&A",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_regulatory-advocacy",
+    "slug": "regulatory-advocacy",
+    "title": "Regulatory Advocacy",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_crypto-estate-planning",
+    "slug": "crypto-estate-planning",
+    "title": "Crypto Estate Planning",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_defi-risk-advisory",
+    "slug": "defi-risk-advisory",
+    "title": "DeFi Risk Advisory",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_tokenization",
+    "slug": "tokenization",
+    "title": "Tokenization",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_ssi-legal-frameworks",
+    "slug": "ssi-legal-frameworks",
+    "title": "SSI Legal Frameworks",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_crypto-law_ai-blockchain-law",
+    "slug": "ai-blockchain-law",
+    "title": "AI & Blockchain Law",
+    "parentId": "practice_crypto-law"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_governance-frameworks",
+    "slug": "governance-frameworks",
+    "title": "Governance Frameworks",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_board-advisory",
+    "slug": "board-advisory",
+    "title": "Board Advisory",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_shareholder-rights",
+    "slug": "shareholder-rights",
+    "title": "Shareholder Rights",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_compliance-risk",
+    "slug": "compliance-risk",
+    "title": "Compliance & Risk",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_ethics-anti-corruption",
+    "slug": "ethics-anti-corruption",
+    "title": "Ethics & Anti-Corruption",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_csr-compliance",
+    "slug": "csr-compliance",
+    "title": "CSR Compliance",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_compliance-audits",
+    "slug": "compliance-audits",
+    "title": "Compliance Audits",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_privacy-compliance",
+    "slug": "privacy-compliance",
+    "title": "Privacy Compliance",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_whistleblower-law",
+    "slug": "whistleblower-law",
+    "title": "Whistleblower Law",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_executive-compensation",
+    "slug": "executive-compensation",
+    "title": "Executive Compensation",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_corporate-restructuring",
+    "slug": "corporate-restructuring",
+    "title": "Corporate Restructuring",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_corporate-reporting",
+    "slug": "corporate-reporting",
+    "title": "Corporate Reporting",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_governance-training",
+    "slug": "governance-training",
+    "title": "Governance Training",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_corporate-governance-and-business-compliance_governance-disputes",
+    "slug": "governance-disputes",
+    "title": "Governance Disputes",
+    "parentId": "practice_corporate-governance-and-business-compliance"
+  },
+  {
+    "id": "service_licenses_business-licensing",
+    "slug": "business-licensing",
+    "title": "Business Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_professional-licensing",
+    "slug": "professional-licensing",
+    "title": "Professional Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_ip-licensing",
+    "slug": "ip-licensing",
+    "title": "IP Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_alcohol-tobacco",
+    "slug": "alcohol-tobacco",
+    "title": "Alcohol & Tobacco",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_environmental-health",
+    "slug": "environmental-health",
+    "title": "Environmental & Health",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_telecom-licensing",
+    "slug": "telecom-licensing",
+    "title": "Telecom Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_import-export-licensing",
+    "slug": "import-export-licensing",
+    "title": "Import/Export Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_food-beverage",
+    "slug": "food-beverage",
+    "title": "Food & Beverage",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_real-estate-construction",
+    "slug": "real-estate-construction",
+    "title": "Real Estate & Construction",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_energy-licensing",
+    "slug": "energy-licensing",
+    "title": "Energy Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_gaming-licensing",
+    "slug": "gaming-licensing",
+    "title": "Gaming Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_financial-services",
+    "slug": "financial-services",
+    "title": "Financial Services",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_logistics-licensing",
+    "slug": "logistics-licensing",
+    "title": "Logistics Licensing",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_licenses_license-monitoring",
+    "slug": "license-monitoring",
+    "title": "License Monitoring",
+    "parentId": "practice_licenses"
+  },
+  {
+    "id": "service_permits_building-permits",
+    "slug": "building-permits",
+    "title": "Building Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_environmental-permits",
+    "slug": "environmental-permits",
+    "title": "Environmental Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_occupational-permits",
+    "slug": "occupational-permits",
+    "title": "Occupational Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_event-permits",
+    "slug": "event-permits",
+    "title": "Event Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_health-safety-permits",
+    "slug": "health-safety-permits",
+    "title": "Health & Safety Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_signage-permits",
+    "slug": "signage-permits",
+    "title": "Signage Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_liquor-tobacco-permits",
+    "slug": "liquor-tobacco-permits",
+    "title": "Liquor/Tobacco Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_transport-permits",
+    "slug": "transport-permits",
+    "title": "Transport Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_fire-occupancy-permits",
+    "slug": "fire-occupancy-permits",
+    "title": "Fire & Occupancy Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_zoning-permits",
+    "slug": "zoning-permits",
+    "title": "Zoning Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_filming-permits",
+    "slug": "filming-permits",
+    "title": "Filming Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_utility-permits",
+    "slug": "utility-permits",
+    "title": "Utility Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_telecom-infrastructure-permits",
+    "slug": "telecom-infrastructure-permits",
+    "title": "Telecom Infrastructure Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_permits_emergency-permits",
+    "slug": "emergency-permits",
+    "title": "Emergency Permits",
+    "parentId": "practice_permits"
+  },
+  {
+    "id": "service_tax-and-accounting_tax-planning",
+    "slug": "tax-planning",
+    "title": "Tax Planning",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_tax-filing",
+    "slug": "tax-filing",
+    "title": "Tax Filing",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_tax-audits",
+    "slug": "tax-audits",
+    "title": "Tax Audits",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_corporate-tax",
+    "slug": "corporate-tax",
+    "title": "Corporate Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_international-tax",
+    "slug": "international-tax",
+    "title": "International Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_indirect-tax",
+    "slug": "indirect-tax",
+    "title": "Indirect Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_sme-tax-structuring",
+    "slug": "sme-tax-structuring",
+    "title": "SME Tax Structuring",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_estate-planning",
+    "slug": "estate-planning",
+    "title": "Estate Planning",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_payroll-tax",
+    "slug": "payroll-tax",
+    "title": "Payroll Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_accounting-services",
+    "slug": "accounting-services",
+    "title": "Accounting Services",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_financial-reporting",
+    "slug": "financial-reporting",
+    "title": "Financial Reporting",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_m-a-tax",
+    "slug": "m-a-tax",
+    "title": "M&A Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_wealth-tax",
+    "slug": "wealth-tax",
+    "title": "Wealth Tax",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_tax-and-accounting_vat-health-checks",
+    "slug": "vat-health-checks",
+    "title": "VAT Health Checks",
+    "parentId": "practice_tax-and-accounting"
+  },
+  {
+    "id": "service_banks-and-finances_loan-agreements",
+    "slug": "loan-agreements",
+    "title": "Loan Agreements",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_asset-management",
+    "slug": "asset-management",
+    "title": "Asset Management",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_aml-compliance",
+    "slug": "aml-compliance",
+    "title": "AML Compliance",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_securities-law",
+    "slug": "securities-law",
+    "title": "Securities Law",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_fintech-law",
+    "slug": "fintech-law",
+    "title": "Fintech Law",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_derivatives",
+    "slug": "derivatives",
+    "title": "Derivatives",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_cross-border-finance",
+    "slug": "cross-border-finance",
+    "title": "Cross-Border Finance",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_private-banking",
+    "slug": "private-banking",
+    "title": "Private Banking",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_payments-e-money",
+    "slug": "payments-e-money",
+    "title": "Payments & E-Money",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_banking-disputes",
+    "slug": "banking-disputes",
+    "title": "Banking Disputes",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_banks-and-finances_bank-compliance-audits",
+    "slug": "bank-compliance-audits",
+    "title": "Bank Compliance Audits",
+    "parentId": "practice_banks-and-finances"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-strategy",
+    "slug": "ip-strategy",
+    "title": "IP Strategy",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_trademark-registration",
+    "slug": "trademark-registration",
+    "title": "Trademark Registration",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_patent-filing",
+    "slug": "patent-filing",
+    "title": "Patent Filing",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_copyright-protection",
+    "slug": "copyright-protection",
+    "title": "Copyright Protection",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_trade-secrets",
+    "slug": "trade-secrets",
+    "title": "Trade Secrets",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-licensing",
+    "slug": "ip-licensing",
+    "title": "IP Licensing",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_invention-assessments",
+    "slug": "invention-assessments",
+    "title": "Invention Assessments",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-due-diligence",
+    "slug": "ip-due-diligence",
+    "title": "IP Due Diligence",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_brand-protection",
+    "slug": "brand-protection",
+    "title": "Brand Protection",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-litigation",
+    "slug": "ip-litigation",
+    "title": "IP Litigation",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_counterfeit-defense",
+    "slug": "counterfeit-defense",
+    "title": "Counterfeit Defense",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_software-licensing",
+    "slug": "software-licensing",
+    "title": "Software Licensing",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-monetization",
+    "slug": "ip-monetization",
+    "title": "IP Monetization",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_customs-ip-enforcement",
+    "slug": "customs-ip-enforcement",
+    "title": "Customs IP Enforcement",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_ip-trademark-inventions_ip-training",
+    "slug": "ip-training",
+    "title": "IP Training",
+    "parentId": "practice_ip-trademark-inventions"
+  },
+  {
+    "id": "service_personal-data-protection_data-compliance",
+    "slug": "data-compliance",
+    "title": "Data Compliance",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_data-subject-rights",
+    "slug": "data-subject-rights",
+    "title": "Data Subject Rights",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_data-breach-response",
+    "slug": "data-breach-response",
+    "title": "Data Breach Response",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_dpo-support",
+    "slug": "dpo-support",
+    "title": "DPO Support",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_employee-data",
+    "slug": "employee-data",
+    "title": "Employee Data",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_cross-border-transfers",
+    "slug": "cross-border-transfers",
+    "title": "Cross-Border Transfers",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_sectoral-compliance",
+    "slug": "sectoral-compliance",
+    "title": "Sectoral Compliance",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_personal-data-protection_regulatory-defense",
+    "slug": "regulatory-defense",
+    "title": "Regulatory Defense",
+    "parentId": "practice_personal-data-protection"
+  },
+  {
+    "id": "service_property-law_real-estate-sales",
+    "slug": "real-estate-sales",
+    "title": "Real Estate Sales",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_lease-agreements",
+    "slug": "lease-agreements",
+    "title": "Lease Agreements",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_title-registration",
+    "slug": "title-registration",
+    "title": "Title Registration",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_construction-law",
+    "slug": "construction-law",
+    "title": "Construction Law",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_mortgages",
+    "slug": "mortgages",
+    "title": "Mortgages",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_agricultural-land",
+    "slug": "agricultural-land",
+    "title": "Agricultural Land",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_property-law_property-tax-planning",
+    "slug": "property-tax-planning",
+    "title": "Property Tax Planning",
+    "parentId": "practice_property-law"
+  },
+  {
+    "id": "service_honor-reputation-protection_defamation-cases",
+    "slug": "defamation-cases",
+    "title": "Defamation Cases",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_online-reputation",
+    "slug": "online-reputation",
+    "title": "Online Reputation",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_media-compliance",
+    "slug": "media-compliance",
+    "title": "Media Compliance",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_business-reputation",
+    "slug": "business-reputation",
+    "title": "Business Reputation",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_right-of-reply",
+    "slug": "right-of-reply",
+    "title": "Right of Reply",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_false-accusation-defense",
+    "slug": "false-accusation-defense",
+    "title": "False Accusation Defense",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_honor-reputation-protection_public-figure-protection",
+    "slug": "public-figure-protection",
+    "title": "Public Figure Protection",
+    "parentId": "practice_honor-reputation-protection"
+  },
+  {
+    "id": "service_international-law_cross-border-contracts",
+    "slug": "cross-border-contracts",
+    "title": "Cross-Border Contracts",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_international-investment",
+    "slug": "international-investment",
+    "title": "International Investment",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_treaty-law",
+    "slug": "treaty-law",
+    "title": "Treaty Law",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_international-arbitration",
+    "slug": "international-arbitration",
+    "title": "International Arbitration",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_human-rights-law",
+    "slug": "human-rights-law",
+    "title": "Human Rights Law",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_jurisdiction-conflicts",
+    "slug": "jurisdiction-conflicts",
+    "title": "Jurisdiction Conflicts",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_international-law_extradition-mlats",
+    "slug": "extradition-mlats",
+    "title": "Extradition & MLATs",
+    "parentId": "practice_international-law"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_civil-litigation",
+    "slug": "civil-litigation",
+    "title": "Civil Litigation",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_arbitration",
+    "slug": "arbitration",
+    "title": "Arbitration",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_administrative-litigation",
+    "slug": "administrative-litigation",
+    "title": "Administrative Litigation",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_corporate-disputes",
+    "slug": "corporate-disputes",
+    "title": "Corporate Disputes",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_judgment-enforcement",
+    "slug": "judgment-enforcement",
+    "title": "Judgment Enforcement",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_appeals",
+    "slug": "appeals",
+    "title": "Appeals",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_litigation-and-dispute-resolution_injunctions",
+    "slug": "injunctions",
+    "title": "Injunctions",
+    "parentId": "practice_litigation-and-dispute-resolution"
+  },
+  {
+    "id": "service_family-law_divorce-separation",
+    "slug": "divorce-separation",
+    "title": "Divorce & Separation",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_child-custody",
+    "slug": "child-custody",
+    "title": "Child Custody",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_alimony",
+    "slug": "alimony",
+    "title": "Alimony",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_prenuptial-agreements",
+    "slug": "prenuptial-agreements",
+    "title": "Prenuptial Agreements",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_adoption",
+    "slug": "adoption",
+    "title": "Adoption",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_surrogacy",
+    "slug": "surrogacy",
+    "title": "Surrogacy",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_domestic-violence",
+    "slug": "domestic-violence",
+    "title": "Domestic Violence",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_cross-border-family-disputes",
+    "slug": "cross-border-family-disputes",
+    "title": "Cross-Border Family Disputes",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_asset-division",
+    "slug": "asset-division",
+    "title": "Asset Division",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_family-law_family-mediation",
+    "slug": "family-mediation",
+    "title": "Family Mediation",
+    "parentId": "practice_family-law"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_fraud-financial-crimes",
+    "slug": "fraud-financial-crimes",
+    "title": "Fraud & Financial Crimes",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_cybercrime-defense",
+    "slug": "cybercrime-defense",
+    "title": "Cybercrime Defense",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_tax-crimes",
+    "slug": "tax-crimes",
+    "title": "Tax Crimes",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_pre-trial-defense",
+    "slug": "pre-trial-defense",
+    "title": "Pre-Trial Defense",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_white-collar-compliance",
+    "slug": "white-collar-compliance",
+    "title": "White-Collar Compliance",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_bribery-corruption",
+    "slug": "bribery-corruption",
+    "title": "Bribery & Corruption",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_plea-bargaining",
+    "slug": "plea-bargaining",
+    "title": "Plea Bargaining",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_criminal-appeals",
+    "slug": "criminal-appeals",
+    "title": "Criminal Appeals",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_executive-defense",
+    "slug": "executive-defense",
+    "title": "Executive Defense",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_criminal-defense-and-white-collar-crime_risk-prevention",
+    "slug": "risk-prevention",
+    "title": "Risk Prevention",
+    "parentId": "practice_criminal-defense-and-white-collar-crime"
+  },
+  {
+    "id": "service_environmental-and-energy-law_environmental-permits",
+    "slug": "environmental-permits",
+    "title": "Environmental Permits",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_energy-project-advisory",
+    "slug": "energy-project-advisory",
+    "title": "Energy Project Advisory",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_mining-resources",
+    "slug": "mining-resources",
+    "title": "Mining & Resources",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_water-law",
+    "slug": "water-law",
+    "title": "Water Law",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_environmental-litigation",
+    "slug": "environmental-litigation",
+    "title": "Environmental Litigation",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_carbon-trading",
+    "slug": "carbon-trading",
+    "title": "Carbon Trading",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_esg-compliance",
+    "slug": "esg-compliance",
+    "title": "ESG Compliance",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_environmental-hearings",
+    "slug": "environmental-hearings",
+    "title": "Environmental Hearings",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_environmental-and-energy-law_eu-green-deal",
+    "slug": "eu-green-deal",
+    "title": "EU Green Deal",
+    "parentId": "practice_environmental-and-energy-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_medical-licensing",
+    "slug": "medical-licensing",
+    "title": "Medical Licensing",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_patient-rights",
+    "slug": "patient-rights",
+    "title": "Patient Rights",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_malpractice-defense",
+    "slug": "malpractice-defense",
+    "title": "Malpractice Defense",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_clinical-trials",
+    "slug": "clinical-trials",
+    "title": "Clinical Trials",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_pharma-labeling",
+    "slug": "pharma-labeling",
+    "title": "Pharma Labeling",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_health-data-privacy",
+    "slug": "health-data-privacy",
+    "title": "Health Data Privacy",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_telemedicine",
+    "slug": "telemedicine",
+    "title": "Telemedicine",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_pharmacy-licensing",
+    "slug": "pharmacy-licensing",
+    "title": "Pharmacy Licensing",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_health-startup-structuring",
+    "slug": "health-startup-structuring",
+    "title": "Health Startup Structuring",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_healthcare-and-pharmaceutical-law_insurance-regulation",
+    "slug": "insurance-regulation",
+    "title": "Insurance Regulation",
+    "parentId": "practice_healthcare-and-pharmaceutical-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_athlete-contracts",
+    "slug": "athlete-contracts",
+    "title": "Athlete Contracts",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_sponsorships",
+    "slug": "sponsorships",
+    "title": "Sponsorships",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_media-licensing",
+    "slug": "media-licensing",
+    "title": "Media Licensing",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_event-law",
+    "slug": "event-law",
+    "title": "Event Law",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_copyrights-for-creatives",
+    "slug": "copyrights-for-creatives",
+    "title": "Copyrights for Creatives",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_content-distribution",
+    "slug": "content-distribution",
+    "title": "Content Distribution",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_talent-agreements",
+    "slug": "talent-agreements",
+    "title": "Talent Agreements",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_online-content-takedowns",
+    "slug": "online-content-takedowns",
+    "title": "Online Content Takedowns",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_influencer-law",
+    "slug": "influencer-law",
+    "title": "Influencer Law",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_sports-media-entertainment-law_reputation-litigation",
+    "slug": "reputation-litigation",
+    "title": "Reputation Litigation",
+    "parentId": "practice_sports-media-entertainment-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_aircraft-vessel-registration",
+    "slug": "aircraft-vessel-registration",
+    "title": "Aircraft/Vessel Registration",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_aviation-licensing",
+    "slug": "aviation-licensing",
+    "title": "Aviation Licensing",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_shipping-law",
+    "slug": "shipping-law",
+    "title": "Shipping Law",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_port-regulation",
+    "slug": "port-regulation",
+    "title": "Port Regulation",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_passenger-rights",
+    "slug": "passenger-rights",
+    "title": "Passenger Rights",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_maritime-crew-law",
+    "slug": "maritime-crew-law",
+    "title": "Maritime Crew Law",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_charter-agreements",
+    "slug": "charter-agreements",
+    "title": "Charter Agreements",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_international-maritime-law",
+    "slug": "international-maritime-law",
+    "title": "International Maritime Law",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_aviation-safety",
+    "slug": "aviation-safety",
+    "title": "Aviation Safety",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_aviation-and-maritime-law_aviation-compliance",
+    "slug": "aviation-compliance",
+    "title": "Aviation Compliance",
+    "parentId": "practice_aviation-and-maritime-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_ai-ethics",
+    "slug": "ai-ethics",
+    "title": "AI Ethics",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_ai-liability",
+    "slug": "ai-liability",
+    "title": "AI Liability",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_software-agreements",
+    "slug": "software-agreements",
+    "title": "Software Agreements",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_ai-generated-ip",
+    "slug": "ai-generated-ip",
+    "title": "AI-Generated IP",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_biometric-compliance",
+    "slug": "biometric-compliance",
+    "title": "Biometric Compliance",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_robot-drone-law",
+    "slug": "robot-drone-law",
+    "title": "Robot & Drone Law",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_ai-labor-law",
+    "slug": "ai-labor-law",
+    "title": "AI & Labor Law",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_privacy-in-ai",
+    "slug": "privacy-in-ai",
+    "title": "Privacy in AI",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_ai-litigation",
+    "slug": "ai-litigation",
+    "title": "AI Litigation",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_technology-and-ai-law_eu-ai-act-compliance",
+    "slug": "eu-ai-act-compliance",
+    "title": "EU AI Act Compliance",
+    "parentId": "practice_technology-and-ai-law"
+  },
+  {
+    "id": "service_education-law_school-licensing",
+    "slug": "school-licensing",
+    "title": "School Licensing",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_teacher-law",
+    "slug": "teacher-law",
+    "title": "Teacher Law",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_student-rights",
+    "slug": "student-rights",
+    "title": "Student Rights",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_academic-discipline",
+    "slug": "academic-discipline",
+    "title": "Academic Discipline",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_curriculum-law",
+    "slug": "curriculum-law",
+    "title": "Curriculum Law",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_special-education-compliance",
+    "slug": "special-education-compliance",
+    "title": "Special Education Compliance",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_edtech-compliance",
+    "slug": "edtech-compliance",
+    "title": "EdTech Compliance",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_foreign-school-advisory",
+    "slug": "foreign-school-advisory",
+    "title": "Foreign School Advisory",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_education-ppps",
+    "slug": "education-ppps",
+    "title": "Education PPPs",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_education-law_cross-border-accreditation",
+    "slug": "cross-border-accreditation",
+    "title": "Cross-Border Accreditation",
+    "parentId": "practice_education-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_ngo-formation",
+    "slug": "ngo-formation",
+    "title": "NGO Formation",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_bylaws-governance",
+    "slug": "bylaws-governance",
+    "title": "Bylaws & Governance",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_tax-exemption",
+    "slug": "tax-exemption",
+    "title": "Tax Exemption",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_grant-compliance",
+    "slug": "grant-compliance",
+    "title": "Grant Compliance",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_ngo-defense",
+    "slug": "ngo-defense",
+    "title": "NGO Defense",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_humanitarian-law",
+    "slug": "humanitarian-law",
+    "title": "Humanitarian Law",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_international-ngo-support",
+    "slug": "international-ngo-support",
+    "title": "International NGO Support",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_ngo-employment",
+    "slug": "ngo-employment",
+    "title": "NGO Employment",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_strategic-litigation",
+    "slug": "strategic-litigation",
+    "title": "Strategic Litigation",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_non-profit-and-ngo-law_transparency-advisory",
+    "slug": "transparency-advisory",
+    "title": "Transparency Advisory",
+    "parentId": "practice_non-profit-and-ngo-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_military-service-law",
+    "slug": "military-service-law",
+    "title": "Military Service Law",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_defense-contracts",
+    "slug": "defense-contracts",
+    "title": "Defense Contracts",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_emergency-law",
+    "slug": "emergency-law",
+    "title": "Emergency Law",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_national-security-clearance",
+    "slug": "national-security-clearance",
+    "title": "National Security Clearance",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_cybersecurity-defense",
+    "slug": "cybersecurity-defense",
+    "title": "Cybersecurity Defense",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_sanctions-law",
+    "slug": "sanctions-law",
+    "title": "Sanctions Law",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_ihl-geneva-convention",
+    "slug": "ihl-geneva-convention",
+    "title": "IHL & Geneva Convention",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_personnel-rights",
+    "slug": "personnel-rights",
+    "title": "Personnel Rights",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_export-control",
+    "slug": "export-control",
+    "title": "Export Control",
+    "parentId": "practice_military-and-national-security-law"
+  },
+  {
+    "id": "service_military-and-national-security-law_military-tribunals",
+    "slug": "military-tribunals",
+    "title": "Military Tribunals",
+    "parentId": "practice_military-and-national-security-law"
+  }
+]

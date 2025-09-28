@@ -1,0 +1,118 @@
+{
+  "site": {
+    "title": "LLC Legal Sandbox Georgia",
+    "tagline": "ინოვაცია იურიდიულ სერვისებში საქართველოში"
+  },
+  "nav": {
+    "practice": "პრაქტიკა",
+    "specialists": "სპეციალისტები",
+    "news": "სიახლეები",
+    "contact": "კონტაქტი"
+  },
+  "footer": {
+    "privacy": "კონფიდენციალურობა",
+    "terms": "წესები"
+  },
+  "hero": {
+    "cta_primary": "დაგვიკავშირდით",
+    "cta_secondary": "იხილეთ პრაქტიკა"
+  },
+  "practice": {
+    "title": "პრაქტიკა",
+    "description": "გაიცანით ჩვენი იურიდიული მიმართულებები"
+  },
+  "lawyers": {
+    "title": "იურისტები",
+    "description": "გაიცანით ჩვენი გუნდი"
+  },
+  "specialists": {
+    "title": "სპეციალისტები",
+    "description": "გაიცანით ჩვენი იურიდიული სპეციალისტები და ექსპერტები",
+    "search_placeholder": "სპეციალისტების ძებნა...",
+    "filter": "ფილტრი",
+    "total_specialists": "სულ სპეციალისტები",
+    "company_specialists": "კომპანიის სპეციალისტები",
+    "solo_practitioners": "დამოუკიდებელი პრაქტიკოსები",
+    "no_specialists": "სპეციალისტები ვერ მოიძებნა",
+    "no_specialists_description": "ჩვენ ვმუშაობთ ჩვენი სპეციალისტების პროფილების დამატებაზე. მალე შეამოწმეთ!",
+    "specializations": "სპეციალიზაციები",
+    "languages": "ენები",
+    "bio": "ბიოგრაფია",
+    "services": "სერვისები",
+    "contact_cta_title": "დაკავშირება",
+    "contact_cta_description": "მზად ხართ ამ სპეციალისტთან მუშაობისთვის?",
+    "send_email": "ელფოსტის გაგზავნა",
+    "call": "დარეკვა"
+  },
+  "companies": {
+    "title": "კომპანიები",
+    "description": "იურიდიული კომპანიები და ფირმები ჩვენს ქსელში",
+    "total_companies": "სულ კომპანიები",
+    "total_specialists": "სულ სპეციალისტები",
+    "no_companies": "კომპანიები ვერ მოიძებნა",
+    "no_companies_description": "ჩვენ ვმუშაობთ კომპანიების პროფილების დამატებაზე. მალე შეამოწმეთ!",
+    "specialists": "სპეციალისტები",
+    "about": "შესახებ",
+    "no_specialists": "სპეციალისტები არ არის",
+    "no_specialists_description": "ამ კომპანიას ჯერ არ აქვს სპეციალისტები ჩამოთვლილი.",
+    "practice_areas": "პრაქტიკა",
+    "search_specialists": "სპეციალისტების ძებნა...",
+    "all_specializations": "ყველა სპეციალიზაცია",
+    "no_specialists_found": "სპეციალისტები ვერ მოიძებნა",
+    "no_specialists_found_description": "სცადეთ ძებნის ან ფილტრის კრიტერიუმების შეცვლა.",
+    "latest_updates": "ბოლო განახლებები",
+    "see_all_posts": "ყველა პოსტის ნახვა",
+    "contact_cta_title": "მზად ხართ ჩვენთან მუშაობისთვის?",
+    "contact_cta_description": "დაუკავშირდით ჩვენს იურიდიული სპეციალისტების გუნდს ექსპერტული რჩევისა და წარმომადგენლობისთვის.",
+    "contact_company": "კომპანიასთან დაკავშირება",
+    "schedule_consultation": "კონსულტაციის დაგეგმვა"
+  },
+  "common": {
+    "home": "მთავარი",
+    "back_to_specialists": "სპეციალისტებზე დაბრუნება",
+    "back_to_companies": "კომპანიებზე დაბრუნება"
+  },
+  "news": {
+    "title": "სიახლეები",
+    "description": "განახლებები და სტატიები"
+  },
+  "contact": {
+    "title": "კონტაქტი",
+    "description": "მოგვწერეთ",
+    "name": "სახელი",
+    "email": "ელ-ფოსტა",
+    "message": "შეტყობინება",
+    "submit": "გაგზავნა",
+    "office": "მთავარი ოფისი",
+    "address": "მისამართი",
+    "phone": "ტელეფონი",
+    "email_contact": "ელ-ფოსტა",
+    "hours": "სამუშაო საათები",
+    "get_directions": "მიმართულებების მიღება",
+    "view_on_osm": "ნახეთ OSM-ზე"
+  },
+  "auth": {
+    "sign_in": "შესვლა",
+    "sign_up": "რეგისტრაცია",
+    "sign_out": "გასვლა"
+  },
+  "header": {
+    "cms": "CMS",
+    "request_access": "წვდომის მოთხოვნა"
+  },
+  "specialist": {
+    "languages": "ენები",
+    "bio": "ბიოგრაფია",
+    "philosophy": "ფილოსოფია",
+    "focus_areas": "ძირითადი სპეციალიზაციის სფერო",
+    "representative_matters": "წარმომადგენლობის ისტორიები",
+    "teaching_writing": "სწავლება, აკადემიური მუშაობა, სპიკერის გამოცდილება",
+    "credentials": "სერთიფიკატები და წევრობა",
+    "values": "ღირებულებები და ჩვენი მუშაობის წესი",
+    "courses": "კურსები",
+    "workshops": "სემინარები",
+    "writing_topics": "წერის თემები"
+  }
+}
+
+

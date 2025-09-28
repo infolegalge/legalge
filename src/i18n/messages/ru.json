@@ -1,0 +1,118 @@
+{
+  "site": {
+    "title": "LLC Legal Sandbox Georgia",
+    "tagline": "Инновации в юридических услугах в Грузии"
+  },
+  "nav": {
+    "practice": "Практики",
+    "specialists": "Специалисты",
+    "news": "Новости",
+    "contact": "Контакты"
+  },
+  "footer": {
+    "privacy": "Конфиденциальность",
+    "terms": "Условия"
+  },
+  "hero": {
+    "cta_primary": "Связаться с нами",
+    "cta_secondary": "Смотреть практики"
+  },
+  "practice": {
+    "title": "Практики",
+    "description": "Наши юридические направления"
+  },
+  "lawyers": {
+    "title": "Юристы",
+    "description": "Наша команда"
+  },
+  "specialists": {
+    "title": "Специалисты",
+    "description": "Познакомьтесь с нашими юридическими специалистами и экспертами",
+    "search_placeholder": "Поиск специалистов...",
+    "filter": "Фильтр",
+    "total_specialists": "Всего специалистов",
+    "company_specialists": "Специалисты компаний",
+    "solo_practitioners": "Частные практики",
+    "no_specialists": "Специалисты не найдены",
+    "no_specialists_description": "Мы работаем над добавлением профилей наших специалистов. Заходите позже!",
+    "specializations": "Специализации",
+    "languages": "Языки",
+    "bio": "Биография",
+    "services": "Услуги",
+    "contact_cta_title": "Связаться",
+    "contact_cta_description": "Готовы работать с этим специалистом?",
+    "send_email": "Отправить email",
+    "call": "Позвонить"
+  },
+  "companies": {
+    "title": "Компании",
+    "description": "Юридические компании и фирмы в нашей сети",
+    "total_companies": "Всего компаний",
+    "total_specialists": "Всего специалистов",
+    "no_companies": "Компании не найдены",
+    "no_companies_description": "Мы работаем над добавлением профилей компаний. Заходите позже!",
+    "specialists": "Специалисты",
+    "about": "О компании",
+    "no_specialists": "Нет специалистов",
+    "no_specialists_description": "У этой компании пока нет перечисленных специалистов.",
+    "practice_areas": "Области практики",
+    "search_specialists": "Поиск специалистов...",
+    "all_specializations": "Все специализации",
+    "no_specialists_found": "Специалисты не найдены",
+    "no_specialists_found_description": "Попробуйте изменить критерии поиска или фильтра.",
+    "latest_updates": "Последние обновления от",
+    "see_all_posts": "Посмотреть все посты",
+    "contact_cta_title": "Готовы работать с нами?",
+    "contact_cta_description": "Свяжитесь с нашей командой юридических специалистов для получения экспертных консультаций и представительства.",
+    "contact_company": "Связаться с компанией",
+    "schedule_consultation": "Запланировать консультацию"
+  },
+  "common": {
+    "home": "Главная",
+    "back_to_specialists": "Назад к специалистам",
+    "back_to_companies": "Назад к компаниям"
+  },
+  "news": {
+    "title": "Новости",
+    "description": "Обновления и статьи"
+  },
+  "contact": {
+    "title": "Контакты",
+    "description": "Напишите",
+    "name": "Ваше имя",
+    "email": "Email",
+    "message": "Сообщение",
+    "submit": "Отправить",
+    "office": "главный офис",
+    "address": "адрес",
+    "phone": "Телефон",
+    "email_contact": "Электронная почта",
+    "hours": "Рабочее время",
+    "get_directions": "Проложить маршрут",
+    "view_on_osm": "Посмотреть на OSM"
+  },
+  "auth": {
+    "sign_in": "Войти",
+    "sign_up": "Регистрация",
+    "sign_out": "Выйти"
+  },
+  "header": {
+    "cms": "CMS",
+    "request_access": "Запросить доступ"
+  },
+  "specialist": {
+    "languages": "Знание языка",
+    "bio": "Био",
+    "philosophy": "Философия",
+    "focus_areas": "основные направления деятельности",
+    "representative_matters": "Истории репрезентации",
+    "teaching_writing": "Преподавание, академическая работа, опыт выступления",
+    "credentials": "Полномочия и членство",
+    "values": "Ценности и как мы работаем",
+    "courses": "Курсы",
+    "workshops": "Семинары",
+    "writing_topics": "Темы для написания"
+  }
+}
+
+
