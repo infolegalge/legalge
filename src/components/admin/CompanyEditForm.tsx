@@ -20,10 +20,16 @@ interface Company {
   mapLink?: string | null;
 }
 
+type UpdateResult = {
+  success?: boolean;
+  error?: string;
+  company?: { id: string; name: string; slug: string };
+};
+
 interface CompanyEditFormProps {
   company: Company;
   translations?: Array<{ locale: 'ka'|'en'|'ru'; name: string; slug: string; description?: string | null; shortDesc?: string | null; longDesc?: string | null }>;
-  updateAction: (formData: FormData) => Promise<void>;
+  updateAction: (formData: FormData) => Promise<UpdateResult | void>;
 }
 
 export default function CompanyEditForm({ 
@@ -70,7 +76,21 @@ export default function CompanyEditForm({
     
     startTransition(async () => {
       try {
-        await updateAction(formData);
+        const result = await updateAction(formData);
+
+        if (result && typeof result === 'object') {
+          if (result.error) {
+            setError(result.error);
+            setSuccess(null);
+            return;
+          }
+
+          if (result.success) {
+            setSuccess('Company updated successfully!');
+            return;
+          }
+        }
+
         setSuccess('Company updated successfully!');
       } catch (err) {
         setError("An unexpected error occurred. Please try again.");
