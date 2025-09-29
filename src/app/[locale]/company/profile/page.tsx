@@ -52,13 +52,15 @@ export default async function CompanyProfilePage({
     redirect(`/${locale}/company`)
   }
 
+  const resolvedCompany = company as ProfileCompany
+
   // Load translations for editor
   let translations: Array<{ locale: 'ka'|'en'|'ru'; name: string; slug: string; description: string | null; shortDesc: string | null; longDesc: string | null }> = []
   try {
     const client: any = prisma as any
     if (client.companyTranslation && typeof client.companyTranslation.findMany === 'function') {
       translations = await client.companyTranslation.findMany({
-        where: { companyId: (company as any).id },
+        where: { companyId: resolvedCompany.id },
         select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true },
       })
     }
@@ -98,10 +100,10 @@ export default async function CompanyProfilePage({
 
     try {
       await prisma.company.update({
-        where: { id: company.id },
+        where: { id: resolvedCompany.id },
         data: {
           name,
-          slug: slug || company.slug,
+          slug: slug || resolvedCompany.slug,
           description: description || undefined,
           shortDesc: shortDesc || undefined,
           longDesc: longDesc || undefined,
@@ -119,14 +121,14 @@ export default async function CompanyProfilePage({
       if (client.companyTranslation) {
         const tx: Promise<any>[] = []
         tx.push(client.companyTranslation.upsert({
-          where: { companyId_locale: { companyId: (company as any).id, locale: 'en' } },
-          create: { companyId: (company as any).id, locale: 'en', name: name_en || name, slug: slug_en || ((slug || company.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
-          update: { name: name_en || name, slug: slug_en || ((slug || company.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
+          where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'en' } },
+          create: { companyId: resolvedCompany.id, locale: 'en', name: name_en || name, slug: slug_en || ((slug || resolvedCompany.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
+          update: { name: name_en || name, slug: slug_en || ((slug || resolvedCompany.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
         }))
         tx.push(client.companyTranslation.upsert({
-          where: { companyId_locale: { companyId: (company as any).id, locale: 'ru' } },
-          create: { companyId: (company as any).id, locale: 'ru', name: name_ru || name, slug: slug_ru || ((slug || company.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
-          update: { name: name_ru || name, slug: slug_ru || ((slug || company.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
+          where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'ru' } },
+          create: { companyId: resolvedCompany.id, locale: 'ru', name: name_ru || name, slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
+          update: { name: name_ru || name, slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
         }))
         await Promise.all(tx)
       }
@@ -145,7 +147,7 @@ export default async function CompanyProfilePage({
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-lg border bg-card p-6">
-            <CompanyEditForm company={company as ProfileCompany} translations={translations as any} updateAction={updateCompany} />
+            <CompanyEditForm company={resolvedCompany} translations={translations as any} updateAction={updateCompany} />
           </div>
         </div>
         <CompanyProfileManagement locale={locale} />

@@ -11,6 +11,7 @@ type SessionUserCompany = NonNullable<Session["user"]> & {
   role?: "SUPER_ADMIN" | "COMPANY" | "SPECIALIST" | "SUBSCRIBER";
   companyId?: string;
   companySlug?: string | null;
+  id: string;
 };
 
 async function requireCompanyAdmin() {

@@ -47,12 +47,17 @@ interface Specialist {
   }>;
 }
 
+type ActionResult<T extends Record<string, unknown> = {}> = {
+  success?: boolean;
+  error?: string;
+} & T;
+
 interface SpecialistEditFormProps {
   specialist: Specialist;
   services: Service[];
   companies: Company[];
-  updateAction: (formData: FormData) => Promise<void>;
-  assignServicesAction: (formData: FormData) => Promise<void>;
+  updateAction: (formData: FormData) => Promise<ActionResult<{ specialist?: { id: string; name: string; slug: string } }> | void>;
+  assignServicesAction: (formData: FormData) => Promise<ActionResult | void>;
   isCompanyAdmin?: boolean;
 }
 
@@ -85,7 +90,21 @@ export default function SpecialistEditForm({
     
     startTransition(async () => {
       try {
-        await updateAction(formData);
+        const result = await updateAction(formData);
+
+        if (result && typeof result === 'object') {
+          if ('error' in result && result.error) {
+            setError(result.error);
+            setSuccess(null);
+            return;
+          }
+
+          if ('success' in result && result.success) {
+            setSuccess('Specialist updated successfully!');
+            return;
+          }
+        }
+
         setSuccess('Specialist updated successfully!');
       } catch (err) {
         setError("An unexpected error occurred. Please try again.");
@@ -99,8 +118,21 @@ export default function SpecialistEditForm({
     
     startTransition(async () => {
       try {
-        await assignServicesAction(formData);
-        // Server action now returns void, so we assume success if no error
+        const result = await assignServicesAction(formData);
+
+        if (result && typeof result === 'object') {
+          if ('error' in result && result.error) {
+            setError(result.error);
+            setSuccess(null);
+            return;
+          }
+
+          if ('success' in result && result.success) {
+            setSuccess('Services assigned successfully!');
+            return;
+          }
+        }
+
         setSuccess("Services assigned successfully!");
       } catch (err) {
         setError("An unexpected error occurred. Please try again.");
