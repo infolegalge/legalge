@@ -181,6 +181,23 @@ model Company {
   updatedAt   DateTime  @updatedAt
 }
 
+model CompanyTranslation {
+  id              String   @id @default(cuid())
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  locale          Locale
+  name            String
+  slug            String
+  description     String?
+  shortDesc       String?
+  longDesc        String?
+  metaTitle       String?
+  metaDescription String?
+
+  @@unique([companyId, locale])
+  @@unique([locale, slug])
+}
+
 model CompanySettings {
   id                    String   @id @default(cuid())
   companyId             String   @unique
@@ -416,23 +433,6 @@ model SpecialistProfileTranslation {
   values      String?
 
   @@unique([specialistProfileId, locale])
-  @@unique([locale, slug])
-}
-
-model CompanyTranslation {
-  id        String  @id @default(cuid())
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  locale    Locale
-  name      String
-  slug      String
-  description String?
-  shortDesc   String?
-  longDesc    String?
-  metaTitle   String?
-  metaDescription String?
-
-  @@unique([companyId, locale])
   @@unique([locale, slug])
 }
 
