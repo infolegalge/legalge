@@ -4,17 +4,27 @@ Whenever you touch the project, run these terminal steps before committing:
 
 1. `git status -sb` – see what changed.
 2. `npm ci`
-3. `npx prisma migrate deploy`
-4. `npx prisma generate`
-5. `npx tsx scripts/seed-practices-services.ts`
-6. `npm run build`
-7. Optionally `npm run start` to verify the UI.
-8. Resolve lint/test errors if any appear.
-9. `git add <files>`
-10. `git commit -m "Describe change"`
-11. `git push`
+3. `npx prisma migrate dev` (records new migrations locally if the schema changed).
+4. `git status -- prisma/migrations` – if a new migration folder was created, review it and commit it.
+5. `npx prisma generate` (if the schema changed; otherwise optional).
+6. `npx tsx scripts/seed-practices-services.ts` (upserts data; safe to rerun).
+7. `npm run build`
+8. Optionally `npm run start` to verify the UI.
+9. Resolve lint/test errors if any appear.
+10. `git add <files>`
+11. `git commit -m "Describe change"`
+12. `git push`
 
 If any step fails, fix it immediately before moving on.
+
+# Handling Schema Changes Safely
+
+1. Modify `prisma/schema.prisma` as needed.
+2. Create a migration (local only):
+   - `npx prisma migrate dev --name <migration_name>`
+3. Inspect the generated SQL in `prisma/migrations/`.
+4. Commit both the schema and migration files.
+5. Never delete or rewrite migrations that ran on shared environments—add new ones instead.
 
 # Docker Build Check
 
