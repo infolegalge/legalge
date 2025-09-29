@@ -41,6 +41,7 @@ export default function CompanyEditForm({
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
+  const [logoUrl, setLogoUrl] = useState<string>(company.logoUrl || "");
 
   const tMap = new Map(translations.map(t => [t.locale, t] as const));
 
@@ -214,19 +215,14 @@ export default function CompanyEditForm({
           <div className="space-y-3">
             <ImageUpload
               onImageUploaded={(img) => {
-                // Write uploaded URL into the hidden input for server action
-                const input = document.querySelector<HTMLInputElement>('input[name="logoUrl"]');
-                if (input) {
-                  const nextValue = img.webpUrl || img.url;
-                  input.value = nextValue;
-                  const event = new Event('input', { bubbles: true });
-                  input.dispatchEvent(event);
-                }
+                // Update controlled hidden field via React state
+                const nextValue = img.webpUrl || img.url;
+                setLogoUrl(nextValue);
               }}
               onError={() => {}}
               maxSize={10 * 1024 * 1024}
             />
-            <input type="hidden" name="logoUrl" defaultValue={company.logoUrl || ""} />
+            <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
             {company.logoUrl && (
               <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
             )}
