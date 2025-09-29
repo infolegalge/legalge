@@ -216,7 +216,12 @@ export default function CompanyEditForm({
               onImageUploaded={(img) => {
                 // Write uploaded URL into the hidden input for server action
                 const input = document.querySelector<HTMLInputElement>('input[name="logoUrl"]');
-                if (input) input.value = img.webpUrl || img.url;
+                if (input) {
+                  const nextValue = img.webpUrl || img.url;
+                  input.value = nextValue;
+                  const event = new Event('input', { bubbles: true });
+                  input.dispatchEvent(event);
+                }
               }}
               onError={() => {}}
               maxSize={10 * 1024 * 1024}
