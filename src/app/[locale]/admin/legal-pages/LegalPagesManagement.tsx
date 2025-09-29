@@ -24,8 +24,8 @@ interface LegalPageTranslation {
   title: string;
   slug: string;
   content: string;
-  metaTitle?: string;
-  metaDescription?: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
 }
 
 interface LegalPagesManagementProps {
