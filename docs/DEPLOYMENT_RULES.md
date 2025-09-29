@@ -1,0 +1,53 @@
+# Local Update Checklist
+
+Whenever you touch the project, run these terminal steps before committing:
+
+1. `git status -sb` – see what changed.
+2. `npm ci`
+3. `npx prisma migrate deploy`
+4. `npx prisma generate`
+5. `npx tsx scripts/seed-practices-services.ts`
+6. `npm run build`
+7. Optionally `npm run start` to verify the UI.
+8. Resolve lint/test errors if any appear.
+9. `git add <files>`
+10. `git commit -m "Describe change"`
+11. `git push`
+
+If any step fails, fix it immediately before moving on.
+
+# Docker Build Check
+
+Before pushing, confirm the Docker build matches production:
+
+1. `docker build -t legalge-builder -f Dockerfile.build .`
+2. `docker run --rm -it legalge-builder sh`
+3. Inside container:
+   - `npx prisma migrate deploy`
+   - `npx prisma generate`
+   - `npx tsx scripts/seed-practices-services.ts`
+   - `npm run build`
+   - Optionally `npm run start -- -p 3000`
+4. Exit the container when done.
+
+If any command fails, fix the code before committing.
+
+# Droplet Deployment Workflow
+
+After the code is merged to main, deploy to the droplet following these steps:
+
+1. `ssh vakho@178.128.246.203`
+2. `cd /home/vakho/apps/legalge`
+3. `git fetch origin`
+4. `git reset --hard origin/main`
+5. `npm ci`
+6. `npx prisma migrate deploy`
+7. `npx prisma generate`
+8. `npx tsx scripts/seed-practices-services.ts`
+9. `npm run build`
+10. `pm2 restart legalge --update-env`
+11. `pm2 logs legalge --lines 200` (check for errors)
+12. Hit `https://legal.ge` or `curl -I` to confirm CSS assets load.
+
+**Rule:** Do not skip the seed/build steps. If any command fails, stop and fix the issue before moving to the next environment.
+
