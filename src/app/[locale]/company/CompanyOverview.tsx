@@ -335,7 +335,7 @@ export default function CompanyOverview({ locale, company }: OverviewProps) {
                         </div>
                         {item.link ? (
                           <Button asChild variant="ghost" size="sm">
-                            <Link href={item.link}>
+                            <Link href={`/${locale}${item.link.startsWith('/') ? item.link : `/${item.link}`}`}>
                               {locale === 'ka' ? 'გახსენი' : locale === 'ru' ? 'Открыть' : 'Open'}
                               <ArrowRight className="h-4 w-4 ml-1" />
                             </Link>
