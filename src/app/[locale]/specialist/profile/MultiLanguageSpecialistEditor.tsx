@@ -627,7 +627,6 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
                     selectedServices={selectedServices}
                     onChange={setSelectedServices}
                     name="serviceIds"
-                    valueType="id"
                   />
                   
                   <Button 

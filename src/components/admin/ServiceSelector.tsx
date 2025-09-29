@@ -6,6 +6,7 @@ import { Search, Check, X } from "lucide-react";
 interface Service {
   id: string;
   title: string;
+  slug?: string;
   practiceArea: {
     title: string;
   };
@@ -21,6 +22,7 @@ interface ServiceSelectorProps {
   selectedServices: string[]; // Array of service IDs
   onChange: (selectedServices: string[]) => void;
   name: string;
+  valueType?: 'id' | 'slug';
 }
 
 export default function ServiceSelector({ 
@@ -28,6 +30,7 @@ export default function ServiceSelector({
   selectedServices, 
   onChange, 
   name,
+  valueType = 'id',
 }: ServiceSelectorProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -164,7 +167,17 @@ export default function ServiceSelector({
       {/* Hidden inputs for form submission */}
       {selectedServices.map((serviceId) => {
         const service = services.find((s) => s.id === serviceId);
-        const value = service?.id ?? serviceId;
+        const value = (() => {
+          if (!service) {
+            return serviceId;
+          }
+
+          if (valueType === 'slug') {
+            return service.slug ?? service.id;
+          }
+
+          return service.id;
+        })();
         return (
           <input
             key={`${serviceId}-${value}`}

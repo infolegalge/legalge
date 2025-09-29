@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Mail, CheckCircle, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
-export default function VerifyPage() {
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center gap-2 text-slate-600">
+        <Loader2 className="h-5 w-5 animate-spin" />
+        <span>Loading verification...</span>
+      </div>
+    </div>
+  );
+}
+
+function VerifyPageContent() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -63,7 +74,7 @@ export default function VerifyPage() {
       } else {
         setError(data.message || 'Verification failed. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setIsLoading(false);
@@ -98,7 +109,7 @@ export default function VerifyPage() {
         setError(data.message || 'Failed to resend code. Please try again.');
         setIsResending(false);
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
       setIsResending(false);
     }
@@ -266,6 +277,14 @@ export default function VerifyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <VerifyPageContent />
+    </Suspense>
   );
 }
 

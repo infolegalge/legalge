@@ -16,3 +16,4 @@ npx prisma generate
 echo "Running Next.js production build"
 npm run build
 
+

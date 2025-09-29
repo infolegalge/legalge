@@ -25,7 +25,9 @@ providers.push(
       email: { label: "Email", type: "email" },
       password: { label: "Password", type: "password" }
     },
-    async authorize(credentials) {
+    // req is unused but part of the provider signature in NextAuth v5
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async authorize(credentials, req) {
       if (!credentials?.email || !credentials?.password) {
         return null;
       }

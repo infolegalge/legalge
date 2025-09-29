@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { Suspense, useState, useEffect } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 
-export default function SignInPage() {
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center gap-2 text-slate-600">
+        <Loader2 className="h-5 w-5 animate-spin" />
+        <span>Loading sign-in...</span>
+      </div>
+    </div>
+  );
+}
+
+function SignInPageContent() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -79,8 +90,8 @@ export default function SignInPage() {
         // Redirect to home page and let the app handle role-based routing
         window.location.href = '/en';
       }
-    } catch (error) {
-      console.error('Sign-in error:', error);
+    } catch (err) {
+      console.error('Sign-in error:', err);
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -94,7 +105,8 @@ export default function SignInPage() {
     try {
       // Let NextAuth handle the redirect, it will use the callbackUrl
       await signIn('google', { callbackUrl: '/auth/callback' });
-    } catch (error) {
+    } catch (err) {
+      console.error('Google sign-in error:', err);
       setError('Error signing in with Google. Please try again.');
       setIsGoogleLoading(false);
     }
@@ -277,5 +289,13 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SignInPageContent />
+    </Suspense>
   );
 }

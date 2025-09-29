@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 
-export default function SignInPage() {
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center gap-2 text-slate-600">
+        <Loader2 className="h-5 w-5 animate-spin" />
+        <span>Loading sign-in...</span>
+      </div>
+    </div>
+  );
+}
+
+function SignInPageContent() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -32,28 +43,43 @@ export default function SignInPage() {
   useEffect(() => {
     const errorParam = searchParams.get('error');
     const messageParam = searchParams.get('message');
+    const verifiedParam = searchParams.get('verified');
     
     if (messageParam) {
       setSuccess(messageParam);
+      setError('');
+    } else if (verifiedParam === 'true') {
+      setSuccess('Your email has been verified. Please sign in.');
+      setError('');
     } else if (errorParam === 'CredentialsSignin') {
+      setSuccess('');
       setError('Invalid email or password. Please try again.');
     } else if (errorParam === 'OAuthSignin') {
+      setSuccess('');
       setError('Error signing in with Google. Please try again.');
     } else if (errorParam === 'OAuthCallback') {
+      setSuccess('');
       setError('Error with Google authentication. Please try again.');
     } else if (errorParam === 'OAuthCreateAccount') {
+      setSuccess('');
       setError('Could not create account with Google. Please try again.');
     } else if (errorParam === 'EmailCreateAccount') {
+      setSuccess('');
       setError('Could not create account. Please try again.');
     } else if (errorParam === 'Callback') {
+      setSuccess('');
       setError('Error during authentication. Please try again.');
     } else if (errorParam === 'OAuthAccountNotLinked') {
+      setSuccess('');
       setError('Email already exists with a different sign-in method.');
     } else if (errorParam === 'EmailSignin') {
+      setSuccess('');
       setError('Check your email for a sign-in link.');
     } else if (errorParam === 'CredentialsSignin') {
+      setSuccess('');
       setError('Sign in failed. Check the details you provided are correct.');
     } else if (errorParam === 'SessionRequired') {
+      setSuccess('');
       setError('Please sign in to access this page.');
     }
   }, [searchParams]);
@@ -61,6 +87,7 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
     try {
@@ -75,14 +102,18 @@ export default function SignInPage() {
 
       if (result?.error) {
         console.log('Sign-in error:', result.error);
+        setSuccess('');
         setError('Invalid email or password. Please try again.');
       } else if (result?.ok) {
         console.log('Sign-in successful, redirecting...');
+        setError('');
+        setSuccess('');
         // Redirect to home page and let the app handle role-based routing
         window.location.href = `/${locale}`;
       }
     } catch (error) {
       console.error('Sign-in error:', error);
+      setSuccess('');
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -92,11 +123,13 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     setError('');
+    setSuccess('');
     
     try {
       // Let NextAuth handle the redirect, it will use the callbackUrl
       await signIn('google', { callbackUrl: '/auth/callback' });
-    } catch (error) {
+    } catch {
+      setSuccess('');
       setError('Error signing in with Google. Please try again.');
       setIsGoogleLoading(false);
     }
@@ -138,7 +171,7 @@ export default function SignInPage() {
                 </AlertDescription>
               </Alert>
             )}
-            {error && (
+            {!success && !!error && (
               <Alert variant="destructive" className="border-red-200 bg-red-50 dark:bg-red-900/20">
                 <AlertDescription className="text-red-800 dark:text-red-200">
                   {error}
@@ -279,5 +312,13 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SignInPageContent />
+    </Suspense>
   );
 }
