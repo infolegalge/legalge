@@ -162,9 +162,11 @@ export default function CompanyEditForm({
             value={loc[activeLocale].name}
             className="w-full rounded border px-3 py-2" 
             required 
-            onChange={(e) => {
-              const value = e.currentTarget.value;
-              setLoc(prev => {
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLInputElement)) return;
+              const value = target.value ?? "";
+              setLoc((prev) => {
                 const next = { ...prev };
                 const cur = { ...next[activeLocale], name: value } as { name: string; slug: string };
                 if (!cur.slug.trim()) {
@@ -183,7 +185,12 @@ export default function CompanyEditForm({
             <input 
               name={activeLocale==='ka' ? 'slug' : `slug_${activeLocale}`}
               value={loc[activeLocale].slug}
-              onChange={(e) => setLoc(prev => ({ ...prev, [activeLocale]: { ...prev[activeLocale], slug: e.currentTarget.value } }))}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLInputElement)) return;
+                const value = target.value ?? "";
+                setLoc((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], slug: value } }));
+              }}
               className="w-full rounded border px-3 py-2" 
               required 
             />
@@ -215,7 +222,12 @@ export default function CompanyEditForm({
             name={activeLocale==='ka' ? 'description' : `description_${activeLocale}`}
             rows={3}
             value={copy[activeLocale].description}
-            onChange={(e) => setCopy(prev => ({ ...prev, [activeLocale]: { ...prev[activeLocale], description: e.currentTarget.value } }))}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], description: value } }));
+            }}
             className="w-full rounded border px-3 py-2" 
             placeholder="Brief company description..."
           ></textarea>
@@ -226,7 +238,12 @@ export default function CompanyEditForm({
           <input 
             name={activeLocale==='ka' ? 'shortDesc' : `shortDesc_${activeLocale}`}
             value={copy[activeLocale].shortDesc}
-            onChange={(e) => setCopy(prev => ({ ...prev, [activeLocale]: { ...prev[activeLocale], shortDesc: e.currentTarget.value } }))}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLInputElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], shortDesc: value } }));
+            }}
             className="w-full rounded border px-3 py-2" 
             placeholder="One-line description for cards"
           />
@@ -311,7 +328,12 @@ export default function CompanyEditForm({
             name={activeLocale==='ka' ? 'longDesc' : `longDesc_${activeLocale}`}
             rows={6}
             value={copy[activeLocale].longDesc}
-            onChange={(e) => setCopy(prev => ({ ...prev, [activeLocale]: { ...prev[activeLocale], longDesc: e.currentTarget.value } }))}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], longDesc: value } }));
+            }}
             className="w-full rounded border px-3 py-2" 
             placeholder="Detailed company information, history, values, etc..."
           ></textarea>
