@@ -135,7 +135,7 @@ async function getNewsData(locale: Locale, searchParams: any) {
     posts: mappedPosts,
     categories: categories.map((category) => ({
       ...category,
-      type: category.type ?? 'GLOBAL',
+      type: (category.type ?? 'GLOBAL') as 'GLOBAL' | 'COMPANY',
     })),
     hasMore: posts.length === 20,
     nextCursor: posts.length === 20 ? posts[posts.length - 1].id : null
