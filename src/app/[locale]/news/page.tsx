@@ -110,7 +110,7 @@ async function getNewsData(locale: Locale, searchParams: any) {
   const categoryIds = categoriesAgg.map(c => c.categoryId);
   const categories = await prisma.category.findMany({
     where: { id: { in: categoryIds } },
-    select: { id: true, name: true, slug: true },
+    select: { id: true, name: true, slug: true, type: true },
   });
 
   // Fetch translations for these posts for requested locale and map
@@ -133,7 +133,10 @@ async function getNewsData(locale: Locale, searchParams: any) {
 
   return {
     posts: mappedPosts,
-    categories,
+    categories: categories.map((category) => ({
+      ...category,
+      type: category.type ?? 'GLOBAL',
+    })),
     hasMore: posts.length === 20,
     nextCursor: posts.length === 20 ? posts[posts.length - 1].id : null
   };
