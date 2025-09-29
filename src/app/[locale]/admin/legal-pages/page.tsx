@@ -16,7 +16,19 @@ async function getLegalPages() {
   if (!session || (session.user as { role?: string })?.role !== "SUPER_ADMIN") {
     throw new Error("Unauthorized");
   }
-  return prisma.legalPage.findMany({ orderBy: { createdAt: "desc" }, include: { translations: true } });
+  const pages = await prisma.legalPage.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { translations: true },
+  });
+
+  return pages.map((page) => ({
+    ...page,
+    lastUpdated: page.lastUpdated?.toISOString() ?? page.updatedAt?.toISOString() ?? new Date(page.createdAt).toISOString(),
+    translations: page.translations.map((translation) => ({
+      ...translation,
+      locale: translation.locale as Locale,
+    })),
+  }));
 }
 
 export default async function LegalPagesAdminPage({ 
