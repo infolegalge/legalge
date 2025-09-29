@@ -77,6 +77,28 @@ export default function CompanyEditForm({
     
     startTransition(async () => {
       try {
+        // Augment form data with all locales and controlled fields to avoid hidden mirrors
+        // KA (default)
+        formData.set('name', loc.ka.name);
+        formData.set('slug', loc.ka.slug);
+        formData.set('description', copy.ka.description);
+        formData.set('shortDesc', copy.ka.shortDesc);
+        formData.set('longDesc', copy.ka.longDesc);
+        // EN
+        formData.set('name_en', loc.en.name);
+        formData.set('slug_en', loc.en.slug);
+        formData.set('description_en', copy.en.description);
+        formData.set('shortDesc_en', copy.en.shortDesc);
+        formData.set('longDesc_en', copy.en.longDesc);
+        // RU
+        formData.set('name_ru', loc.ru.name);
+        formData.set('slug_ru', loc.ru.slug);
+        formData.set('description_ru', copy.ru.description);
+        formData.set('shortDesc_ru', copy.ru.shortDesc);
+        formData.set('longDesc_ru', copy.ru.longDesc);
+        // Controlled logo value
+        formData.set('logoUrl', logoUrl || '');
+        
         const result = await updateAction(formData);
 
         if (result && typeof result === 'object') {
