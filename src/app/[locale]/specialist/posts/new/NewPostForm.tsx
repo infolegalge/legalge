@@ -91,7 +91,9 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
 
     const slug = ensureSlug(base.slug, base.title, 'ka');
 
-    const translationsPayload = ['en', 'ru']
+    const translationLocales = ['en', 'ru'] as const;
+
+    const translationsPayload = translationLocales
       .map((loc) => ({
         locale: loc,
         data: tData[loc],
