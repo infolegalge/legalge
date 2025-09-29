@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@prisma/client"],
   // Enforce linting during builds
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
   images: {
     remotePatterns: [

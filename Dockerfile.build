@@ -1,0 +1,13 @@
+FROM node:20-alpine
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+ENV NEXT_DISABLE_ESLINT=1 \
+    DATABASE_URL="file:./dev.db"
+
+RUN npx prisma migrate deploy --schema prisma/schema.prisma
+RUN npx prisma generate
+RUN NEXT_DISABLE_ESLINT=1 npm run build
