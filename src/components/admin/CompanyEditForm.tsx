@@ -18,6 +18,10 @@ interface Company {
   email?: string | null;
   address?: string | null;
   mapLink?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
 }
 
 type UpdateResult = {
@@ -28,7 +32,18 @@ type UpdateResult = {
 
 interface CompanyEditFormProps {
   company: Company;
-  translations?: Array<{ locale: 'ka'|'en'|'ru'; name: string; slug: string; description?: string | null; shortDesc?: string | null; longDesc?: string | null }>;
+  translations?: Array<{
+    locale: 'ka'|'en'|'ru';
+    name: string;
+    slug: string;
+    description?: string | null;
+    shortDesc?: string | null;
+    longDesc?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+  }>;
   updateAction: (formData: FormData) => Promise<UpdateResult | void>;
 }
 
@@ -44,6 +59,7 @@ export default function CompanyEditForm({
   const [logoUrl, setLogoUrl] = useState<string>(company.logoUrl || "");
 
   const tMap = new Map(translations.map(t => [t.locale, t] as const));
+  const kaTranslation = tMap.get('ka');
 
   // Controlled per-locale state for fields that must persist per locale (name, slug)
   const [loc, setLoc] = useState<Record<'ka'|'en'|'ru', { name: string; slug: string }>>({
@@ -53,21 +69,41 @@ export default function CompanyEditForm({
   });
 
   // Controlled per-locale copy fields so switching tabs doesn't lose edits
-  const [copy, setCopy] = useState<Record<'ka'|'en'|'ru', { description: string; shortDesc: string; longDesc: string }>>({
+  const [copy, setCopy] = useState<Record<'ka'|'en'|'ru', {
+    description: string;
+    shortDesc: string;
+    longDesc: string;
+    metaTitle: string;
+    metaDescription: string;
+    ogTitle: string;
+    ogDescription: string;
+  }>>({
     ka: {
-      description: (company.description || ''),
-      shortDesc: (company.shortDesc || ''),
-      longDesc: (company.longDesc || ''),
+      description: kaTranslation?.description ?? company.description ?? '',
+      shortDesc: kaTranslation?.shortDesc ?? company.shortDesc ?? '',
+      longDesc: kaTranslation?.longDesc ?? company.longDesc ?? '',
+      metaTitle: kaTranslation?.metaTitle ?? company.metaTitle ?? '',
+      metaDescription: kaTranslation?.metaDescription ?? company.metaDescription ?? '',
+      ogTitle: kaTranslation?.ogTitle ?? company.ogTitle ?? '',
+      ogDescription: kaTranslation?.ogDescription ?? company.ogDescription ?? '',
     },
     en: {
-      description: (tMap.get('en')?.description || ''),
-      shortDesc: (tMap.get('en')?.shortDesc || ''),
-      longDesc: (tMap.get('en')?.longDesc || ''),
+      description: tMap.get('en')?.description || '',
+      shortDesc: tMap.get('en')?.shortDesc || '',
+      longDesc: tMap.get('en')?.longDesc || '',
+      metaTitle: tMap.get('en')?.metaTitle || '',
+      metaDescription: tMap.get('en')?.metaDescription || '',
+      ogTitle: tMap.get('en')?.ogTitle || '',
+      ogDescription: tMap.get('en')?.ogDescription || '',
     },
     ru: {
-      description: (tMap.get('ru')?.description || ''),
-      shortDesc: (tMap.get('ru')?.shortDesc || ''),
-      longDesc: (tMap.get('ru')?.longDesc || ''),
+      description: tMap.get('ru')?.description || '',
+      shortDesc: tMap.get('ru')?.shortDesc || '',
+      longDesc: tMap.get('ru')?.longDesc || '',
+      metaTitle: tMap.get('ru')?.metaTitle || '',
+      metaDescription: tMap.get('ru')?.metaDescription || '',
+      ogTitle: tMap.get('ru')?.ogTitle || '',
+      ogDescription: tMap.get('ru')?.ogDescription || '',
     },
   });
 
@@ -84,18 +120,30 @@ export default function CompanyEditForm({
         formData.set('description', copy.ka.description);
         formData.set('shortDesc', copy.ka.shortDesc);
         formData.set('longDesc', copy.ka.longDesc);
+        formData.set('metaTitle', copy.ka.metaTitle);
+        formData.set('metaDescription', copy.ka.metaDescription);
+        formData.set('ogTitle', copy.ka.ogTitle);
+        formData.set('ogDescription', copy.ka.ogDescription);
         // EN
         formData.set('name_en', loc.en.name);
         formData.set('slug_en', loc.en.slug);
         formData.set('description_en', copy.en.description);
         formData.set('shortDesc_en', copy.en.shortDesc);
         formData.set('longDesc_en', copy.en.longDesc);
+        formData.set('metaTitle_en', copy.en.metaTitle);
+        formData.set('metaDescription_en', copy.en.metaDescription);
+        formData.set('ogTitle_en', copy.en.ogTitle);
+        formData.set('ogDescription_en', copy.en.ogDescription);
         // RU
         formData.set('name_ru', loc.ru.name);
         formData.set('slug_ru', loc.ru.slug);
         formData.set('description_ru', copy.ru.description);
         formData.set('shortDesc_ru', copy.ru.shortDesc);
         formData.set('longDesc_ru', copy.ru.longDesc);
+        formData.set('metaTitle_ru', copy.ru.metaTitle);
+        formData.set('metaDescription_ru', copy.ru.metaDescription);
+        formData.set('ogTitle_ru', copy.ru.ogTitle);
+        formData.set('ogDescription_ru', copy.ru.ogDescription);
         // Controlled logo value
         formData.set('logoUrl', logoUrl || '');
         
@@ -339,6 +387,84 @@ export default function CompanyEditForm({
           ></textarea>
         </div>
 
+        <div>
+          <label className="mb-1 block text-sm font-medium">Meta Title (SEO)</label>
+          <input
+            name={activeLocale==='ka' ? 'metaTitle' : `metaTitle_${activeLocale}`}
+            value={copy[activeLocale].metaTitle}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLInputElement)) return;
+              const value = target.value ?? '';
+              setCopy((prev) => ({
+                ...prev,
+                [activeLocale]: { ...prev[activeLocale], metaTitle: value },
+              }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Optimized title for search engines"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">Meta Description (SEO)</label>
+          <textarea
+            name={activeLocale==='ka' ? 'metaDescription' : `metaDescription_${activeLocale}`}
+            rows={2}
+            value={copy[activeLocale].metaDescription}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? '';
+              setCopy((prev) => ({
+                ...prev,
+                [activeLocale]: { ...prev[activeLocale], metaDescription: value },
+              }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Summary shown in search results"
+          ></textarea>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">OG Title</label>
+          <input
+            name={activeLocale==='ka' ? 'ogTitle' : `ogTitle_${activeLocale}`}
+            value={copy[activeLocale].ogTitle}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLInputElement)) return;
+              const value = target.value ?? '';
+              setCopy((prev) => ({
+                ...prev,
+                [activeLocale]: { ...prev[activeLocale], ogTitle: value },
+              }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Title for social previews"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">OG Description</label>
+          <textarea
+            name={activeLocale==='ka' ? 'ogDescription' : `ogDescription_${activeLocale}`}
+            rows={3}
+            value={copy[activeLocale].ogDescription}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? '';
+              setCopy((prev) => ({
+                ...prev,
+                [activeLocale]: { ...prev[activeLocale], ogDescription: value },
+              }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Description for social sharing previews"
+          ></textarea>
+        </div>
+
         {/* Hidden mirrors for non-active locales so all translations submit */}
         {(['ka','en','ru'] as const)
           .filter((locKey) => locKey !== activeLocale)
@@ -347,6 +473,10 @@ export default function CompanyEditForm({
               <input name={locKey==='ka' ? 'description' : `description_${locKey}`} value={copy[locKey].description} readOnly />
               <input name={locKey==='ka' ? 'shortDesc' : `shortDesc_${locKey}`} value={copy[locKey].shortDesc} readOnly />
               <input name={locKey==='ka' ? 'longDesc' : `longDesc_${locKey}`} value={copy[locKey].longDesc} readOnly />
+              <input name={locKey==='ka' ? 'metaTitle' : `metaTitle_${locKey}`} value={copy[locKey].metaTitle} readOnly />
+              <input name={locKey==='ka' ? 'metaDescription' : `metaDescription_${locKey}`} value={copy[locKey].metaDescription} readOnly />
+              <input name={locKey==='ka' ? 'ogTitle' : `ogTitle_${locKey}`} value={copy[locKey].ogTitle} readOnly />
+              <input name={locKey==='ka' ? 'ogDescription' : `ogDescription_${locKey}`} value={copy[locKey].ogDescription} readOnly />
             </div>
           ))}
         

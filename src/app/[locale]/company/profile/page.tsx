@@ -88,6 +88,18 @@ export default async function CompanyProfilePage({
     const longDesc = String(formData.get('longDesc') || '').trim() || null
     const longDesc_en = String(formData.get('longDesc_en') || '').trim() || null
     const longDesc_ru = String(formData.get('longDesc_ru') || '').trim() || null
+    const metaTitle = String(formData.get('metaTitle') || '').trim() || null
+    const metaTitle_en = String(formData.get('metaTitle_en') || '').trim() || null
+    const metaTitle_ru = String(formData.get('metaTitle_ru') || '').trim() || null
+    const metaDescription = String(formData.get('metaDescription') || '').trim() || null
+    const metaDescription_en = String(formData.get('metaDescription_en') || '').trim() || null
+    const metaDescription_ru = String(formData.get('metaDescription_ru') || '').trim() || null
+    const ogTitle = String(formData.get('ogTitle') || '').trim() || null
+    const ogTitle_en = String(formData.get('ogTitle_en') || '').trim() || null
+    const ogTitle_ru = String(formData.get('ogTitle_ru') || '').trim() || null
+    const ogDescription = String(formData.get('ogDescription') || '').trim() || null
+    const ogDescription_en = String(formData.get('ogDescription_en') || '').trim() || null
+    const ogDescription_ru = String(formData.get('ogDescription_ru') || '').trim() || null
     const logoUrl = String(formData.get('logoUrl') || '').trim() || null
     const website = String(formData.get('website') || '').trim() || null
     const phone = String(formData.get('phone') || '').trim() || null
@@ -113,6 +125,10 @@ export default async function CompanyProfilePage({
           email: email || undefined,
           address: address || undefined,
           mapLink: mapLink || undefined,
+          metaTitle: metaTitle || undefined,
+          metaDescription: metaDescription || undefined,
+          ogTitle: ogTitle || undefined,
+          ogDescription: ogDescription || undefined,
         },
       })
 
@@ -120,15 +136,70 @@ export default async function CompanyProfilePage({
       const client: any = prisma as any
       if (client.companyTranslation) {
         const tx: Promise<any>[] = []
+        const enMetaTitle = metaTitle_en || metaTitle
+        const enMetaDescription = metaDescription_en || metaDescription
+        const enOgTitle = ogTitle_en || ogTitle
+        const enOgDescription = ogDescription_en || ogDescription
+
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'en' } },
-          create: { companyId: resolvedCompany.id, locale: 'en', name: name_en || name, slug: slug_en || ((slug || resolvedCompany.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
-          update: { name: name_en || name, slug: slug_en || ((slug || resolvedCompany.slug) + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
+          create: {
+            companyId: resolvedCompany.id,
+            locale: 'en',
+            name: name_en || name,
+            slug: slug_en || ((slug || resolvedCompany.slug) + '-en'),
+            description: description_en,
+            shortDesc: shortDesc_en,
+            longDesc: longDesc_en,
+            metaTitle: enMetaTitle,
+            metaDescription: enMetaDescription,
+            ogTitle: enOgTitle,
+            ogDescription: enOgDescription,
+          },
+          update: {
+            name: name_en || name,
+            slug: slug_en || ((slug || resolvedCompany.slug) + '-en'),
+            description: description_en,
+            shortDesc: shortDesc_en,
+            longDesc: longDesc_en,
+            metaTitle: enMetaTitle,
+            metaDescription: enMetaDescription,
+            ogTitle: enOgTitle,
+            ogDescription: enOgDescription,
+          },
         }))
+
+        const ruMetaTitle = metaTitle_ru || metaTitle
+        const ruMetaDescription = metaDescription_ru || metaDescription
+        const ruOgTitle = ogTitle_ru || ogTitle
+        const ruOgDescription = ogDescription_ru || ogDescription
+
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'ru' } },
-          create: { companyId: resolvedCompany.id, locale: 'ru', name: name_ru || name, slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
-          update: { name: name_ru || name, slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
+          create: {
+            companyId: resolvedCompany.id,
+            locale: 'ru',
+            name: name_ru || name,
+            slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'),
+            description: description_ru,
+            shortDesc: shortDesc_ru,
+            longDesc: longDesc_ru,
+            metaTitle: ruMetaTitle,
+            metaDescription: ruMetaDescription,
+            ogTitle: ruOgTitle,
+            ogDescription: ruOgDescription,
+          },
+          update: {
+            name: name_ru || name,
+            slug: slug_ru || ((slug || resolvedCompany.slug) + '-ru'),
+            description: description_ru,
+            shortDesc: shortDesc_ru,
+            longDesc: longDesc_ru,
+            metaTitle: ruMetaTitle,
+            metaDescription: ruMetaDescription,
+            ogTitle: ruOgTitle,
+            ogDescription: ruOgDescription,
+          },
         }))
         await Promise.all(tx)
       }

@@ -42,6 +42,18 @@ async function updateCompany(formData: FormData) {
     const email = String(formData.get("email") || "").trim() || null;
     const address = String(formData.get("address") || "").trim() || null;
     const mapLink = String(formData.get("mapLink") || "").trim() || null;
+    const metaTitle = String(formData.get("metaTitle") || "").trim() || null;
+    const metaTitle_en = String(formData.get("metaTitle_en") || "").trim() || null;
+    const metaTitle_ru = String(formData.get("metaTitle_ru") || "").trim() || null;
+    const metaDescription = String(formData.get("metaDescription") || "").trim() || null;
+    const metaDescription_en = String(formData.get("metaDescription_en") || "").trim() || null;
+    const metaDescription_ru = String(formData.get("metaDescription_ru") || "").trim() || null;
+    const ogTitle = String(formData.get("ogTitle") || "").trim() || null;
+    const ogTitle_en = String(formData.get("ogTitle_en") || "").trim() || null;
+    const ogTitle_ru = String(formData.get("ogTitle_ru") || "").trim() || null;
+    const ogDescription = String(formData.get("ogDescription") || "").trim() || null;
+    const ogDescription_en = String(formData.get("ogDescription_en") || "").trim() || null;
+    const ogDescription_ru = String(formData.get("ogDescription_ru") || "").trim() || null;
     
     if (!id || !name || !slug) {
       return { error: "ID, name and slug are required" };
@@ -73,7 +85,11 @@ async function updateCompany(formData: FormData) {
         phone: phone || undefined,
         email: email || undefined,
         address: address || undefined,
-        mapLink: mapLink || undefined
+        mapLink: mapLink || undefined,
+        metaTitle: metaTitle || undefined,
+        metaDescription: metaDescription || undefined,
+        ogTitle: ogTitle || undefined,
+        ogDescription: ogDescription || undefined
       } 
     });
 
@@ -82,13 +98,13 @@ async function updateCompany(formData: FormData) {
     if (client.companyTranslation) {
       await client.companyTranslation.upsert({
         where: { companyId_locale: { companyId: id, locale: 'en' } },
-        create: { companyId: id, locale: 'en', name: name_en || name, slug: slug_en || (slug + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
-        update: { name: name_en || name, slug: slug_en || (slug + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en },
+        create: { companyId: id, locale: 'en', name: name_en || name, slug: slug_en || (slug + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en, metaTitle: metaTitle_en || metaTitle, metaDescription: metaDescription_en || metaDescription, ogTitle: ogTitle_en || ogTitle, ogDescription: ogDescription_en || ogDescription },
+        update: { name: name_en || name, slug: slug_en || (slug + '-en'), description: description_en, shortDesc: shortDesc_en, longDesc: longDesc_en, metaTitle: metaTitle_en || metaTitle, metaDescription: metaDescription_en || metaDescription, ogTitle: ogTitle_en || ogTitle, ogDescription: ogDescription_en || ogDescription },
       });
       await client.companyTranslation.upsert({
         where: { companyId_locale: { companyId: id, locale: 'ru' } },
-        create: { companyId: id, locale: 'ru', name: name_ru || name, slug: slug_ru || (slug + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
-        update: { name: name_ru || name, slug: slug_ru || (slug + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru },
+        create: { companyId: id, locale: 'ru', name: name_ru || name, slug: slug_ru || (slug + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru, metaTitle: metaTitle_ru || metaTitle, metaDescription: metaDescription_ru || metaDescription, ogTitle: ogTitle_ru || ogTitle, ogDescription: ogDescription_ru || ogDescription },
+        update: { name: name_ru || name, slug: slug_ru || (slug + '-ru'), description: description_ru, shortDesc: shortDesc_ru, longDesc: longDesc_ru, metaTitle: metaTitle_ru || metaTitle, metaDescription: metaDescription_ru || metaDescription, ogTitle: ogTitle_ru || ogTitle, ogDescription: ogDescription_ru || ogDescription },
       });
     }
     
