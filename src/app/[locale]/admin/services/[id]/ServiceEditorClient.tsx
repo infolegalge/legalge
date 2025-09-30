@@ -14,6 +14,8 @@ type ServiceTranslation = {
   description: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
 };
 
 type Service = {
@@ -49,6 +51,8 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
     description: service.description,
     metaTitle: null,
     metaDescription: null,
+    ogTitle: null,
+    ogDescription: null,
   };
 
   const handleFormSubmit = async (formData: FormData, endpoint: string, successMessage: string) => {
@@ -259,6 +263,27 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
               <div className="text-xs text-muted-foreground mt-1">
                 {currentTranslation.metaDescription?.length || 0}/155 characters
               </div>
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm">OG Title</label>
+              <input
+                name="t_og_title"
+                defaultValue={currentTranslation.ogTitle || ""}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Title for social sharing"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm">OG Description</label>
+              <textarea
+                name="t_og_description"
+                defaultValue={currentTranslation.ogDescription || ""}
+                rows={2}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Description for social previews"
+              />
             </div>
           </div>
           

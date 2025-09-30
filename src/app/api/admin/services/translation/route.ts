@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
     const description = String(formData.get("t_description") || "").trim() || null;
     const metaTitle = String(formData.get("t_meta_title") || "").trim() || null;
     const metaDescription = String(formData.get("t_meta_description") || "").trim() || null;
+    const ogTitle = String(formData.get("t_og_title") || "").trim() || null;
+    const ogDescription = String(formData.get("t_og_description") || "").trim() || null;
 
     // Debug: Log the description being saved
     console.log("Service translation save - Description:", description);
@@ -47,6 +49,8 @@ export async function POST(request: NextRequest) {
         description: description || undefined,
         metaTitle: metaTitle || undefined,
         metaDescription: metaDescription || undefined,
+        ogTitle: ogTitle || undefined,
+        ogDescription: ogDescription || undefined,
       },
       update: {
         title: nextTitle,
@@ -54,6 +58,8 @@ export async function POST(request: NextRequest) {
         description: description || undefined,
         metaTitle: metaTitle || undefined,
         metaDescription: metaDescription || undefined,
+        ogTitle: ogTitle || undefined,
+        ogDescription: ogDescription || undefined,
       },
     });
 

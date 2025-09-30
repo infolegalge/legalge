@@ -203,6 +203,16 @@ export default async function PracticeEdit({ params, searchParams }: { params: P
                     <input name="t_meta_description" defaultValue={t?.metaDescription || ""} maxLength={155} className="w-full rounded border px-2 py-1" />
                   </div>
                 </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs">OG title</label>
+                    <input name="t_og_title" defaultValue={t?.ogTitle || ""} className="w-full rounded border px-2 py-1" />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs">OG description</label>
+                    <textarea name="t_og_description" defaultValue={t?.ogDescription || ""} rows={2} className="w-full rounded border px-2 py-1" />
+                  </div>
+                </div>
                 <input type="hidden" name="adminLocale" value={locale} />
                 {/* SEO fields can be re-added later once Prisma client is regenerated */}
                 <button className="mt-2 w-max rounded bg-primary px-2 py-1 text-primary-foreground">Save {String(active).toUpperCase()}</button>
