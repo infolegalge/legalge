@@ -248,6 +248,11 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
     }
   };
 
+  const normalizeOptional = (value: string) => {
+    const trimmed = value.trim();
+    return trimmed.length ? trimmed : null;
+  };
+ 
   return (
     <div className="space-y-6">
       {/* Header */}

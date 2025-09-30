@@ -76,7 +76,7 @@ export default async function CompanyEditPostPage({
   } as any;
 
   // Fetch translations for this post
-  let translations: Array<{ locale: 'ka'|'en'|'ru'; title: string; slug: string; excerpt: string | null; body: string | null; metaTitle?: string | null; metaDescription?: string | null; ogTitle?: string | null; ogDescription?: string | null }> = [];
+  let translations: Array<{ locale: 'ka'|'en'|'ru'; title: string; slug: string; excerpt: string | null; body: string | null; metaTitle?: string | null | undefined; metaDescription?: string | null | undefined; ogTitle?: string | null | undefined; ogDescription?: string | null | undefined }> = [];
   try {
     translations = await prisma.postTranslation.findMany({
       where: { postId: id },
@@ -94,7 +94,19 @@ export default async function CompanyEditPostPage({
     }) as any;
   } catch {}
 
-  return <CompanyEditPostForm locale={locale} post={mapped} translations={translations} />;
+  const normalizedTranslations = translations.map((t) => ({
+    locale: t.locale,
+    title: t.title,
+    slug: t.slug,
+    excerpt: t.excerpt,
+    body: t.body,
+    metaTitle: t.metaTitle ?? undefined,
+    metaDescription: t.metaDescription ?? undefined,
+    ogTitle: t.ogTitle ?? undefined,
+    ogDescription: t.ogDescription ?? undefined,
+  }));
+
+  return <CompanyEditPostForm locale={locale} post={mapped} translations={normalizedTranslations} />;
 }
 
 export const dynamic = "force-dynamic";
