@@ -33,6 +33,8 @@ export default async function AdminEditPostPage({
       authorId: true,
       metaTitle: true,
       metaDescription: true,
+      ogTitle: true,
+      ogDescription: true,
     },
   });
 
@@ -47,7 +49,18 @@ export default async function AdminEditPostPage({
     if (client.postTranslation && typeof client.postTranslation.findMany === 'function') {
       translations = await client.postTranslation.findMany({
         where: { postId: id },
-        select: { id: true, locale: true, title: true, slug: true, excerpt: true, body: true, metaTitle: true, metaDescription: true },
+        select: {
+          id: true,
+          locale: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          body: true,
+          metaTitle: true,
+          metaDescription: true,
+          ogTitle: true,
+          ogDescription: true,
+        },
       });
     }
   } catch {}

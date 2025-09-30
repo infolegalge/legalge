@@ -34,6 +34,8 @@ interface Post {
   slug: string;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
   translations?: Array<{
     id: string;
     locale: 'ka' | 'en' | 'ru';
@@ -43,6 +45,8 @@ interface Post {
     body?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
   }>;
 }
 
@@ -58,6 +62,8 @@ interface AdminEditPostFormProps {
     body?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
   }>;
 }
 
@@ -91,6 +97,8 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
         body: string;
         metaTitle: string;
         metaDescription: string;
+        ogTitle: string;
+        ogDescription: string;
       }
     >
   >({
@@ -101,6 +109,8 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       body: post.body,
       metaTitle: post.metaTitle || '',
       metaDescription: post.metaDescription || '',
+      ogTitle: post.ogTitle || '',
+      ogDescription: post.ogDescription || '',
     },
     en: {
       title: translations.find((t) => t.locale === 'en')?.title || '',
@@ -109,6 +119,8 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       body: translations.find((t) => t.locale === 'en')?.body || '',
       metaTitle: translations.find((t) => t.locale === 'en')?.metaTitle || '',
       metaDescription: translations.find((t) => t.locale === 'en')?.metaDescription || '',
+      ogTitle: translations.find((t) => t.locale === 'en')?.ogTitle || '',
+      ogDescription: translations.find((t) => t.locale === 'en')?.ogDescription || '',
     },
     ru: {
       title: translations.find((t) => t.locale === 'ru')?.title || '',
@@ -117,6 +129,8 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       body: translations.find((t) => t.locale === 'ru')?.body || '',
       metaTitle: translations.find((t) => t.locale === 'ru')?.metaTitle || '',
       metaDescription: translations.find((t) => t.locale === 'ru')?.metaDescription || '',
+      ogTitle: translations.find((t) => t.locale === 'ru')?.ogTitle || '',
+      ogDescription: translations.find((t) => t.locale === 'ru')?.ogDescription || '',
     },
   });
 
@@ -219,8 +233,10 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
           status,
           date: formData.date ? new Date(formData.date).toISOString() : null,
           categoryIds: selectedCategoryIds,
-          metaTitle: normalizeMeta(prepared.ka.metaTitle),
-          metaDescription: normalizeMeta(prepared.ka.metaDescription),
+          metaTitle: normalizeOptional(prepared.ka.metaTitle),
+          metaDescription: normalizeOptional(prepared.ka.metaDescription),
+          ogTitle: normalizeOptional(prepared.ka.ogTitle),
+          ogDescription: normalizeOptional(prepared.ka.ogDescription),
           translations: [
             {
               locale: 'en',
@@ -228,8 +244,10 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
               slug: prepared.en.slug,
               excerpt: prepared.en.excerpt,
               body: prepared.en.body,
-              metaTitle: normalizeMeta(prepared.en.metaTitle),
-              metaDescription: normalizeMeta(prepared.en.metaDescription),
+              metaTitle: normalizeOptional(prepared.en.metaTitle),
+              metaDescription: normalizeOptional(prepared.en.metaDescription),
+              ogTitle: normalizeOptional(prepared.en.ogTitle),
+              ogDescription: normalizeOptional(prepared.en.ogDescription),
             },
             {
               locale: 'ru',
@@ -237,8 +255,10 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
               slug: prepared.ru.slug,
               excerpt: prepared.ru.excerpt,
               body: prepared.ru.body,
-              metaTitle: normalizeMeta(prepared.ru.metaTitle),
-              metaDescription: normalizeMeta(prepared.ru.metaDescription),
+              metaTitle: normalizeOptional(prepared.ru.metaTitle),
+              metaDescription: normalizeOptional(prepared.ru.metaDescription),
+              ogTitle: normalizeOptional(prepared.ru.ogTitle),
+              ogDescription: normalizeOptional(prepared.ru.ogDescription),
             },
           ],
         }),
@@ -312,7 +332,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
     return slugify(base, { lower: true, strict: true, locale: 'en' });
   };
 
-  const normalizeMeta = (value: string) => {
+  const normalizeOptional = (value: string) => {
     const trimmed = value.trim();
     return trimmed.length ? trimmed : null;
   };
@@ -544,6 +564,35 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
                     }
                   />
                   <p className="text-xs text-muted-foreground">{tData[activeLocale].metaDescription.length}/155</p>
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>OG Title ({activeLocale.toUpperCase()})</Label>
+                  <Input
+                    value={tData[activeLocale].ogTitle}
+                    placeholder="Title for social sharing"
+                    onChange={(e) =>
+                      setTData((prev) => ({
+                        ...prev,
+                        [activeLocale]: { ...prev[activeLocale], ogTitle: e.target.value },
+                      }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>OG Description ({activeLocale.toUpperCase()})</Label>
+                  <Textarea
+                    value={tData[activeLocale].ogDescription}
+                    rows={3}
+                    placeholder="Description for social previews"
+                    onChange={(e) =>
+                      setTData((prev) => ({
+                        ...prev,
+                        [activeLocale]: { ...prev[activeLocale], ogDescription: e.target.value },
+                      }))
+                    }
+                  />
                 </div>
               </div>
             </CardContent>

@@ -31,6 +31,10 @@ export default async function SpecialistEditPostPage({
       publishedAt: true,
       locale: true,
       authorId: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogTitle: true,
+      ogDescription: true,
       categories: {
         select: {
           categoryId: true,
@@ -60,7 +64,17 @@ export default async function SpecialistEditPostPage({
   // Fetch translations for language tabs
   const translations = await prisma.postTranslation.findMany({
     where: { postId: id },
-    select: { locale: true, title: true, excerpt: true, body: true, slug: true },
+    select: {
+      locale: true,
+      title: true,
+      excerpt: true,
+      body: true,
+      slug: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogTitle: true,
+      ogDescription: true,
+    },
   });
 
   const mapped = { 

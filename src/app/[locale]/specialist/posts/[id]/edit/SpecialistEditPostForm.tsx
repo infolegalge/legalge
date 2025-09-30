@@ -32,7 +32,21 @@ interface Post {
   status: string;
   slug: string;
   categories?: Array<{ id: string; name: string }>;
-  translations?: Array<{ locale: 'ka'|'en'|'ru'; title?: string | null; excerpt?: string | null; body?: string | null; slug?: string | null }>;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  translations?: Array<{
+    locale: 'ka'|'en'|'ru';
+    title?: string | null;
+    excerpt?: string | null;
+    body?: string | null;
+    slug?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+  }>;
 }
 
 interface SpecialistEditPostFormProps {
@@ -63,19 +77,36 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
 
   
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; excerpt: string; body: string; slug: string }>>({
-    ka: { title: post.title || '', excerpt: post.excerpt || '', body: post.content || '', slug: post.slug || '' },
+  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; excerpt: string; body: string; slug: string; metaTitle: string; metaDescription: string; ogTitle: string; ogDescription: string }>>({
+    ka: {
+      title: post.title || '',
+      excerpt: post.excerpt || '',
+      body: post.content || '',
+      slug: post.slug || '',
+      metaTitle: post.metaTitle || '',
+      metaDescription: post.metaDescription || '',
+      ogTitle: post.ogTitle || '',
+      ogDescription: post.ogDescription || '',
+    },
     en: {
       title: post.translations?.find((t) => t.locale === 'en')?.title || '',
       excerpt: post.translations?.find((t) => t.locale === 'en')?.excerpt || '',
       body: post.translations?.find((t) => t.locale === 'en')?.body || '',
       slug: post.translations?.find((t) => t.locale === 'en')?.slug || '',
+      metaTitle: post.translations?.find((t) => t.locale === 'en')?.metaTitle || '',
+      metaDescription: post.translations?.find((t) => t.locale === 'en')?.metaDescription || '',
+      ogTitle: post.translations?.find((t) => t.locale === 'en')?.ogTitle || '',
+      ogDescription: post.translations?.find((t) => t.locale === 'en')?.ogDescription || '',
     },
     ru: {
       title: post.translations?.find((t) => t.locale === 'ru')?.title || '',
       excerpt: post.translations?.find((t) => t.locale === 'ru')?.excerpt || '',
       body: post.translations?.find((t) => t.locale === 'ru')?.body || '',
       slug: post.translations?.find((t) => t.locale === 'ru')?.slug || '',
+      metaTitle: post.translations?.find((t) => t.locale === 'ru')?.metaTitle || '',
+      metaDescription: post.translations?.find((t) => t.locale === 'ru')?.metaDescription || '',
+      ogTitle: post.translations?.find((t) => t.locale === 'ru')?.ogTitle || '',
+      ogDescription: post.translations?.find((t) => t.locale === 'ru')?.ogDescription || '',
     },
   });
   const [formData, setFormData] = useState({
@@ -147,9 +178,33 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
           coverImageUrl: formData.coverImageUrl,
           status: formData.status,
           categoryIds: selectedCategoryIds,
+          metaTitle: normalizeOptional(tData.ka.metaTitle),
+          metaDescription: normalizeOptional(tData.ka.metaDescription),
+          ogTitle: normalizeOptional(tData.ka.ogTitle),
+          ogDescription: normalizeOptional(tData.ka.ogDescription),
           translations: [
-            { locale: 'en', title: tData.en.title, slug: tData.en.slug, excerpt: tData.en.excerpt, body: tData.en.body },
-            { locale: 'ru', title: tData.ru.title, slug: tData.ru.slug, excerpt: tData.ru.excerpt, body: tData.ru.body },
+            {
+              locale: 'en',
+              title: tData.en.title,
+              slug: tData.en.slug,
+              excerpt: tData.en.excerpt,
+              body: tData.en.body,
+              metaTitle: normalizeOptional(tData.en.metaTitle),
+              metaDescription: normalizeOptional(tData.en.metaDescription),
+              ogTitle: normalizeOptional(tData.en.ogTitle),
+              ogDescription: normalizeOptional(tData.en.ogDescription),
+            },
+            {
+              locale: 'ru',
+              title: tData.ru.title,
+              slug: tData.ru.slug,
+              excerpt: tData.ru.excerpt,
+              body: tData.ru.body,
+              metaTitle: normalizeOptional(tData.ru.metaTitle),
+              metaDescription: normalizeOptional(tData.ru.metaDescription),
+              ogTitle: normalizeOptional(tData.ru.ogTitle),
+              ogDescription: normalizeOptional(tData.ru.ogDescription),
+            },
           ],
         }),
       });
@@ -280,18 +335,22 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setTData(prev => ({
-                        ...prev,
-                        [activeLocale]: {
-                          ...prev[activeLocale],
-                          slug: makeSlug(prev[activeLocale].title, activeLocale as any),
-                        }
-                      }))}
+                      onClick={() =>
+                        setTData((prev) => ({
+                          ...prev,
+                          [activeLocale]: {
+                            ...prev[activeLocale],
+                            slug: makeSlug(prev[activeLocale].title, activeLocale as any),
+                          },
+                        }))
+                      }
                     >
                       Auto
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">Use lowercase letters, numbers and hyphens. Leave blank to auto-generate.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Use lowercase letters, numbers and hyphens. Leave blank to auto-generate when saving.
+                  </p>
                 </div>
 
                 <div>

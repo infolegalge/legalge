@@ -43,6 +43,10 @@ export default async function CompanyEditPostPage({
       locale: true,
       authorId: true,
       companyId: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogTitle: true,
+      ogDescription: true,
       categories: {
         select: {
           categoryId: true,
@@ -72,11 +76,21 @@ export default async function CompanyEditPostPage({
   } as any;
 
   // Fetch translations for this post
-  let translations: Array<{ locale: 'ka'|'en'|'ru'; title: string; slug: string; excerpt: string | null; body: string | null }> = [];
+  let translations: Array<{ locale: 'ka'|'en'|'ru'; title: string; slug: string; excerpt: string | null; body: string | null; metaTitle?: string | null; metaDescription?: string | null; ogTitle?: string | null; ogDescription?: string | null }> = [];
   try {
     translations = await prisma.postTranslation.findMany({
       where: { postId: id },
-      select: { locale: true, title: true, slug: true, excerpt: true, body: true },
+      select: {
+        locale: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        body: true,
+        metaTitle: true,
+        metaDescription: true,
+        ogTitle: true,
+        ogDescription: true,
+      },
     }) as any;
   } catch {}
 
