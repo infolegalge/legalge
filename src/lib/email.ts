@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import type { TransportOptions } from 'nodemailer';
 
 interface ContactFormData {
   name: string;
@@ -10,28 +11,33 @@ const SMTP_HOST = process.env.EMAIL_HOST ?? 'smtp.zoho.eu';
 const SMTP_PORT = Number(process.env.EMAIL_PORT ?? 465);
 const SMTP_SECURE = (process.env.EMAIL_SECURE ?? 'true').toLowerCase() !== 'false';
 const DEFAULT_INBOX = process.env.CONTACT_INBOX ?? 'contact@legal.ge';
+const FROM_ADDRESS = process.env.EMAIL_USER;
 
-function createTransporter() {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+function ensureCredentials() {
+  if (!FROM_ADDRESS || !process.env.EMAIL_PASS) {
     throw new Error('Email service not configured. Please set EMAIL_USER and EMAIL_PASS environment variables.');
   }
+}
+
+function createTransporter() {
+  ensureCredentials();
 
   return nodemailer.createTransport({
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_SECURE,
     auth: {
-      user: process.env.EMAIL_USER,
+      user: FROM_ADDRESS,
       pass: process.env.EMAIL_PASS,
     },
-  });
+  } as TransportOptions);
 }
 
 export async function sendEmail(to: string, subject: string, html: string, text?: string): Promise<void> {
   try {
     const transporter = createTransporter();
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: FROM_ADDRESS!,
       to,
       subject,
       html,
@@ -56,7 +62,7 @@ export async function sendContactEmail(data: ContactFormData): Promise<void> {
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: FROM_ADDRESS!,
       to: DEFAULT_INBOX,
       subject: `New Contact Form Submission from ${data.name}`,
       html: `
