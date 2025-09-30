@@ -32,6 +32,10 @@ interface Post {
     companyId?: string | null;
   };
   categories?: Array<{ id: string; name: string }>;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
 }
 
 interface CompanyEditPostFormProps {
@@ -43,6 +47,10 @@ interface CompanyEditPostFormProps {
     slug: string;
     excerpt: string | null;
     body: string | null;
+    metaTitle?: string;
+    metaDescription?: string;
+    ogTitle?: string;
+    ogDescription?: string;
   }>;
 }
 
@@ -55,24 +63,50 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
   const [previewMode, setPreviewMode] = useState(false);
 
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>(locale as 'ka'|'en'|'ru');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string }>>({
+  const blankLocale: LocalePayload = {
+    title: '',
+    slug: '',
+    excerpt: '',
+    body: '',
+    metaTitle: '',
+    metaDescription: '',
+    ogTitle: '',
+    ogDescription: '',
+  };
+ 
+  const [tData, setTData] = useState<Record<Locale, LocalePayload>>({
     ka: {
+      ...blankLocale,
       title: locale === 'ka' ? post.title : (translations.find(t => t.locale === 'ka')?.title || ''),
       slug: locale === 'ka' ? post.slug : (translations.find(t => t.locale === 'ka')?.slug || ''),
       excerpt: locale === 'ka' ? (post.excerpt || '') : (translations.find(t => t.locale === 'ka')?.excerpt || ''),
       body: locale === 'ka' ? post.content : (translations.find(t => t.locale === 'ka')?.body || ''),
+      metaTitle: locale === 'ka' ? (post.metaTitle || '') : (translations.find(t => t.locale === 'ka')?.metaTitle || ''),
+      metaDescription: locale === 'ka' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ka')?.metaDescription || ''),
+      ogTitle: locale === 'ka' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ka')?.ogTitle || ''),
+      ogDescription: locale === 'ka' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ka')?.ogDescription || ''),
     },
     en: {
+      ...blankLocale,
       title: locale === 'en' ? post.title : (translations.find(t => t.locale === 'en')?.title || ''),
       slug: locale === 'en' ? post.slug : (translations.find(t => t.locale === 'en')?.slug || ''),
       excerpt: locale === 'en' ? (post.excerpt || '') : (translations.find(t => t.locale === 'en')?.excerpt || ''),
       body: locale === 'en' ? post.content : (translations.find(t => t.locale === 'en')?.body || ''),
+      metaTitle: locale === 'en' ? (post.metaTitle || '') : (translations.find(t => t.locale === 'en')?.metaTitle || ''),
+      metaDescription: locale === 'en' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'en')?.metaDescription || ''),
+      ogTitle: locale === 'en' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'en')?.ogTitle || ''),
+      ogDescription: locale === 'en' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'en')?.ogDescription || ''),
     },
     ru: {
+      ...blankLocale,
       title: locale === 'ru' ? post.title : (translations.find(t => t.locale === 'ru')?.title || ''),
       slug: locale === 'ru' ? post.slug : (translations.find(t => t.locale === 'ru')?.slug || ''),
       excerpt: locale === 'ru' ? (post.excerpt || '') : (translations.find(t => t.locale === 'ru')?.excerpt || ''),
       body: locale === 'ru' ? post.content : (translations.find(t => t.locale === 'ru')?.body || ''),
+      metaTitle: locale === 'ru' ? (post.metaTitle || '') : (translations.find(t => t.locale === 'ru')?.metaTitle || ''),
+      metaDescription: locale === 'ru' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ru')?.metaDescription || ''),
+      ogTitle: locale === 'ru' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ru')?.ogTitle || ''),
+      ogDescription: locale === 'ru' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ru')?.ogDescription || ''),
     },
   });
   const updateLocaleField = (loc: 'ka'|'en'|'ru', key: 'title'|'slug'|'excerpt'|'body', value: string) => {
@@ -136,6 +170,10 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
           coverImageUrl,
           status: statusValue,
           categoryIds: selectedCategoryIds,
+          metaTitle: tData[activeLocale].metaTitle,
+          metaDescription: tData[activeLocale].metaDescription,
+          ogTitle: tData[activeLocale].ogTitle,
+          ogDescription: tData[activeLocale].ogDescription,
           translations: (['ka','en','ru'] as const)
             .filter((loc) => loc !== activeLocale)
             .map((loc) => ({
@@ -144,6 +182,10 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
               slug: tData[loc].slug || makeSlug(tData[loc].title, loc as any),
               excerpt: tData[loc].excerpt,
               body: tData[loc].body,
+              metaTitle: tData[loc].metaTitle,
+              metaDescription: tData[loc].metaDescription,
+              ogTitle: tData[loc].ogTitle,
+              ogDescription: tData[loc].ogDescription,
             })),
         }),
       });
@@ -296,6 +338,52 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
                     onChange={(e) => updateLocaleField(activeLocale, 'excerpt', e.target.value)}
                     placeholder="Brief description of the post"
                     rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="metaTitle">Meta Title</Label>
+                  <Input
+                    id="metaTitle"
+                    name="metaTitle"
+                    value={tData[activeLocale].metaTitle}
+                    onChange={(e) => updateLocaleField(activeLocale, 'metaTitle', e.target.value)}
+                    placeholder="SEO title for search results"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="metaDescription">Meta Description</Label>
+                  <Textarea
+                    id="metaDescription"
+                    name="metaDescription"
+                    value={tData[activeLocale].metaDescription}
+                    onChange={(e) => updateLocaleField(activeLocale, 'metaDescription', e.target.value)}
+                    placeholder="Short summary for search or previews"
+                    rows={2}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="ogTitle">OG Title</Label>
+                  <Input
+                    id="ogTitle"
+                    name="ogTitle"
+                    value={tData[activeLocale].ogTitle}
+                    onChange={(e) => updateLocaleField(activeLocale, 'ogTitle', e.target.value)}
+                    placeholder="Title for social sharing"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="ogDescription">OG Description</Label>
+                  <Textarea
+                    id="ogDescription"
+                    name="ogDescription"
+                    value={tData[activeLocale].ogDescription}
+                    onChange={(e) => updateLocaleField(activeLocale, 'ogDescription', e.target.value)}
+                    placeholder="Description for social sharing"
+                    rows={2}
                   />
                 </div>
 

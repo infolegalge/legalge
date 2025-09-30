@@ -21,6 +21,20 @@ interface CompanyNewPostFormProps {
   locale: string;
 }
 
+type Locale = 'ka' | 'en' | 'ru';
+type LocalePayload = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  metaTitle: string;
+  metaDescription: string;
+  ogTitle: string;
+  ogDescription: string;
+};
+
+type LocaleField = keyof LocalePayload;
+
 interface CategoryOption {
   id: string;
   name: string;
@@ -33,15 +47,26 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
 
-  const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>(locale as 'ka'|'en'|'ru');
+  const [activeLocale, setActiveLocale] = useState<Locale>(locale as Locale);
 
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string }>>({
-    ka: { title: '', slug: '', excerpt: '', body: '' },
-    en: { title: '', slug: '', excerpt: '', body: '' },
-    ru: { title: '', slug: '', excerpt: '', body: '' },
+  const blankLocale: LocalePayload = {
+    title: '',
+    slug: '',
+    excerpt: '',
+    body: '',
+    metaTitle: '',
+    metaDescription: '',
+    ogTitle: '',
+    ogDescription: '',
+  };
+
+  const [tData, setTData] = useState<Record<Locale, LocalePayload>>({
+    ka: { ...blankLocale },
+    en: { ...blankLocale },
+    ru: { ...blankLocale },
   });
 
-  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: 'title'|'slug'|'excerpt'|'body', value: string) => {
+  const updateLocaleField = (loc: Locale, key: LocaleField, value: string) => {
     setTData((prev) => ({ ...prev, [loc]: { ...prev[loc], [key]: value } }));
   };
 
@@ -96,6 +121,10 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
           slug: ensureSlug(data.slug, data.title, loc),
           excerpt: data.excerpt,
           body: data.body,
+          metaTitle: data.metaTitle,
+          metaDescription: data.metaDescription,
+          ogTitle: data.ogTitle,
+          ogDescription: data.ogDescription,
         }));
 
       const payload = {
@@ -109,6 +138,10 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
         authorType: 'COMPANY',
         scope: 'company',
         categoryIds: selectedCategoryIds,
+        metaTitle: base.metaTitle,
+        metaDescription: base.metaDescription,
+        ogTitle: base.ogTitle,
+        ogDescription: base.ogDescription,
         translations: translationsPayload,
       };
 
@@ -196,7 +229,7 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
               <CardDescription>Write your post content and set the basic information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <Tabs defaultValue={activeLocale} onValueChange={(v) => setActiveLocale(v as 'ka'|'en'|'ru')}>
+              <Tabs defaultValue={activeLocale} onValueChange={(v) => setActiveLocale(v as Locale)}>
                 <TabsList className="grid w-full max-w-md grid-cols-3">
                   <TabsTrigger value="ka">KA</TabsTrigger>
                   <TabsTrigger value="en">EN</TabsTrigger>
@@ -234,6 +267,44 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
                   />
                   <Button type="button" variant="outline" onClick={() => updateLocaleField(activeLocale, 'slug', makeSlug(tData[activeLocale].title, activeLocale))}>Auto</Button>
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Meta Title ({activeLocale.toUpperCase()})</Label>
+                <Input
+                  value={tData[activeLocale].metaTitle}
+                  onChange={(e) => updateLocaleField(activeLocale, 'metaTitle', e.target.value)}
+                  placeholder="SEO title for search results"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Meta Description ({activeLocale.toUpperCase()})</Label>
+                <Textarea
+                  value={tData[activeLocale].metaDescription}
+                  onChange={(e) => updateLocaleField(activeLocale, 'metaDescription', e.target.value)}
+                  rows={2}
+                  placeholder="Short summary for search engines"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>OG Title ({activeLocale.toUpperCase()})</Label>
+                <Input
+                  value={tData[activeLocale].ogTitle}
+                  onChange={(e) => updateLocaleField(activeLocale, 'ogTitle', e.target.value)}
+                  placeholder="Title for social sharing"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>OG Description ({activeLocale.toUpperCase()})</Label>
+                <Textarea
+                  value={tData[activeLocale].ogDescription}
+                  onChange={(e) => updateLocaleField(activeLocale, 'ogDescription', e.target.value)}
+                  rows={2}
+                  placeholder="Description for social sharing"
+                />
               </div>
 
               <div className="space-y-2">
