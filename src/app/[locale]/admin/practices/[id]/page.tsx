@@ -47,13 +47,35 @@ export default async function PracticeEdit({ params, searchParams }: { params: P
     const tAlt = String(formData.get("t_alt") || "").trim() || null; // may be set from hero form
     const tMetaTitle = String(formData.get("t_meta_title") || "").trim() || null;
     const tMetaDescription = String(formData.get("t_meta_description") || "").trim() || null;
+    const tOgTitle = String(formData.get("t_og_title") || "").trim() || null;
+    const tOgDescription = String(formData.get("t_og_description") || "").trim() || null;
     const baseInfo = await prisma.practiceArea.findUnique({ where: { id }, select: { title: true, slug: true } });
     const nextTitle = tTitle || baseInfo?.title || "";
     const nextSlug = tSlug || baseInfo?.slug || `${id}-${tLocale}`;
     await prisma.practiceAreaTranslation.upsert({
       where: { practiceAreaId_locale: { practiceAreaId: id, locale: tLocale } },
-      create: { practiceAreaId: id, locale: tLocale, title: nextTitle, slug: nextSlug, description: tDesc || undefined, heroImageAlt: tAlt || undefined, metaTitle: tMetaTitle || undefined, metaDescription: tMetaDescription || undefined },
-      update: { title: nextTitle, slug: nextSlug, description: tDesc || undefined, heroImageAlt: tAlt || undefined, metaTitle: tMetaTitle || undefined, metaDescription: tMetaDescription || undefined },
+      create: {
+        practiceAreaId: id,
+        locale: tLocale,
+        title: nextTitle,
+        slug: nextSlug,
+        description: tDesc || undefined,
+        heroImageAlt: tAlt || undefined,
+        metaTitle: tMetaTitle || undefined,
+        metaDescription: tMetaDescription || undefined,
+        ogTitle: tOgTitle || undefined,
+        ogDescription: tOgDescription || undefined,
+      },
+      update: {
+        title: nextTitle,
+        slug: nextSlug,
+        description: tDesc || undefined,
+        heroImageAlt: tAlt || undefined,
+        metaTitle: tMetaTitle || undefined,
+        metaDescription: tMetaDescription || undefined,
+        ogTitle: tOgTitle || undefined,
+        ogDescription: tOgDescription || undefined,
+      },
     });
     revalidatePath(`/${tLocale}/practice`);
     revalidatePath(`/${tLocale}/practice/${nextSlug}`);
@@ -214,7 +236,6 @@ export default async function PracticeEdit({ params, searchParams }: { params: P
                   </div>
                 </div>
                 <input type="hidden" name="adminLocale" value={locale} />
-                {/* SEO fields can be re-added later once Prisma client is regenerated */}
                 <button className="mt-2 w-max rounded bg-primary px-2 py-1 text-primary-foreground">Save {String(active).toUpperCase()}</button>
               </form>
             );
