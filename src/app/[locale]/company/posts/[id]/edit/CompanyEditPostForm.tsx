@@ -15,6 +15,21 @@ import { Textarea } from "@/components/ui/textarea"
 const RichEditor = dynamic(() => import('@/components/admin/RichEditor'), { ssr: false, loading: () => null });
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+type SupportedLocale = 'ka' | 'en' | 'ru';
+
+type LocalePayload = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  metaTitle: string;
+  metaDescription: string;
+  ogTitle: string;
+  ogDescription: string;
+};
+
+type LocaleFieldKey = keyof LocalePayload;
+
 interface Post {
   id: string;
   title: string;
@@ -62,7 +77,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
 
-  const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>(locale as 'ka'|'en'|'ru');
+  const [activeLocale, setActiveLocale] = useState<SupportedLocale>(locale as SupportedLocale);
   const blankLocale: LocalePayload = {
     title: '',
     slug: '',
@@ -74,7 +89,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
     ogDescription: '',
   };
  
-  const [tData, setTData] = useState<Record<Locale, LocalePayload>>({
+  const [tData, setTData] = useState<Record<SupportedLocale, LocalePayload>>({
     ka: {
       ...blankLocale,
       title: locale === 'ka' ? post.title : (translations.find(t => t.locale === 'ka')?.title || ''),
@@ -109,7 +124,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       ogDescription: locale === 'ru' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ru')?.ogDescription || ''),
     },
   });
-  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: 'title'|'slug'|'excerpt'|'body', value: string) => {
+  const updateLocaleField = (loc: SupportedLocale, key: LocaleFieldKey, value: string) => {
     setTData(prev => ({ ...prev, [loc]: { ...prev[loc], [key]: value } }));
   };
   const [coverImageUrl, setCoverImageUrl] = useState(post.coverImageUrl || '');
