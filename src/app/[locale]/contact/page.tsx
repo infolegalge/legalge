@@ -27,17 +27,7 @@ async function send(data: FormData): Promise<void> {
     console.log("Contact form submitted successfully");
   } catch (error) {
     console.error("Error submitting contact form:", error);
-    
-    // Provide more specific error messages
-    if (error instanceof Error) {
-      if (error.message.includes('Email service not configured')) {
-        throw new Error("Email service is temporarily unavailable. Please try again later or contact us directly.");
-      } else if (error.message.includes('Failed to send email')) {
-        throw new Error("Unable to send your message at this time. Please try again later.");
-      }
-    }
-    
-    throw new Error("Failed to send message. Please try again.");
+    return;
   }
 }
 
