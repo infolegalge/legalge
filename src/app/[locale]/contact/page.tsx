@@ -4,7 +4,11 @@ import ContactInfo from "@/components/ContactInfo";
 import OpenStreetMap from "@/components/OpenStreetMap";
 import { sendContactEmail } from "@/lib/email";
 
-async function send(data: FormData): Promise<void> {
+type ContactActionResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+async function send(data: FormData): Promise<ContactActionResult> {
   "use server";
   
   const name = data.get("name") as string;
@@ -12,7 +16,7 @@ async function send(data: FormData): Promise<void> {
   const message = data.get("message") as string;
 
   if (!name || !email || !message) {
-    throw new Error("All fields are required");
+    return { ok: false, error: "All fields are required" };
   }
 
   try {
@@ -21,13 +25,13 @@ async function send(data: FormData): Promise<void> {
       email: email.trim(),
       message: message.trim(),
     });
-    
-    // Redirect to a success page or show success message
-    // For now, we'll just log success
     console.log("Contact form submitted successfully");
+    return { ok: true };
   } catch (error) {
     console.error("Error submitting contact form:", error);
-    return;
+    const err =
+      error instanceof Error ? error.message : "Failed to send message. Please try again.";
+    return { ok: false, error: err };
   }
 }
 
@@ -36,6 +40,8 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const t = await getTranslations();
   
+  let result: ContactActionResult | null = null;
+
     // Tbilisi, Georgia coordinates (Agmashnebeli alley N240, 0159) - Exact Google Maps location
     const officeLocation = {
       latitude: 41.80594854658469,
@@ -55,7 +61,13 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         <div className="space-y-6">
           <div>
             <h2 className="text-xl font-semibold mb-4">{t("contact.description")}</h2>
-            <form action={send} className="space-y-4">
+            <form
+              action={async (formData) => {
+                "use server";
+                result = await send(formData);
+              }}
+              className="space-y-4"
+            >
               <div>
                 <label className="mb-1 block text-sm font-medium" htmlFor="name">
                   {t("contact.name")}
@@ -100,6 +112,11 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               >
                 {t("contact.submit")}
               </button>
+              {result ? (
+                <p className={`text-sm ${result.ok ? "text-green-500" : "text-red-500"}`}>
+                  {result.ok ? "Thanks for reaching out! We'll get back to you shortly." : result.error}
+                </p>
+              ) : null}
             </form>
           </div>
         </div>
