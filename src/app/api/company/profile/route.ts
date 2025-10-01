@@ -59,7 +59,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Company not found" }, { status: 404 });
     }
     
-    return NextResponse.json(company);
+    return NextResponse.json({
+      company,
+    });
   } catch (error) {
     console.error("Error fetching company profile:", error);
     return NextResponse.json(
@@ -96,7 +98,8 @@ export async function PATCH(request: NextRequest) {
       address,
       city,
       mapLink,
-      logoUrl
+      logoUrl,
+    logoAlt,
     } = body;
     
     // Determine which company to update
@@ -150,6 +153,7 @@ export async function PATCH(request: NextRequest) {
         city: city || undefined,
         mapLink: mapLink || undefined,
         logoUrl: logoUrl || undefined,
+        logoAlt: (body.logoAlt as string | undefined)?.trim() || undefined,
       }
     });
     

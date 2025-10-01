@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const description = String(formData.get("description") || "").trim() || null;
     const practiceAreaId = String(formData.get("practiceAreaId") || "");
     const heroImageUrl = String(formData.get("heroImage") || "").trim() || null;
+    const heroImageAlt = String(formData.get("heroImageAlt") || "").trim() || null;
 
     if (!id || !title || !slug || !practiceAreaId) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
         description: description || undefined,
         practiceAreaId,
         heroImageUrl: heroImageUrl || undefined,
+        heroImageAlt: heroImageAlt || undefined,
       },
     });
 

@@ -134,7 +134,7 @@ export async function findPracticeBySlugForLocale(locale: Locale, slug: string) 
       ka?.metaDescription ||
       (fallbackDesc ? fallbackDesc.replace(/<[^>]+>/g, "").slice(0, 155) : null),
     heroImageUrl: p.pageHeroImageUrl || p.heroImageUrl || null,
-    heroImageAlt: t?.pageHeroImageAlt || t?.heroImageAlt || ka?.heroImageAlt || null,
+    heroImageAlt: t?.pageHeroImageAlt || t?.heroImageAlt || ka?.pageHeroImageAlt || ka?.heroImageAlt || null,
     heroVersion: Number(new Date(p.updatedAt).getTime()),
   };
 }
@@ -195,6 +195,7 @@ export async function findServiceBySlugForLocale(locale: Locale, slug: string) {
     metaDescription:
       t?.metaDescription || ka?.metaDescription || (fallbackDesc ? fallbackDesc.replace(/<[^>]+>/g, "").slice(0, 155) : null),
     heroImageUrl: s.heroImageUrl || null,
+    heroImageAlt: t?.heroImageAlt || s.heroImageAlt || ka?.heroImageAlt || null,
     specialists: s.specialists || [],
     practice: {
       id: s.practiceAreaId,

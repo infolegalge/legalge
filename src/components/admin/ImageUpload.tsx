@@ -68,7 +68,7 @@ export default function ImageUpload({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <label className="mb-1 block text-sm font-medium">Avatar Image</label>
+      <label className="mb-1 block text-sm font-medium">Image</label>
       
       {preview ? (
         <div className="relative">

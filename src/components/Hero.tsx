@@ -17,7 +17,7 @@ export default function Hero({ locale }: { locale: Locale }) {
   const { data } = useSWR("/api/slider", async (url) => {
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed slider fetch");
-    return (await res.json()) as Array<{ light: string; dark: string }>;
+    return (await res.json()) as Array<{ light: string; dark: string; lightAlt?: string | null; darkAlt?: string | null }>;
   }, { suspense: false, revalidateOnFocus: false });
 
   const slides = Array.isArray(data) && data.length > 0 ? data : fallbackSlides;
@@ -42,7 +42,7 @@ export default function Hero({ locale }: { locale: Locale }) {
               <source media="(prefers-color-scheme: dark)" srcSet={slides[index].dark} />
               <img 
                 src={slides[index].light} 
-                alt="" 
+                alt={(slides[index] as any).lightAlt || t("site.title")}
                 className="h-full w-full object-cover" 
                 aria-hidden 
                 loading={index === 0 ? "eager" : "lazy"}

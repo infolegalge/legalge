@@ -103,6 +103,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
   const heroImg = getHeroImage(item);
   
   // Use specialists assigned to the service instead of the old lawyersForService function
+  const heroAlt = item.heroImageAlt || `${item.title} hero image`;
   const pros = item.specialists || [];
   
   return (
@@ -127,12 +128,12 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
             </h1>
             
             {/* Hero Image with lazy loading */}
-            {heroImg && (
+            {heroImg ? (
               <div className="mb-8 overflow-hidden rounded-lg border shadow-sm">
                 <div className="relative w-full aspect-[16/9] bg-muted">
                   <Image 
                     src={heroImg} 
-                    alt={`${item.title} hero image`}
+                    alt={heroAlt}
                     fill 
                     className="object-cover" 
                     loading="lazy"
@@ -140,7 +141,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
                   />
                 </div>
               </div>
-            )}
+            ) : null}
           </header>
 
           {/* Reading Experience Features */}

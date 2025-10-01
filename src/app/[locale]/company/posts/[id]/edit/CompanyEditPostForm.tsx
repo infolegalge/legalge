@@ -7,13 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Save, Eye, Upload, Loader2, ArrowLeft, FileText, Trash2 } from "lucide-react";
+import { Save, Eye, Loader2, ArrowLeft, FileText, Trash2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from 'next/dynamic';
 import { makeSlug } from '@/lib/utils';
 import { Textarea } from "@/components/ui/textarea"
 const RichEditor = dynamic(() => import('@/components/admin/RichEditor'), { ssr: false, loading: () => null });
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ImageUpload from '@/components/ImageUpload';
 
 type SupportedLocale = 'ka' | 'en' | 'ru';
 
@@ -26,6 +27,7 @@ type LocalePayload = {
   metaDescription: string;
   ogTitle: string;
   ogDescription: string;
+  coverImageAlt: string;
 };
 
 type LocaleFieldKey = keyof LocalePayload;
@@ -36,6 +38,7 @@ interface Post {
   excerpt?: string;
   content: string;
   coverImageUrl?: string;
+  coverImageAlt?: string | null;
   date: string | null;
   status: string;
   slug: string;
@@ -66,13 +69,13 @@ interface CompanyEditPostFormProps {
     metaDescription?: string;
     ogTitle?: string;
     ogDescription?: string;
+    coverImageAlt?: string | null;
   }>;
 }
 
 export default function CompanyEditPostForm({ locale, post, translations = [] }: CompanyEditPostFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
@@ -87,6 +90,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
     metaDescription: '',
     ogTitle: '',
     ogDescription: '',
+    coverImageAlt: '',
   };
  
   const [tData, setTData] = useState<Record<SupportedLocale, LocalePayload>>({
@@ -100,6 +104,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'ka' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ka')?.metaDescription || ''),
       ogTitle: locale === 'ka' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ka')?.ogTitle || ''),
       ogDescription: locale === 'ka' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ka')?.ogDescription || ''),
+      coverImageAlt: locale === 'ka' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'ka')?.coverImageAlt || ''),
     },
     en: {
       ...blankLocale,
@@ -111,6 +116,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'en' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'en')?.metaDescription || ''),
       ogTitle: locale === 'en' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'en')?.ogTitle || ''),
       ogDescription: locale === 'en' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'en')?.ogDescription || ''),
+      coverImageAlt: locale === 'en' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'en')?.coverImageAlt || ''),
     },
     ru: {
       ...blankLocale,
@@ -122,6 +128,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'ru' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ru')?.metaDescription || ''),
       ogTitle: locale === 'ru' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ru')?.ogTitle || ''),
       ogDescription: locale === 'ru' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ru')?.ogDescription || ''),
+      coverImageAlt: locale === 'ru' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'ru')?.coverImageAlt || ''),
     },
   });
   const updateLocaleField = (loc: SupportedLocale, key: LocaleFieldKey, value: string) => {
@@ -137,33 +144,28 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
     setTData(prev => ({ ...prev, [activeLocale]: { ...prev[activeLocale], [name as any]: value } }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageUploaded = (imageData: {
+    id: string;
+    url: string;
+    webpUrl: string;
+    filename: string;
+    width: number;
+    height: number;
+    alt: string;
+  }) => {
+    setCoverImageUrl(imageData.url);
+    setTData((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
+    }));
+    setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+  };
 
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/images/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Upload failed');
-      }
-
-      const data = await response.json();
-      setCoverImageUrl(data.image.url);
-      setMessage({ type: 'success', text: 'Image uploaded successfully!' });
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to upload image' });
-    } finally {
-      setUploading(false);
-    }
+  const handleImageError = (error: string) => {
+    setMessage({ type: 'error', text: error });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -182,7 +184,8 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
           slug: tData[activeLocale].slug || makeSlug(tData[activeLocale].title, activeLocale as any),
           excerpt: tData[activeLocale].excerpt,
           content: tData[activeLocale].body,
-          coverImageUrl,
+          coverImage: coverImageUrl,
+          coverImageAlt: tData[activeLocale].coverImageAlt || null,
           status: statusValue,
           categoryIds: selectedCategoryIds,
           metaTitle: tData[activeLocale].metaTitle,
@@ -201,7 +204,12 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
               metaDescription: tData[loc].metaDescription,
               ogTitle: tData[loc].ogTitle,
               ogDescription: tData[loc].ogDescription,
+              coverImageAlt: tData[loc].coverImageAlt || null,
             })),
+          coverImageAltTranslations: (
+            ['ka','en','ru'] as const
+          ).map((loc) => ({ locale: loc, alt: tData[loc].coverImageAlt }))
+            .filter(({ alt }) => !!alt?.trim()),
         }),
       });
 
@@ -504,11 +512,29 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <ImageUpload
+                onImageUploaded={handleImageUploaded}
+                onError={handleImageError}
+                maxSize={10 * 1024 * 1024}
+                disabled={loading}
+                defaultAlt={tData[activeLocale].coverImageAlt}
+                altValue={tData[activeLocale].coverImageAlt}
+                onAltChange={(value) =>
+                  setTData((prev) => ({
+                    ...prev,
+                    [activeLocale]: {
+                      ...prev[activeLocale],
+                      coverImageAlt: value,
+                    },
+                  }))
+                }
+                altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+              />
               {coverImageUrl && (
                 <div className="space-y-2">
                   <img
                     src={coverImageUrl}
-                    alt="Cover"
+                    alt={tData[activeLocale].coverImageAlt || 'Cover'}
                     className="w-full rounded-lg border"
                     loading="lazy"
                     decoding="async"
@@ -523,23 +549,6 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
                   </Button>
                 </div>
               )}
-              
-              <div>
-                <Label htmlFor="coverImage">Upload Image</Label>
-                <Input
-                  id="coverImage"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={uploading}
-                />
-                {uploading && (
-                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Uploading...
-                  </div>
-                )}
-              </div>
             </CardContent>
           </Card>
 

@@ -19,6 +19,7 @@ export async function GET(
         excerpt: true,
         body: true,
         coverImage: true,
+        coverImageAlt: true,
         status: true,
         publishedAt: true,
         authorType: true,
@@ -56,8 +57,11 @@ export async function PATCH(
       excerpt,
       body: contentBody,
       coverImage,
+      coverImageAlt,
       status,
       slug,
+      translations,
+      coverImageAltTranslations,
     } = body;
 
     const updateData: any = {};
@@ -66,13 +70,40 @@ export async function PATCH(
     if (excerpt !== undefined) updateData.excerpt = excerpt;
     if (contentBody !== undefined) updateData.body = contentBody;
     if (coverImage !== undefined) updateData.coverImage = coverImage;
+    if (coverImageAlt !== undefined) updateData.coverImageAlt = coverImageAlt;
     if (status !== undefined) updateData.status = status;
 
     const updated = await prisma.post.update({
       where: { id },
       data: updateData,
-      select: { id: true },
+      select: { id: true, coverImageAlt: true },
     });
+
+    if (Array.isArray(translations)) {
+      for (const t of translations) {
+        if (!t?.locale) continue;
+        const existing = await prisma.postTranslation.findUnique({
+          where: { postId_locale: { postId: id, locale: t.locale as any } },
+        });
+        const payload = {
+          postId: id,
+          locale: t.locale as any,
+          title: t.title ?? null,
+          slug: t.slug ?? null,
+          excerpt: t.excerpt ?? null,
+          body: t.body ?? null,
+          coverImageAlt:
+            coverImageAltTranslations?.find((item: any) => item.locale === t.locale)?.alt ??
+            (coverImageAlt !== undefined ? coverImageAlt : updated.coverImageAlt) ??
+            null,
+        };
+        if (existing) {
+          await prisma.postTranslation.update({ where: { id: existing.id }, data: payload });
+        } else {
+          await prisma.postTranslation.create({ data: payload });
+        }
+      }
+    }
 
     return NextResponse.json(updated);
   } catch (error) {

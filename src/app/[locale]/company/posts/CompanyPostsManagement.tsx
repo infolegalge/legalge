@@ -25,6 +25,7 @@ interface Post {
   excerpt?: string;
   content: string;
   coverImageUrl?: string;
+  coverImageAlt?: string | null;
   date: string | null;
   status: 'DRAFT' | 'PUBLISHED';
   slug: string;

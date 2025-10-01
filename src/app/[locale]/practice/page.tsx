@@ -67,11 +67,11 @@ export default async function PracticeIndex({ params }: { params: Promise<{ loca
                 <div className="relative">
                   {a.heroImageUrl ? (
                     <div className="relative w-full aspect-square">
-                      <Image src={`${a.heroImageUrl}`} alt={a.heroImageAlt || ""} fill className="object-cover" />
+                      <Image src={`${a.heroImageUrl}`} alt={a.heroImageAlt || a.title} fill className="object-cover" />
                     </div>
                   ) : img ? (
                     <div className="relative w-full aspect-square">
-                      <Image src={img} alt="" fill className="object-cover bg-muted" />
+                      <Image src={img} alt={a.title} fill className="object-cover bg-muted" />
                     </div>
                   ) : (
                     <div className="w-full aspect-square bg-muted" />

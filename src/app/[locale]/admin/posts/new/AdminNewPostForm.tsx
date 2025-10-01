@@ -35,10 +35,10 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
   const [allCategories, setAllCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string }>>({
-    ka: { title: '', slug: '', excerpt: '', body: '' },
-    en: { title: '', slug: '', excerpt: '', body: '' },
-    ru: { title: '', slug: '', excerpt: '', body: '' },
+  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string; coverImageAlt: string }>>({
+    ka: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
+    en: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
+    ru: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
   });
 
   useEffect(() => {
@@ -84,6 +84,13 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
       coverImageUrl: imageData.url,
       coverImageId: imageData.id
     }));
+    setTData((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
+    }));
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
 
@@ -104,19 +111,22 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
         body: JSON.stringify({
           title: tData.ka.title,
           excerpt: tData.ka.excerpt,
-          // API expects 'body' field name
           body: tData.ka.body,
-          // API expects 'coverImage'
           coverImage: formData.coverImageUrl || null,
+          coverImageAlt: tData.ka.coverImageAlt || null,
           status: status,
-          // provide locale and slug explicitly
           locale: locale,
           slug: makeSlug(tData.ka.title as string, locale as any),
           categoryIds: selectedCategoryIds,
           translations: [
-            { locale: 'en', title: tData.en.title, slug: makeSlug(tData.en.title || tData.ka.title, 'en' as any), excerpt: tData.en.excerpt, body: tData.en.body },
-            { locale: 'ru', title: tData.ru.title, slug: makeSlug(tData.ru.title || tData.ka.title, 'ru' as any), excerpt: tData.ru.excerpt, body: tData.ru.body },
+            { locale: 'en', title: tData.en.title, slug: makeSlug(tData.en.title || tData.ka.title, 'en' as any), excerpt: tData.en.excerpt, body: tData.en.body, coverImageAlt: tData.en.coverImageAlt },
+            { locale: 'ru', title: tData.ru.title, slug: makeSlug(tData.ru.title || tData.ka.title, 'ru' as any), excerpt: tData.ru.excerpt, body: tData.ru.body, coverImageAlt: tData.ru.coverImageAlt },
           ],
+          coverImageAltTranslations: [
+            { locale: 'ka', alt: tData.ka.coverImageAlt },
+            { locale: 'en', alt: tData.en.coverImageAlt },
+            { locale: 'ru', alt: tData.ru.coverImageAlt },
+          ].filter((item) => item.alt && item.alt.trim().length > 0),
         }),
       });
 
@@ -290,33 +300,25 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
                 <ImageUpload
                   onImageUploaded={handleImageUploaded}
                   onError={handleImageError}
-                  maxSize={10 * 1024 * 1024} // 10MB
+                  maxSize={10 * 1024 * 1024}
                   disabled={loading}
+                  defaultAlt={tData[activeLocale].coverImageAlt}
+                  altValue={tData[activeLocale].coverImageAlt}
+                  onAltChange={(value) =>
+                    setTData((prev) => ({
+                      ...prev,
+                      [activeLocale]: {
+                        ...prev[activeLocale],
+                        coverImageAlt: value,
+                      },
+                    }))
+                  }
+                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
                 />
                 {formData.coverImageUrl && (
-                  <div className="text-xs text-muted-foreground">
-                    Current image: {formData.coverImageUrl}
-                  </div>
+                  <p className="text-xs text-muted-foreground">Current image URL: {formData.coverImageUrl}</p>
                 )}
               </div>
-
-              {formData.coverImageUrl && (
-                <div className="space-y-2">
-                  <Label>Preview</Label>
-                  <div className="aspect-video rounded-md border bg-muted overflow-hidden">
-                    <img 
-                      src={formData.coverImageUrl} 
-                      alt="Cover preview"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
 
               <div className="space-y-2">
                 <Label>Publication Status</Label>

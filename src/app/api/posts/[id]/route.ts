@@ -60,18 +60,21 @@ export async function PATCH(
       excerpt,
       content,
       coverImage,
+      coverImageAlt,
       status,
       date,
       categoryIds,
       metaTitle,
       metaDescription,
       translations,
+      coverImageAltTranslations,
     } = body as {
       title?: string;
       slug?: string;
       excerpt?: string | null;
       content?: string;
       coverImage?: string | null;
+      coverImageAlt?: string | null;
       status?: 'DRAFT' | 'PUBLISHED';
       date?: string | null;
       categoryIds?: string[];
@@ -86,12 +89,13 @@ export async function PATCH(
         metaTitle?: string | null;
         metaDescription?: string | null;
       }>;
+      coverImageAltTranslations?: Array<{ locale: 'ka' | 'en' | 'ru'; alt?: string | null }>;
     };
 
     // Check if post exists and user has permission
     const existingPost = await prisma.post.findUnique({
       where: { id },
-      select: { id: true, title: true, authorId: true, companyId: true, status: true },
+      select: { id: true, title: true, authorId: true, companyId: true, status: true, coverImageAlt: true },
     });
 
     if (!existingPost) {
@@ -130,6 +134,7 @@ export async function PATCH(
     if (excerpt !== undefined) updateData.excerpt = excerpt;
     if (content !== undefined) updateData.body = content;
     if (coverImage !== undefined) updateData.coverImage = coverImage;
+    if (coverImageAlt !== undefined) updateData.coverImageAlt = coverImageAlt;
     if (metaTitle !== undefined) updateData.metaTitle = metaTitle;
     if (metaDescription !== undefined) updateData.metaDescription = metaDescription;
     if (status !== undefined) {
@@ -193,6 +198,7 @@ export async function PATCH(
         excerpt: true,
         body: true,
         coverImage: true,
+        coverImageAlt: true,
         metaTitle: true,
         metaDescription: true,
         status: true,
@@ -211,6 +217,7 @@ export async function PATCH(
         });
         const baseTitle = title ?? post.title;
         const baseSlug = post.slug;
+        const translationAlt = coverImageAltTranslations?.find((alt) => alt.locale === t.locale)?.alt;
         const payload = {
           postId: id,
           locale: t.locale as any,
@@ -220,6 +227,12 @@ export async function PATCH(
           body: t.body ?? null,
           metaTitle: t.metaTitle ?? null,
           metaDescription: t.metaDescription ?? null,
+          coverImageAlt:
+            translationAlt !== undefined
+              ? translationAlt || null
+              : coverImageAlt !== undefined
+              ? coverImageAlt
+              : existingPost.coverImageAlt ?? null,
         };
         if (existing) {
           await prisma.postTranslation.update({ where: { id: existing.id }, data: payload });

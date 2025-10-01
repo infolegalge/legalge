@@ -38,6 +38,7 @@ export default async function CompanyEditPostPage({
       excerpt: true,
       body: true,
       coverImage: true,
+      coverImageAlt: true,
       status: true,
       publishedAt: true,
       locale: true,
@@ -72,27 +73,14 @@ export default async function CompanyEditPostPage({
     date: post.publishedAt ? post.publishedAt.toISOString() : null,
     content: post.body,
     coverImageUrl: post.coverImage,
+    coverImageAlt: post.coverImageAlt,
     categories: post.categories?.map((c) => ({ id: c.categoryId, name: c.category?.name || '' })) ?? [],
   } as any;
 
   // Fetch translations for this post
-  let translations: Array<{ locale: 'ka'|'en'|'ru'; title: string; slug: string; excerpt: string | null; body: string | null; metaTitle?: string | null | undefined; metaDescription?: string | null | undefined; ogTitle?: string | null | undefined; ogDescription?: string | null | undefined }> = [];
-  try {
-    translations = await prisma.postTranslation.findMany({
-      where: { postId: id },
-      select: {
-        locale: true,
-        title: true,
-        slug: true,
-        excerpt: true,
-        body: true,
-        metaTitle: true,
-        metaDescription: true,
-        ogTitle: true,
-        ogDescription: true,
-      },
-    }) as any;
-  } catch {}
+  const translations = await prisma.postTranslation.findMany({
+    where: { postId: id },
+  });
 
   const normalizedTranslations = translations.map((t) => ({
     locale: t.locale,
@@ -104,6 +92,7 @@ export default async function CompanyEditPostPage({
     metaDescription: t.metaDescription ?? undefined,
     ogTitle: t.ogTitle ?? undefined,
     ogDescription: t.ogDescription ?? undefined,
+    coverImageAlt: (t as any).coverImageAlt ?? undefined,
   }));
 
   return <CompanyEditPostForm locale={locale} post={mapped} translations={normalizedTranslations} />;

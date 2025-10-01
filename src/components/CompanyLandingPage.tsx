@@ -57,7 +57,7 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
             {company.logoUrl ? (
               <Image
                 src={company.logoUrl}
-                alt={company.name}
+                alt={company.logoAlt || company.name}
                 width={200}
                 height={200}
                 className="h-48 w-48 rounded-lg object-cover"
@@ -211,13 +211,13 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
               >
                 <div className="rounded-lg border bg-card p-6 transition-all hover:shadow-md hover:border-primary/20">
                   <div className="flex items-start gap-4">
-                    {specialist.avatarUrl ? (
+                    {specialist.company?.logoUrl ? (
                       <Image
-                        src={specialist.avatarUrl}
-                        alt={specialist.name}
-                        width={64}
-                        height={64}
-                        className="h-16 w-16 rounded-full object-cover"
+                        src={specialist.company.logoUrl}
+                        alt={specialist.company.logoAlt || specialist.company.name}
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded object-cover"
                       />
                     ) : (
                       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
@@ -294,7 +294,7 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
                     <div className="aspect-video relative">
                       <Image
                         src={post.coverImage}
-                        alt={post.title}
+                        alt={post.coverImageAlt || post.title}
                         fill
                         className="object-cover"
                       />

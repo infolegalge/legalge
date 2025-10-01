@@ -13,6 +13,7 @@ interface Company {
   shortDesc?: string | null;
   longDesc?: string | null;
   logoUrl?: string | null;
+  logoAlt?: string | null;
   website?: string | null;
   phone?: string | null;
   email?: string | null;
@@ -43,6 +44,7 @@ interface CompanyEditFormProps {
     metaDescription?: string | null;
     ogTitle?: string | null;
     ogDescription?: string | null;
+    logoAlt?: string | null;
   }>;
   updateAction: (formData: FormData) => Promise<UpdateResult | void>;
 }
@@ -77,6 +79,7 @@ export default function CompanyEditForm({
     metaDescription: string;
     ogTitle: string;
     ogDescription: string;
+    logoAlt: string;
   }>>({
     ka: {
       description: kaTranslation?.description ?? company.description ?? '',
@@ -86,6 +89,7 @@ export default function CompanyEditForm({
       metaDescription: kaTranslation?.metaDescription ?? company.metaDescription ?? '',
       ogTitle: kaTranslation?.ogTitle ?? company.ogTitle ?? '',
       ogDescription: kaTranslation?.ogDescription ?? company.ogDescription ?? '',
+      logoAlt: kaTranslation?.logoAlt ?? company.logoAlt ?? '',
     },
     en: {
       description: tMap.get('en')?.description || '',
@@ -95,6 +99,7 @@ export default function CompanyEditForm({
       metaDescription: tMap.get('en')?.metaDescription || '',
       ogTitle: tMap.get('en')?.ogTitle || '',
       ogDescription: tMap.get('en')?.ogDescription || '',
+      logoAlt: tMap.get('en')?.logoAlt || '',
     },
     ru: {
       description: tMap.get('ru')?.description || '',
@@ -104,6 +109,7 @@ export default function CompanyEditForm({
       metaDescription: tMap.get('ru')?.metaDescription || '',
       ogTitle: tMap.get('ru')?.ogTitle || '',
       ogDescription: tMap.get('ru')?.ogDescription || '',
+      logoAlt: tMap.get('ru')?.logoAlt || '',
     },
   });
 
@@ -114,36 +120,30 @@ export default function CompanyEditForm({
     startTransition(async () => {
       try {
         // Augment form data with all locales and controlled fields to avoid hidden mirrors
-        // KA (default)
-        formData.set('name', loc.ka.name);
-        formData.set('slug', loc.ka.slug);
-        formData.set('description', copy.ka.description);
-        formData.set('shortDesc', copy.ka.shortDesc);
-        formData.set('longDesc', copy.ka.longDesc);
-        formData.set('metaTitle', copy.ka.metaTitle);
-        formData.set('metaDescription', copy.ka.metaDescription);
-        formData.set('ogTitle', copy.ka.ogTitle);
-        formData.set('ogDescription', copy.ka.ogDescription);
-        // EN
-        formData.set('name_en', loc.en.name);
-        formData.set('slug_en', loc.en.slug);
-        formData.set('description_en', copy.en.description);
-        formData.set('shortDesc_en', copy.en.shortDesc);
-        formData.set('longDesc_en', copy.en.longDesc);
-        formData.set('metaTitle_en', copy.en.metaTitle);
-        formData.set('metaDescription_en', copy.en.metaDescription);
-        formData.set('ogTitle_en', copy.en.ogTitle);
-        formData.set('ogDescription_en', copy.en.ogDescription);
-        // RU
-        formData.set('name_ru', loc.ru.name);
-        formData.set('slug_ru', loc.ru.slug);
-        formData.set('description_ru', copy.ru.description);
-        formData.set('shortDesc_ru', copy.ru.shortDesc);
-        formData.set('longDesc_ru', copy.ru.longDesc);
-        formData.set('metaTitle_ru', copy.ru.metaTitle);
-        formData.set('metaDescription_ru', copy.ru.metaDescription);
-        formData.set('ogTitle_ru', copy.ru.ogTitle);
-        formData.set('ogDescription_ru', copy.ru.ogDescription);
+        (['ka','en','ru'] as const).forEach((key) => {
+          const isBase = key === 'ka';
+          const nameKey = isBase ? 'name' : `name_${key}`;
+          const slugKey = isBase ? 'slug' : `slug_${key}`;
+          const descKey = isBase ? 'description' : `description_${key}`;
+          const shortKey = isBase ? 'shortDesc' : `shortDesc_${key}`;
+          const longKey = isBase ? 'longDesc' : `longDesc_${key}`;
+          const metaTitleKey = isBase ? 'metaTitle' : `metaTitle_${key}`;
+          const metaDescKey = isBase ? 'metaDescription' : `metaDescription_${key}`;
+          const ogTitleKey = isBase ? 'ogTitle' : `ogTitle_${key}`;
+          const ogDescKey = isBase ? 'ogDescription' : `ogDescription_${key}`;
+          const logoAltKey = isBase ? 'logoAlt' : `logoAlt_${key}`;
+
+          formData.set(nameKey, loc[key].name);
+          formData.set(slugKey, loc[key].slug);
+          formData.set(descKey, copy[key].description);
+          formData.set(shortKey, copy[key].shortDesc);
+          formData.set(longKey, copy[key].longDesc);
+          formData.set(metaTitleKey, copy[key].metaTitle);
+          formData.set(metaDescKey, copy[key].metaDescription);
+          formData.set(ogTitleKey, copy[key].ogTitle);
+          formData.set(ogDescKey, copy[key].ogDescription);
+          formData.set(logoAltKey, copy[key].logoAlt.trim());
+        });
         // Controlled logo value
         formData.set('logoUrl', logoUrl || '');
         
@@ -302,10 +302,18 @@ export default function CompanyEditForm({
           <div className="space-y-3">
             <ImageUpload
               onImageUploaded={(img) => {
-                // Update controlled hidden field via React state
                 const nextValue = img.webpUrl || img.url;
                 setLogoUrl(nextValue);
               }}
+              defaultAlt={copy[activeLocale].logoAlt}
+              altValue={copy[activeLocale].logoAlt}
+              onAltChange={(value) => {
+                setCopy((prev) => ({
+                  ...prev,
+                  [activeLocale]: { ...prev[activeLocale], logoAlt: value },
+                }));
+              }}
+              altLabel={`Logo alt (${activeLocale.toUpperCase()})`}
               onError={() => {}}
               maxSize={10 * 1024 * 1024}
             />
@@ -313,6 +321,9 @@ export default function CompanyEditForm({
             {company.logoUrl && (
               <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
             )}
+            <p className="text-xs text-muted-foreground">
+              Provide a localized logo description for {activeLocale.toUpperCase()} users.
+            </p>
           </div>
         </div>
         
@@ -465,21 +476,6 @@ export default function CompanyEditForm({
           ></textarea>
         </div>
 
-        {/* Hidden mirrors for non-active locales so all translations submit */}
-        {(['ka','en','ru'] as const)
-          .filter((locKey) => locKey !== activeLocale)
-          .map((locKey) => (
-            <div key={`hidden-copy-${locKey}`} className="hidden">
-              <input name={locKey==='ka' ? 'description' : `description_${locKey}`} value={copy[locKey].description} readOnly />
-              <input name={locKey==='ka' ? 'shortDesc' : `shortDesc_${locKey}`} value={copy[locKey].shortDesc} readOnly />
-              <input name={locKey==='ka' ? 'longDesc' : `longDesc_${locKey}`} value={copy[locKey].longDesc} readOnly />
-              <input name={locKey==='ka' ? 'metaTitle' : `metaTitle_${locKey}`} value={copy[locKey].metaTitle} readOnly />
-              <input name={locKey==='ka' ? 'metaDescription' : `metaDescription_${locKey}`} value={copy[locKey].metaDescription} readOnly />
-              <input name={locKey==='ka' ? 'ogTitle' : `ogTitle_${locKey}`} value={copy[locKey].ogTitle} readOnly />
-              <input name={locKey==='ka' ? 'ogDescription' : `ogDescription_${locKey}`} value={copy[locKey].ogDescription} readOnly />
-            </div>
-          ))}
-        
         <div className="md:col-span-2">
           <button 
             type="submit" 

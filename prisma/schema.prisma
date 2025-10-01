@@ -143,6 +143,7 @@ model Service {
   title        String
   description  String?
   heroImageUrl String?
+  heroImageAlt String?
 
   practiceAreaId String
   practiceArea   PracticeArea @relation(fields: [practiceAreaId], references: [id], onDelete: Cascade)
@@ -162,6 +163,7 @@ model Company {
   shortDesc       String? // Tagline / short description
   longDesc        String? // Longer about section
   logoUrl         String?
+  logoAlt         String?
   website         String?
   phone           String?
   email           String?
@@ -195,6 +197,7 @@ model CompanyTranslation {
   description     String?
   shortDesc       String?
   longDesc        String?
+  logoAlt         String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
@@ -257,6 +260,7 @@ model Post {
   title           String
   slug            String
   coverImage      String?
+  coverImageAlt   String?
   excerpt         String?
   body            String
   metaTitle       String?
@@ -370,10 +374,12 @@ model Media {
 }
 
 model SliderSlide {
-  id         String @id @default(cuid())
-  orderIndex Int    @default(0)
+  id         String  @id @default(cuid())
+  orderIndex Int     @default(0)
   lightUrl   String
+  lightAlt   String?
   darkUrl    String
+  darkAlt    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -400,7 +406,6 @@ model PracticeAreaTranslation {
   slug             String
   description      String?
   heroImageAlt     String?
-  // New: alt for page hero image (localized)
   pageHeroImageAlt String?
   metaTitle        String?
   metaDescription  String?
@@ -419,6 +424,7 @@ model ServiceTranslation {
   title           String
   slug            String
   description     String?
+  heroImageAlt    String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
@@ -481,6 +487,16 @@ model AudioFile {
   updatedAt DateTime @updatedAt
 }
 
+model ImageTranslation {
+  id      String @id @default(cuid())
+  imageId String
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  locale  Locale
+  alt     String
+
+  @@unique([imageId, locale])
+}
+
 model Image {
   id         String   @id @default(cuid())
   filename   String
@@ -495,5 +511,6 @@ model Image {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  uploader User? @relation(name: "UserUploadedImages", fields: [uploadedBy], references: [id], onDelete: SetNull)
+  uploader     User?              @relation(name: "UserUploadedImages", fields: [uploadedBy], references: [id], onDelete: SetNull)
+  translations ImageTranslation[]
 }

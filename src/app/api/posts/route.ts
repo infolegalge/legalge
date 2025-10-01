@@ -263,6 +263,7 @@ export async function POST(request: NextRequest) {
       excerpt, 
       body: contentBody, 
       coverImage, 
+      coverImageAlt,
       status = 'DRAFT',
       companyId,
       locale = 'ka',
@@ -274,6 +275,7 @@ export async function POST(request: NextRequest) {
       date,
       metaTitle,
       metaDescription,
+      coverImageAltTranslations,
     } = body;
 
     if (!title || !contentBody) {
@@ -357,6 +359,7 @@ export async function POST(request: NextRequest) {
         excerpt: excerpt || null,
         body: contentBody,
         coverImage: coverImage || null,
+        coverImageAlt: coverImageAlt || null,
         status: status as any,
         authorType: userRole === 'SUPER_ADMIN' && !authorType ? ('SUPER_ADMIN' as any) : authorType,
         locale,
@@ -384,6 +387,10 @@ export async function POST(request: NextRequest) {
                     body: t.body ?? null,
                     metaTitle: t.metaTitle ?? null,
                     metaDescription: t.metaDescription ?? null,
+                    coverImageAlt:
+                      (coverImageAltTranslations || []).find((alt: any) => alt?.locale === t.locale)?.alt ??
+                      coverImageAlt ??
+                      null,
                   })),
               },
             }

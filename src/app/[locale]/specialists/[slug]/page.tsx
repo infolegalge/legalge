@@ -112,7 +112,7 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
                   {specialist.company.logoUrl ? (
                     <Image
                       src={specialist.company.logoUrl}
-                      alt={specialist.company.name}
+                      alt={specialist.company.logoAlt || specialist.company.name}
                       width={40}
                       height={40}
                       className="h-10 w-10 rounded object-cover"

@@ -15,7 +15,7 @@ export default async function CompanyDashboard({ params }: { params: Promise<{ l
 
   const company = await prisma.company.findFirst({
     where: { slug: (session.user as any).companySlug ?? undefined },
-    select: { id: true, slug: true, name: true, city: true },
+    select: { id: true, slug: true, name: true, city: true, logoUrl: true, logoAlt: true },
   })
 
   return (

@@ -95,7 +95,7 @@ export default async function PracticeDetail({
           <div className="mt-3">
             {item.heroImageUrl ? (
               <figure className="relative mx-auto w-[90%] overflow-hidden rounded-lg border" style={{ aspectRatio: "4/3" }}>
-                <Image src={`${item.heroImageUrl}`} alt={item.heroImageAlt || ""} fill className="object-cover" />
+                <Image src={`${item.heroImageUrl}`} alt={item.heroImageAlt || item.title} fill className="object-cover" />
                 {item.heroImageAlt ? (
                   <figcaption className="absolute inset-x-0 bottom-0 bg-black/40 px-2 py-1 text-xs text-white">
                     {item.heroImageAlt}

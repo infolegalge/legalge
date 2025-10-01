@@ -13,7 +13,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Save, 
   Eye, 
-  Upload, 
   Loader2,
   ArrowLeft,
   FileText,
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 const RichEditor = dynamic(() => import('@/components/admin/RichEditor'), { ssr: false, loading: () => null });
+import ImageUpload from '@/components/ImageUpload';
 
 interface Post {
   id: string;
@@ -28,6 +28,7 @@ interface Post {
   excerpt?: string;
   content: string;
   coverImageUrl?: string;
+  coverImageAlt?: string | null;
   date: string | null;
   status: string;
   slug: string;
@@ -46,6 +47,7 @@ interface Post {
     metaDescription?: string | null;
     ogTitle?: string | null;
     ogDescription?: string | null;
+    coverImageAlt?: string | null;
   }>;
 }
 
@@ -57,7 +59,6 @@ interface SpecialistEditPostFormProps {
 export default function SpecialistEditPostForm({ locale, post }: SpecialistEditPostFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
@@ -77,7 +78,7 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
 
   
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; excerpt: string; body: string; slug: string; metaTitle: string; metaDescription: string; ogTitle: string; ogDescription: string }>>({
+  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; excerpt: string; body: string; slug: string; metaTitle: string; metaDescription: string; ogTitle: string; ogDescription: string; coverImageAlt: string }>>({
     ka: {
       title: post.title || '',
       excerpt: post.excerpt || '',
@@ -87,6 +88,7 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
       metaDescription: post.metaDescription || '',
       ogTitle: post.ogTitle || '',
       ogDescription: post.ogDescription || '',
+      coverImageAlt: post.coverImageAlt || '',
     },
     en: {
       title: post.translations?.find((t) => t.locale === 'en')?.title || '',
@@ -97,6 +99,7 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
       metaDescription: post.translations?.find((t) => t.locale === 'en')?.metaDescription || '',
       ogTitle: post.translations?.find((t) => t.locale === 'en')?.ogTitle || '',
       ogDescription: post.translations?.find((t) => t.locale === 'en')?.ogDescription || '',
+      coverImageAlt: post.translations?.find((t) => t.locale === 'en')?.coverImageAlt || '',
     },
     ru: {
       title: post.translations?.find((t) => t.locale === 'ru')?.title || '',
@@ -107,10 +110,12 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
       metaDescription: post.translations?.find((t) => t.locale === 'ru')?.metaDescription || '',
       ogTitle: post.translations?.find((t) => t.locale === 'ru')?.ogTitle || '',
       ogDescription: post.translations?.find((t) => t.locale === 'ru')?.ogDescription || '',
+      coverImageAlt: post.translations?.find((t) => t.locale === 'ru')?.coverImageAlt || '',
     },
   });
   const [formData, setFormData] = useState({
     coverImageUrl: post.coverImageUrl || '',
+    coverImageAlt: post.coverImageAlt || '',
     status: (post.status as 'DRAFT' | 'PUBLISHED') || 'DRAFT',
   });
 
@@ -127,36 +132,32 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
     setFormData(prev => ({ ...prev, status: value as 'DRAFT' | 'PUBLISHED' }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageUploaded = (imageData: {
+    id: string;
+    url: string;
+    webpUrl: string;
+    filename: string;
+    width: number;
+    height: number;
+    alt: string;
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      coverImageUrl: imageData.url,
+      coverImageAlt: imageData.alt || prev.coverImageAlt,
+    }));
+    setTData((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
+    }));
+    setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+  };
 
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-
-      const response = await fetch('/api/images/upload', {
-        method: 'POST',
-        body: fd,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setFormData(prev => ({
-          ...prev,
-          coverImageUrl: data.image.url
-        }));
-        setMessage({ type: 'success', text: 'Image uploaded successfully!' });
-      } else {
-        const errorData = await response.json();
-        setMessage({ type: 'error', text: errorData.error || 'Failed to upload image' });
-      }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to upload image' });
-    } finally {
-      setUploading(false);
-    }
+  const handleImageError = (error: string) => {
+    setMessage({ type: 'error', text: error });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -175,7 +176,8 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
           slug: tData.ka.slug,
           excerpt: tData.ka.excerpt,
           content: tData.ka.body,
-          coverImageUrl: formData.coverImageUrl,
+          coverImage: formData.coverImageUrl,
+          coverImageAlt: tData.ka.coverImageAlt || formData.coverImageAlt || null,
           status: formData.status,
           categoryIds: selectedCategoryIds,
           metaTitle: normalizeOptional(tData.ka.metaTitle),
@@ -193,6 +195,7 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
               metaDescription: normalizeOptional(tData.en.metaDescription),
               ogTitle: normalizeOptional(tData.en.ogTitle),
               ogDescription: normalizeOptional(tData.en.ogDescription),
+              coverImageAlt: tData.en.coverImageAlt || null,
             },
             {
               locale: 'ru',
@@ -204,8 +207,14 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
               metaDescription: normalizeOptional(tData.ru.metaDescription),
               ogTitle: normalizeOptional(tData.ru.ogTitle),
               ogDescription: normalizeOptional(tData.ru.ogDescription),
+              coverImageAlt: tData.ru.coverImageAlt || null,
             },
           ],
+          coverImageAltTranslations: [
+            { locale: 'ka', alt: tData.ka.coverImageAlt },
+            { locale: 'en', alt: tData.en.coverImageAlt },
+            { locale: 'ru', alt: tData.ru.coverImageAlt },
+          ].filter(({ alt }) => !!alt?.trim()),
         }),
       });
 
@@ -414,11 +423,29 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <ImageUpload
+                  onImageUploaded={handleImageUploaded}
+                  onError={handleImageError}
+                  maxSize={10 * 1024 * 1024}
+                  disabled={loading}
+                  defaultAlt={tData[activeLocale].coverImageAlt}
+                  altValue={tData[activeLocale].coverImageAlt}
+                  onAltChange={(value) =>
+                    setTData((prev) => ({
+                      ...prev,
+                      [activeLocale]: {
+                        ...prev[activeLocale],
+                        coverImageAlt: value,
+                      },
+                    }))
+                  }
+                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                />
                 {formData.coverImageUrl && (
                   <div className="space-y-2">
                     <img
                       src={formData.coverImageUrl}
-                      alt="Cover"
+                      alt={tData[activeLocale].coverImageAlt || 'Cover'}
                       className="w-full h-32 object-cover rounded-md"
                       loading="lazy"
                       decoding="async"
@@ -431,23 +458,6 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
                     />
                   </div>
                 )}
-                
-                <div>
-                  <Label htmlFor="image-upload">Upload Image</Label>
-                  <Input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploading}
-                  />
-                  {uploading && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span className="text-sm text-muted-foreground">Uploading...</span>
-                    </div>
-                  )}
-                </div>
               </CardContent>
             </Card>
 

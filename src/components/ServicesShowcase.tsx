@@ -11,12 +11,15 @@ async function getRandomServices(locale: Locale, take = 4) {
     const localized = all.map((s) => {
       const t = s.translations.find((x) => x.locale === locale) || s.translations.find((x) => x.locale === ("ka" as Locale));
       const pt = s.practiceArea.translations.find((x) => x.locale === locale) || s.practiceArea.translations.find((x) => x.locale === ("ka" as Locale));
+      const practiceTranslation = s.practiceArea?.translations?.find((x) => x.locale === locale);
+      const practiceHeroAlt = practiceTranslation?.heroImageAlt || null;
       return {
         id: s.id,
         title: t?.title || s.title,
         slug: t?.slug || s.slug,
         practice: { title: pt?.title || s.practiceArea.title, slug: pt?.slug || s.practiceArea.slug },
         heroImageUrl: s.heroImageUrl || s.practiceArea.heroImageUrl || null,
+        heroImageAlt: t?.heroImageAlt || s.heroImageAlt || practiceHeroAlt || null,
       };
     });
     const shuffled = localized.sort(() => Math.random() - 0.5).slice(0, take);
@@ -38,7 +41,7 @@ export default async function ServicesShowcase({ locale }: { locale: Locale }) {
               <div className="absolute inset-0">
                 <div className="relative h-full w-full">
                   {s.heroImageUrl ? (
-                    <Image src={s.heroImageUrl} alt="" fill className="object-cover" />
+                    <Image src={s.heroImageUrl} alt={s.heroImageAlt || s.title} fill className="object-cover" />
                   ) : (
                     <div className="h-full w-full bg-muted" />
                   )}

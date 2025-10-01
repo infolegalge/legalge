@@ -21,6 +21,7 @@ interface CompanyProfile {
   address: string | null;
   mapLink: string | null;
   logoUrl: string | null;
+  logoAlt: string | null;
 }
 
 export default function CompanyProfileManagement({ locale }: CompanyProfileManagementProps) {
@@ -89,7 +90,7 @@ export default function CompanyProfileManagement({ locale }: CompanyProfileManag
                 {company.logoUrl ? (
                   <Image
                     src={company.logoUrl}
-                    alt="Company logo"
+                    alt={company.logoAlt || 'Company logo'}
                     width={48}
                     height={48}
                     className="h-full w-full object-cover"

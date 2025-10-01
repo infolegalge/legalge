@@ -22,6 +22,8 @@ export async function POST(request: NextRequest) {
     const metaDescription = String(formData.get("t_meta_description") || "").trim() || null;
     const ogTitle = String(formData.get("t_og_title") || "").trim() || null;
     const ogDescription = String(formData.get("t_og_description") || "").trim() || null;
+    const heroImageAlt = String(formData.get("t_hero_alt") || "").trim() || null;
+    const heroImageUrl = String(formData.get("t_hero_url") || "").trim() || null;
 
     // Debug: Log the description being saved
     console.log("Service translation save - Description:", description);
@@ -51,6 +53,7 @@ export async function POST(request: NextRequest) {
         metaDescription: metaDescription || undefined,
         ogTitle: ogTitle || undefined,
         ogDescription: ogDescription || undefined,
+        heroImageAlt: heroImageAlt || undefined,
       },
       update: {
         title: nextTitle,
@@ -60,8 +63,16 @@ export async function POST(request: NextRequest) {
         metaDescription: metaDescription || undefined,
         ogTitle: ogTitle || undefined,
         ogDescription: ogDescription || undefined,
+        heroImageAlt: heroImageAlt || undefined,
       },
     });
+
+    if (heroImageUrl) {
+      await prisma.service.update({
+        where: { id: serviceId },
+        data: { heroImageUrl: heroImageUrl, heroImageAlt: heroImageAlt || undefined },
+      });
+    }
 
     // Revalidate relevant paths
     revalidatePath(`/${locale}/services/${nextSlug}`);

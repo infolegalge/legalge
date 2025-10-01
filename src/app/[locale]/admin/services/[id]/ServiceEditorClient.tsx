@@ -3,7 +3,8 @@
 import { useState } from "react";
 import RichEditor from "@/components/admin/RichEditor";
 import AutoSlug from "@/components/admin/AutoSlug";
-import ImageUpload from "@/components/admin/ImageUpload";
+import ImageUpload from "@/components/ImageUpload";
+import { Label } from "@/components/ui/label";
 import type { Locale } from "@/i18n/locales";
 
 type ServiceTranslation = {
@@ -16,6 +17,7 @@ type ServiceTranslation = {
   metaDescription: string | null;
   ogTitle: string | null;
   ogDescription: string | null;
+  heroImageAlt: string | null;
 };
 
 type Service = {
@@ -37,12 +39,27 @@ type ServiceEditorClientProps = {
   locale: Locale;
 };
 
-const locales: Locale[] = ["ka", "en", "ru"] as unknown as Locale[];
+const locales: Locale[] = ["ka", "en", "ru"];
 
 export default function ServiceEditorClient({ service, practices, allSpecialists, locale }: ServiceEditorClientProps) {
   const [selectedLocale, setSelectedLocale] = useState<Locale>(locale);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [baseHeroAlt, setBaseHeroAlt] = useState(service.heroImageAlt || '');
+  const [heroImageUrl, setHeroImageUrl] = useState(service.heroImageUrl || '');
+  const [translationHeroAlt, setTranslationHeroAlt] = useState<Record<Locale, string>>(() => {
+    const map = {} as Record<Locale, string>;
+    locales.forEach((loc) => {
+      const existing = service.translations.find((t) => t.locale === loc);
+      map[loc] = existing?.heroImageAlt || '';
+    });
+    return map;
+  });
+  const [translationHeroUrl, setTranslationHeroUrl] = useState<Record<Locale, string>>({
+    ka: '',
+    en: '',
+    ru: '',
+  });
   
   const currentTranslation = service.translations.find(t => t.locale === selectedLocale) || {
     locale: selectedLocale,
@@ -53,6 +70,7 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
     metaDescription: null,
     ogTitle: null,
     ogDescription: null,
+    heroImageAlt: null,
   };
 
   const handleFormSubmit = async (formData: FormData, endpoint: string, successMessage: string) => {
@@ -112,6 +130,8 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
       <form onSubmit={(e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        formData.set('heroImage', heroImageUrl.trim());
+        formData.set('heroImageAlt', baseHeroAlt.trim());
         handleFormSubmit(formData, '/api/admin/services/base', 'Base service updated successfully!');
       }} className="grid gap-3 rounded border p-4">
         <input type="hidden" name="id" value={service.id} />
@@ -153,13 +173,28 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
         </div>
         
         {/* Image Upload */}
-        <div>
+        <div className="space-y-2">
           <label className="mb-1 block text-sm">Hero Image</label>
           <ImageUpload
-            name="heroImage"
-            value={service.heroImageUrl || ""}
-            className="w-full"
+            onImageUploaded={(img) => {
+              setHeroImageUrl(img.webpUrl || img.url);
+              setBaseHeroAlt((prev) => prev || img.alt);
+            }}
+            defaultAlt={baseHeroAlt}
+            altValue={baseHeroAlt}
+            onAltChange={(value) => setBaseHeroAlt(value)}
+            altLabel="Hero image alt (default locale)"
+            onError={(err) => setMessage({ type: 'error', text: err })}
+            disabled={isLoading}
           />
+          <input type="hidden" name="heroImage" value={heroImageUrl} readOnly />
+          <input type="hidden" name="heroImageAlt" value={baseHeroAlt} readOnly />
+          {heroImageUrl && (
+            <p className="text-xs text-muted-foreground">Current hero image: {heroImageUrl}</p>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Provide an accessible description that explains the hero image to users and screen readers.
+          </p>
         </div>
         
         <RichEditor name="description" initialHTML={typeof service.description === 'string' ? service.description : ""} label="Description" />
@@ -203,6 +238,8 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
         <form key={selectedLocale} onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
+          formData.set('t_hero_alt', translationHeroAlt[selectedLocale].trim());
+          formData.set('t_hero_url', (translationHeroUrl[selectedLocale] || '').trim());
           handleFormSubmit(formData, '/api/admin/services/translation', `${selectedLocale.toUpperCase()} translation updated successfully!`);
         }} className="grid gap-3">
           <input type="hidden" name="serviceId" value={service.id} />
@@ -228,6 +265,29 @@ export default function ServiceEditorClient({ service, practices, allSpecialists
             />
           </div>
           
+          <div className="space-y-2">
+            <Label className="text-sm">Hero Image Alt &amp; Upload ({selectedLocale.toUpperCase()})</Label>
+            <ImageUpload
+              defaultAlt={translationHeroAlt[selectedLocale]}
+              altValue={translationHeroAlt[selectedLocale]}
+              onAltChange={(value) => setTranslationHeroAlt((prev) => ({ ...prev, [selectedLocale]: value }))}
+              altLabel={`Alt text (${selectedLocale.toUpperCase()})`}
+              onImageUploaded={(img) => {
+                setTranslationHeroUrl((prev) => ({ ...prev, [selectedLocale]: img.webpUrl || img.url }));
+                setTranslationHeroAlt((prev) => ({
+                  ...prev,
+                  [selectedLocale]: prev[selectedLocale] || img.alt,
+                }));
+              }}
+              onError={(err) => setMessage({ type: 'error', text: err })}
+              disabled={isLoading}
+            />
+            <input type="hidden" name="t_hero_url" value={translationHeroUrl[selectedLocale] || ''} readOnly />
+            <p className="text-xs text-muted-foreground">
+              Add or update localized alt text so the hero image is meaningful for {selectedLocale.toUpperCase()} users. Uploading a new image replaces the existing hero globally.
+            </p>
+          </div>
+
           <RichEditor 
             key={`desc-${selectedLocale}`}
             name="t_description" 

@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
     openGraph: {
       title: `${company.name} - Legal Company`,
       description: company.shortDesc || company.description || `Meet the legal specialists at ${company.name}.`,
-      images: company.logoUrl ? [{ url: company.logoUrl, alt: company.name }] : [],
+      images: company.logoUrl ? [{ url: company.logoUrl, alt: company.logoAlt || company.name }] : [],
     },
   };
 }
@@ -55,7 +55,11 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
             "name": company.name,
             "description": company.shortDesc || company.description,
             "url": company.website,
-            "logo": company.logoUrl,
+            "logo": company.logoUrl ? {
+              "@type": "ImageObject",
+              "url": company.logoUrl,
+              "description": company.logoAlt || company.name
+            } : undefined,
             "telephone": company.phone,
             "email": company.email,
             "address": company.address ? {

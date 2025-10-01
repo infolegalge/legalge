@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useId } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +23,10 @@ interface ImageUploadProps {
   acceptedTypes?: string[];
   className?: string;
   disabled?: boolean;
+  defaultAlt?: string;
+  altLabel?: string;
+  altValue?: string;
+  onAltChange?: (alt: string) => void;
 }
 
 export default function ImageUpload({
@@ -32,11 +36,26 @@ export default function ImageUpload({
   acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'],
   className = '',
   disabled = false,
+  defaultAlt = '',
+  altLabel = 'Alt text',
+  altValue,
+  onAltChange,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [internalAlt, setInternalAlt] = useState(defaultAlt);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const altInputId = useId();
+
+  const currentAlt = altValue ?? internalAlt;
+  const updateAlt = (value: string) => {
+    if (onAltChange) {
+      onAltChange(value);
+    } else {
+      setInternalAlt(value);
+    }
+  };
 
   const handleFileSelect = async (file: File) => {
     setError(null);
@@ -66,7 +85,7 @@ export default function ImageUpload({
       // Upload to server
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('alt', file.name);
+      formData.append('alt', currentAlt.trim() || file.name);
 
       const response = await fetch('/api/images/upload', {
         method: 'POST',
@@ -83,7 +102,7 @@ export default function ImageUpload({
           filename: data.image.filename,
           width: data.image.width,
           height: data.image.height,
-          alt: data.image.alt,
+          alt: currentAlt.trim() || data.image.alt || file.name,
         });
       } else {
         throw new Error(data.error || 'Failed to upload image');
@@ -119,6 +138,7 @@ export default function ImageUpload({
   const clearPreview = () => {
     setPreview(null);
     setError(null);
+    updateAlt(defaultAlt || "");
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -126,6 +146,16 @@ export default function ImageUpload({
 
   return (
     <div className={`space-y-4 ${className}`}>
+      <div className="space-y-2">
+        <Label htmlFor={altInputId}>{altLabel}</Label>
+        <Input
+          id={altInputId}
+          value={currentAlt}
+          onChange={(e) => updateAlt(e.target.value)}
+          placeholder="Describe the image"
+          disabled={disabled || uploading}
+        />
+      </div>
       <div
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
           disabled
@@ -150,7 +180,7 @@ export default function ImageUpload({
             <div className="relative inline-block">
               <img
                 src={preview}
-                alt="Preview"
+                alt={currentAlt || 'Preview'}
                 className="max-w-full max-h-48 rounded-lg shadow-sm"
                 loading="lazy"
                 decoding="async"

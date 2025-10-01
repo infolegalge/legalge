@@ -69,14 +69,14 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
               <div className="rounded-lg border bg-card p-6 transition-all hover:shadow-md hover:border-primary/20">
                 {/* Company Logo and Name */}
                 <div className="mb-4 flex items-center gap-3">
-                  {company.logoUrl ? (
-                    <Image
-                      src={company.logoUrl}
-                      alt={company.name}
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 rounded object-cover"
-                    />
+                {company.logoUrl ? (
+                  <Image
+                    src={company.logoUrl}
+                    alt={company.logoAlt || company.name}
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded object-cover"
+                  />
                   ) : (
                     <div className="flex h-12 w-12 items-center justify-center rounded bg-muted">
                       <Building2 className="h-6 w-6 text-muted-foreground" />

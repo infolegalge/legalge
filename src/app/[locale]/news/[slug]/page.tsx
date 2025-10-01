@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     const resolvedSlug = decodeURIComponent(slug);
     const post = await prisma.post.findFirst({
       where: { slug: resolvedSlug, status: 'PUBLISHED' },
-      select: { title: true, excerpt: true, coverImage: true, slug: true, id: true },
+      select: { title: true, excerpt: true, coverImage: true, coverImageAlt: true, slug: true, id: true },
     });
     if (!post) return { title: 'News' };
     const site = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002';
@@ -111,6 +111,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     const canonicalSlug = translatedSlug || post.slug;
     const url = `${site}/${locale}/news/${canonicalSlug}`;
     const img = post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `${site}${post.coverImage}`) : undefined;
+    const imgAlt = post.coverImageAlt || post.title;
     const description = post.excerpt?.slice(0, 180);
     return {
       title: post.title,
@@ -122,7 +123,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         title: post.title,
         description,
         locale,
-        images: img ? [{ url: img, width: 1200, height: 630, alt: post.title }] : undefined,
+        images: img ? [{ url: img, width: 1200, height: 630, alt: imgAlt }] : undefined,
       },
       twitter: {
         card: 'summary_large_image',
@@ -266,7 +267,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <div className="aspect-video w-full overflow-hidden">
               <img
                 src={post.coverImage}
-                alt={post.title}
+                alt={post.coverImageAlt || post.title}
                 className="w-full h-full object-cover"
                 loading="eager"
                 decoding="async"
@@ -412,7 +413,7 @@ export default async function PostPage({ params }: PostPageProps) {
                     <div className="aspect-video w-full overflow-hidden">
                       <img
                         src={relatedPost.coverImage}
-                        alt={relatedPost.title}
+                        alt={(relatedPost as any).coverImageAlt || relatedPost.title}
                         className="w-full h-full object-cover"
                         loading="lazy"
                         decoding="async"

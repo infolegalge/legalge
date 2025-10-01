@@ -55,13 +55,13 @@ export default async function CompanyProfilePage({
   const resolvedCompany = company as ProfileCompany
 
   // Load translations for editor
-  let translations: Array<{ locale: 'ka'|'en'|'ru'; name: string; slug: string; description: string | null; shortDesc: string | null; longDesc: string | null }> = []
+  let translations: Array<{ locale: 'ka'|'en'|'ru'; name: string; slug: string; description: string | null; shortDesc: string | null; longDesc: string | null; logoAlt: string | null }> = []
   try {
     const client: any = prisma as any
     if (client.companyTranslation && typeof client.companyTranslation.findMany === 'function') {
       translations = await client.companyTranslation.findMany({
         where: { companyId: resolvedCompany.id },
-        select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true },
+        select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true, logoAlt: true },
       })
     }
   } catch {}
@@ -101,6 +101,7 @@ export default async function CompanyProfilePage({
     const ogDescription_en = String(formData.get('ogDescription_en') || '').trim() || null
     const ogDescription_ru = String(formData.get('ogDescription_ru') || '').trim() || null
     const logoUrl = String(formData.get('logoUrl') || '').trim() || null
+    const logoAlt = String(formData.get('logoAlt') || '').trim() || null
     const website = String(formData.get('website') || '').trim() || null
     const phone = String(formData.get('phone') || '').trim() || null
     const email = String(formData.get('email') || '').trim() || null
@@ -120,6 +121,7 @@ export default async function CompanyProfilePage({
           shortDesc: shortDesc || undefined,
           longDesc: longDesc || undefined,
           logoUrl: logoUrl || undefined,
+          logoAlt: logoAlt || undefined,
           website: website || undefined,
           phone: phone || undefined,
           email: email || undefined,
@@ -140,6 +142,7 @@ export default async function CompanyProfilePage({
         const enMetaDescription = metaDescription_en || metaDescription
         const enOgTitle = ogTitle_en || ogTitle
         const enOgDescription = ogDescription_en || ogDescription
+        const enLogoAlt = String(formData.get('logoAlt_en') || '').trim() || logoAlt
 
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'en' } },
@@ -155,6 +158,7 @@ export default async function CompanyProfilePage({
             metaDescription: enMetaDescription,
             ogTitle: enOgTitle,
             ogDescription: enOgDescription,
+            logoAlt: enLogoAlt || undefined,
           },
           update: {
             name: name_en || name,
@@ -166,6 +170,7 @@ export default async function CompanyProfilePage({
             metaDescription: enMetaDescription,
             ogTitle: enOgTitle,
             ogDescription: enOgDescription,
+            logoAlt: enLogoAlt || undefined,
           },
         }))
 
@@ -173,6 +178,7 @@ export default async function CompanyProfilePage({
         const ruMetaDescription = metaDescription_ru || metaDescription
         const ruOgTitle = ogTitle_ru || ogTitle
         const ruOgDescription = ogDescription_ru || ogDescription
+        const ruLogoAlt = String(formData.get('logoAlt_ru') || '').trim() || logoAlt
 
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'ru' } },
@@ -188,6 +194,7 @@ export default async function CompanyProfilePage({
             metaDescription: ruMetaDescription,
             ogTitle: ruOgTitle,
             ogDescription: ruOgDescription,
+            logoAlt: ruLogoAlt || undefined,
           },
           update: {
             name: name_ru || name,
@@ -199,6 +206,7 @@ export default async function CompanyProfilePage({
             metaDescription: ruMetaDescription,
             ogTitle: ruOgTitle,
             ogDescription: ruOgDescription,
+            logoAlt: ruLogoAlt || undefined,
           },
         }))
         await Promise.all(tx)

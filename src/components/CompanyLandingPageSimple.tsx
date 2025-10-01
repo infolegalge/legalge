@@ -31,7 +31,7 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
             {company.logoUrl ? (
               <Image
                 src={company.logoUrl}
-                alt={company.name}
+                alt={company.logoAlt || company.name}
                 width={200}
                 height={200}
                 className="h-48 w-48 rounded-lg object-cover"
@@ -244,7 +244,7 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
                     <div className="aspect-video relative">
                       <Image
                         src={post.coverImage}
-                        alt={post.title}
+                        alt={post.coverImageAlt || post.title}
                         fill
                         className="object-cover"
                       />

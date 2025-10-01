@@ -14,14 +14,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Save, 
   Eye, 
-  Upload, 
   Loader2,
   ArrowLeft,
   FileText,
-  Trash2
+  Trash2,
+  Upload
 } from "lucide-react";
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ImageUpload from "@/components/ImageUpload";
 
 interface Post {
   id: string;
@@ -29,6 +30,7 @@ interface Post {
   excerpt?: string | null;
   body: string;
   coverImage?: string | null;
+  coverImageAlt?: string | null;
   publishedAt: string | null;
   status: string;
   slug: string;
@@ -47,6 +49,7 @@ interface Post {
     metaDescription?: string | null;
     ogTitle?: string | null;
     ogDescription?: string | null;
+    coverImageAlt?: string | null;
   }>;
 }
 
@@ -64,6 +67,7 @@ interface AdminEditPostFormProps {
     metaDescription?: string | null;
     ogTitle?: string | null;
     ogDescription?: string | null;
+    coverImageAlt?: string | null;
   }>;
 }
 
@@ -80,6 +84,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
     excerpt: post.excerpt || '',
     content: post.body,
     coverImageUrl: post.coverImage || '',
+    coverImageAlt: post.coverImageAlt || '',
     status: post.status as 'DRAFT' | 'PUBLISHED',
     date: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : ''
   });
@@ -99,6 +104,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
         metaDescription: string;
         ogTitle: string;
         ogDescription: string;
+        coverImageAlt: string;
       }
     >
   >({
@@ -111,6 +117,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: post.metaDescription || '',
       ogTitle: post.ogTitle || '',
       ogDescription: post.ogDescription || '',
+      coverImageAlt: post.coverImageAlt || '',
     },
     en: {
       title: translations.find((t) => t.locale === 'en')?.title || '',
@@ -121,6 +128,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: translations.find((t) => t.locale === 'en')?.metaDescription || '',
       ogTitle: translations.find((t) => t.locale === 'en')?.ogTitle || '',
       ogDescription: translations.find((t) => t.locale === 'en')?.ogDescription || '',
+      coverImageAlt: translations.find((t) => t.locale === 'en')?.coverImageAlt || '',
     },
     ru: {
       title: translations.find((t) => t.locale === 'ru')?.title || '',
@@ -131,6 +139,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: translations.find((t) => t.locale === 'ru')?.metaDescription || '',
       ogTitle: translations.find((t) => t.locale === 'ru')?.ogTitle || '',
       ogDescription: translations.find((t) => t.locale === 'ru')?.ogDescription || '',
+      coverImageAlt: translations.find((t) => t.locale === 'ru')?.coverImageAlt || '',
     },
   });
 
@@ -167,38 +176,32 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
     }));
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageUploaded = (imageData: {
+    id: string;
+    url: string;
+    webpUrl: string;
+    filename: string;
+    width: number;
+    height: number;
+    alt: string;
+  }) => {
+    setFormData(prev => ({
+      ...prev,
+      coverImageUrl: imageData.url,
+      coverImageAlt: imageData.alt || prev.coverImageAlt,
+    }));
+    setTData((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
+    }));
+    setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+  };
 
-    setUploading(true);
-    setMessage(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/images/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setFormData(prev => ({
-          ...prev,
-          coverImageUrl: data.image.url
-        }));
-        setMessage({ type: 'success', text: 'Image uploaded successfully!' });
-      } else {
-        setMessage({ type: 'error', text: data.error || 'Failed to upload image' });
-      }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to upload image' });
-    } finally {
-      setUploading(false);
-    }
+  const handleImageError = (error: string) => {
+    setMessage({ type: 'error', text: error });
   };
 
   const handleSave = async (status: 'DRAFT' | 'PUBLISHED') => {
@@ -230,6 +233,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
           excerpt: prepared.ka.excerpt,
           content: prepared.ka.body,
           coverImage: formData.coverImageUrl,
+          coverImageAlt: formData.coverImageAlt || null,
           status,
           date: formData.date ? new Date(formData.date).toISOString() : null,
           categoryIds: selectedCategoryIds,
@@ -248,6 +252,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
               metaDescription: normalizeOptional(prepared.en.metaDescription),
               ogTitle: normalizeOptional(prepared.en.ogTitle),
               ogDescription: normalizeOptional(prepared.en.ogDescription),
+              coverImageAlt: prepared.en.coverImageAlt || null,
             },
             {
               locale: 'ru',
@@ -259,8 +264,14 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
               metaDescription: normalizeOptional(prepared.ru.metaDescription),
               ogTitle: normalizeOptional(prepared.ru.ogTitle),
               ogDescription: normalizeOptional(prepared.ru.ogDescription),
+              coverImageAlt: prepared.ru.coverImageAlt || null,
             },
           ],
+          coverImageAltTranslations: [
+            { locale: 'ka', alt: prepared.ka.coverImageAlt },
+            { locale: 'en', alt: prepared.en.coverImageAlt },
+            { locale: 'ru', alt: prepared.ru.coverImageAlt },
+          ].filter((item) => item.alt && item.alt.trim().length > 0),
         }),
       });
 
@@ -650,47 +661,28 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
                 <p className="text-xs text-muted-foreground">Set a past or future date. Leaving empty keeps current behavior.</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="coverImageUrl">Cover Image URL</Label>
-                <Input
-                  id="coverImageUrl"
-                  name="coverImageUrl"
-                  value={formData.coverImageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/image.jpg"
+                <Label>Cover Image</Label>
+                <ImageUpload
+                  onImageUploaded={handleImageUploaded}
+                  onError={handleImageError}
+                  maxSize={10 * 1024 * 1024}
+                  disabled={loading}
+                  defaultAlt={tData[activeLocale].coverImageAlt}
+                  altValue={tData[activeLocale].coverImageAlt}
+                  onAltChange={(value) =>
+                    setTData((prev) => ({
+                      ...prev,
+                      [activeLocale]: {
+                        ...prev[activeLocale],
+                        coverImageAlt: value,
+                      },
+                    }))
+                  }
+                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
                 />
-                <div className="space-y-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="image-upload"
-                    disabled={uploading}
-                  />
-                  <label htmlFor="image-upload">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full cursor-pointer"
-                      disabled={uploading}
-                      asChild
-                    >
-                      <span>
-                        {uploading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Uploading...
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="h-4 w-4 mr-2" />
-                            Upload Image
-                          </>
-                        )}
-                      </span>
-                    </Button>
-                  </label>
-                </div>
+                {formData.coverImageUrl && (
+                  <p className="text-xs text-muted-foreground">Current image URL: {formData.coverImageUrl}</p>
+                )}
               </div>
 
               {formData.coverImageUrl && (
@@ -699,7 +691,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
                   <div className="aspect-video rounded-md border bg-muted overflow-hidden">
                     <img 
                       src={formData.coverImageUrl} 
-                      alt="Cover preview"
+                      alt={formData.coverImageAlt || 'Cover preview'}
                       className="w-full h-full object-cover"
                       loading="lazy"
                       decoding="async"

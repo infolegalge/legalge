@@ -25,6 +25,7 @@ export interface SpecialistProfile {
     slug: string;
     name: string;
     logoUrl?: string | null;
+    logoAlt?: string | null;
     website?: string | null;
     city?: string | null;
   };
@@ -43,6 +44,7 @@ export interface Company {
   shortDesc?: string | null;
   longDesc?: string | null;
   logoUrl?: string | null;
+  logoAlt?: string | null;
   website?: string | null;
   phone?: string | null;
   email?: string | null;
@@ -56,6 +58,7 @@ export interface Company {
     title: string;
     excerpt?: string | null;
     coverImage?: string | null;
+    coverImageAlt?: string | null;
     publishedAt?: Date | null;
   }>;
 }
@@ -103,6 +106,7 @@ export async function fetchSpecialists(): Promise<SpecialistProfile[]> {
           slug: specialist.company.slug,
           name: specialist.company.name,
           logoUrl: specialist.company.logoUrl ?? null,
+          logoAlt: specialist.company.logoAlt ?? null,
           website: specialist.company.website ?? null,
           city: specialist.company.city ?? null,
         }
@@ -183,6 +187,7 @@ export async function fetchSpecialist(
           slug: specialist.company.slug,
           name: specialist.company.name,
           logoUrl: specialist.company.logoUrl ?? null,
+          logoAlt: specialist.company.logoAlt ?? null,
           website: specialist.company.website ?? null,
           city: specialist.company.city ?? null,
         }
@@ -212,6 +217,7 @@ export async function fetchCompanies(): Promise<Company[]> {
           title: true,
           excerpt: true,
           coverImage: true,
+          coverImageAlt: true,
           publishedAt: true,
         },
         orderBy: {
@@ -233,13 +239,22 @@ export async function fetchCompanies(): Promise<Company[]> {
     shortDesc: company.shortDesc ?? null,
     longDesc: company.longDesc ?? null,
     logoUrl: company.logoUrl ?? null,
+    logoAlt: company.logoAlt ?? null,
     website: company.website ?? null,
     phone: company.phone ?? null,
     email: company.email ?? null,
     address: company.address ?? null,
     city: company.city ?? null,
     mapLink: company.mapLink ?? null,
-    posts: company.posts,
+    posts: company.posts.map((post) => ({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      coverImage: post.coverImage,
+      coverImageAlt: (post as any).coverImageAlt ?? null,
+      publishedAt: post.publishedAt,
+    })),
     specialists: company.specialists.map((specialist) => ({
       id: specialist.id,
       slug: specialist.slug,
@@ -258,6 +273,7 @@ export async function fetchCompanies(): Promise<Company[]> {
         slug: company.slug,
         name: company.name,
         logoUrl: company.logoUrl ?? null,
+        logoAlt: company.logoAlt ?? null,
         website: company.website ?? null,
         city: company.city ?? null,
       },
@@ -288,6 +304,7 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
           title: true,
           excerpt: true,
           coverImage: true,
+          coverImageAlt: true,
           publishedAt: true,
         },
         orderBy: {
@@ -307,13 +324,22 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
     shortDesc: company.shortDesc ?? null,
     longDesc: company.longDesc ?? null,
     logoUrl: company.logoUrl ?? null,
+    logoAlt: company.logoAlt ?? null,
     website: company.website ?? null,
     phone: company.phone ?? null,
     email: company.email ?? null,
     address: company.address ?? null,
     city: company.city ?? null,
     mapLink: company.mapLink ?? null,
-    posts: company.posts,
+    posts: company.posts.map((post) => ({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      coverImage: post.coverImage,
+      coverImageAlt: (post as any).coverImageAlt ?? null,
+      publishedAt: post.publishedAt,
+    })),
     specialists: company.specialists.map((specialist) => ({
       id: specialist.id,
       slug: specialist.slug,
@@ -332,6 +358,7 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
         slug: company.slug,
         name: company.name,
         logoUrl: company.logoUrl ?? null,
+        logoAlt: company.logoAlt ?? null,
         website: company.website ?? null,
         city: company.city ?? null,
       },

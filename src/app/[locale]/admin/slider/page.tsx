@@ -16,9 +16,11 @@ async function createSlide(formData: FormData) {
   await requireSuperAdmin();
   const lightUrl = String(formData.get("lightUrl") || "").trim();
   const darkUrl = String(formData.get("darkUrl") || "").trim();
+  const lightAlt = String(formData.get("lightAlt") || "").trim() || null;
+  const darkAlt = String(formData.get("darkAlt") || "").trim() || null;
   const orderIndex = Number(formData.get("orderIndex") || 0);
   if (!lightUrl || !darkUrl) return;
-  await prisma.sliderSlide.create({ data: { lightUrl, darkUrl, orderIndex } });
+  await prisma.sliderSlide.create({ data: { lightUrl, darkUrl, lightAlt: lightAlt || undefined, darkAlt: darkAlt || undefined, orderIndex } });
   revalidatePath("/");
 }
 
@@ -48,8 +50,16 @@ export default async function SliderAdmin({ params }: { params: Promise<{ locale
           <input name="lightUrl" className="w-full rounded border px-3 py-2" placeholder="/uploads/01light.webp" required />
         </div>
         <div>
+          <label className="mb-1 block text-sm">Light image alt text</label>
+          <input name="lightAlt" className="w-full rounded border px-3 py-2" placeholder="Describe the light image" />
+        </div>
+        <div>
           <label className="mb-1 block text-sm">Dark image URL</label>
           <input name="darkUrl" className="w-full rounded border px-3 py-2" placeholder="/uploads/01dark.webp" required />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm">Dark image alt text</label>
+          <input name="darkAlt" className="w-full rounded border px-3 py-2" placeholder="Describe the dark image" />
         </div>
         <div>
           <label className="mb-1 block text-sm">Order</label>
@@ -62,8 +72,8 @@ export default async function SliderAdmin({ params }: { params: Promise<{ locale
         {slides.map((s) => (
           <li key={s.id} className="overflow-hidden rounded border">
             <div className="relative h-40 w-full">
-              <img src={s.lightUrl} alt="" className="absolute inset-0 h-full w-full object-cover dark:opacity-0" loading="lazy" decoding="async" />
-              <img src={s.darkUrl} alt="" className="absolute inset-0 h-full w-full object-cover opacity-0 dark:opacity-100" loading="lazy" decoding="async" />
+              <img src={s.lightUrl} alt={s.lightAlt || "Slider light image"} className="absolute inset-0 h-full w-full object-cover dark:opacity-0" loading="lazy" decoding="async" />
+              <img src={s.darkUrl} alt={s.darkAlt || s.lightAlt || "Slider dark image"} className="absolute inset-0 h-full w-full object-cover opacity-0 dark:opacity-100" loading="lazy" decoding="async" />
             </div>
             <div className="flex items-center justify-between p-2 text-sm">
               <span className="truncate">#{s.orderIndex}</span>

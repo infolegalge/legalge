@@ -31,6 +31,7 @@ type LocalePayload = {
   metaDescription: string;
   ogTitle: string;
   ogDescription: string;
+  coverImageAlt: string;
 };
 
 type LocaleField = keyof LocalePayload;
@@ -58,6 +59,7 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
     metaDescription: '',
     ogTitle: '',
     ogDescription: '',
+    coverImageAlt: '',
   };
 
   const [tData, setTData] = useState<Record<Locale, LocalePayload>>({
@@ -133,6 +135,7 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
         excerpt: base.excerpt,
         body: base.body,
         coverImage: '',
+        coverImageAlt: base.coverImageAlt || null,
         status,
         locale: baseLoc,
         authorType: 'COMPANY',
@@ -143,6 +146,10 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
         ogTitle: base.ogTitle,
         ogDescription: base.ogDescription,
         translations: translationsPayload,
+        coverImageAltTranslations: (
+          ['ka','en','ru'] as const
+        ).map((loc) => ({ locale: loc, alt: tData[loc].coverImageAlt }))
+          .filter(({ alt }) => !!alt?.trim()),
       };
 
       const res = await fetch('/api/posts', {
@@ -177,6 +184,13 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
   };
 
   const handleImageUploaded = (imageData: { id: string; url: string; webpUrl: string; filename: string; width: number; height: number; alt: string; }) => {
+    setTData((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
+    }));
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
 
@@ -358,6 +372,35 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
               </div>
 
               <div className="text-sm text-muted-foreground">Words: {wordCount}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Cover Image</CardTitle>
+              <CardDescription>Add an image to your post for better visual appeal.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Cover Image</Label>
+                <ImageUpload
+                  onImageUploaded={handleImageUploaded}
+                  onError={handleImageError}
+                  maxSize={10 * 1024 * 1024} // 10MB
+                  disabled={loading}
+                  defaultAlt={tData[activeLocale].coverImageAlt}
+                  altValue={tData[activeLocale].coverImageAlt}
+                  onAltChange={(value) =>
+                    setTData((prev) => ({
+                      ...prev,
+                      [activeLocale]: {
+                        ...prev[activeLocale],
+                        coverImageAlt: value,
+                      },
+                    }))
+                  }
+                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>

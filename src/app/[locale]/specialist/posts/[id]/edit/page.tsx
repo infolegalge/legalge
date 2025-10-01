@@ -27,6 +27,7 @@ export default async function SpecialistEditPostPage({
       excerpt: true,
       body: true,
       coverImage: true,
+      coverImageAlt: true,
       status: true,
       publishedAt: true,
       locale: true,
@@ -64,17 +65,6 @@ export default async function SpecialistEditPostPage({
   // Fetch translations for language tabs
   const translations = await prisma.postTranslation.findMany({
     where: { postId: id },
-    select: {
-      locale: true,
-      title: true,
-      excerpt: true,
-      body: true,
-      slug: true,
-      metaTitle: true,
-      metaDescription: true,
-      ogTitle: true,
-      ogDescription: true,
-    },
   });
 
   const mapped = { 
@@ -82,6 +72,7 @@ export default async function SpecialistEditPostPage({
     date: post.publishedAt ? post.publishedAt.toISOString() : null,
     content: post.body,
     coverImageUrl: post.coverImage,
+    coverImageAlt: post.coverImageAlt,
     categories: post.categories?.map((c) => ({ id: c.categoryId, name: c.category?.name ?? '' })) ?? [],
     translations,
   } as any;

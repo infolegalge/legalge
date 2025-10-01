@@ -196,7 +196,7 @@ export default async function EditCompany({
         {/** eslint-disable-next-line react/jsx-no-undef */}
         <CompanyEditForm 
           company={company}
-          translations={(await prisma.companyTranslation.findMany({ where: { companyId: id }, select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true } })) as any}
+          translations={(await prisma.companyTranslation.findMany({ where: { companyId: id }, select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true, logoAlt: true, metaTitle: true, metaDescription: true, ogTitle: true, ogDescription: true } })) as any}
           updateAction={updateCompany}
         />
       </div>

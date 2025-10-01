@@ -36,15 +36,16 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   const [formData, setFormData] = useState({
     coverImageUrl: '',
     coverImageId: '',
+    coverImageAlt: '',
     status: 'DRAFT' as 'DRAFT' | 'PUBLISHED',
   });
   const [allCategories, setAllCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>(['ka', 'en', 'ru'].includes(locale) ? (locale as 'ka'|'en'|'ru') : 'ka');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string }>>({
-    ka: { title: '', slug: '', excerpt: '', body: '' },
-    en: { title: '', slug: '', excerpt: '', body: '' },
-    ru: { title: '', slug: '', excerpt: '', body: '' },
+  const [translationsState, setTranslationsState] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string; coverImageAlt: string }>>({
+    ka: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
+    en: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
+    ru: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
   });
 
   const localeOptions: Array<{ code: 'ka' | 'en' | 'ru'; label: string }> = [
@@ -65,8 +66,8 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
     })();
   }, []);
 
-  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: keyof typeof tData['ka'], value: string) => {
-    setTData((prev) => ({
+  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: keyof typeof translationsState['ka'], value: string) => {
+    setTranslationsState((prev) => ({
       ...prev,
       [loc]: {
         ...prev[loc],
@@ -75,14 +76,14 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
     }));
   };
 
-  const hasBaseContent = tData.ka.title.trim().length > 0 && tData.ka.body.trim().length > 0;
+  const hasBaseContent = translationsState.ka.title.trim().length > 0 && translationsState.ka.body.trim().length > 0;
 
   const handleSave = async (status: 'DRAFT' | 'PUBLISHED') => {
     setLoading(true);
     setMessage(null);
 
     try {
-    const base = tData.ka;
+    const base = translationsState.ka;
     if (!base.title.trim() || !base.body.trim()) {
       setMessage({ type: 'error', text: 'Georgian title and content are required.' });
       setLoading(false);
@@ -96,7 +97,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
     const translationsPayload = translationLocales
       .map((loc) => ({
         locale: loc,
-        data: tData[loc],
+        data: translationsState[loc],
       }))
       .filter(({ data }) => data.title.trim() || data.body.trim());
 
@@ -111,6 +112,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
           excerpt: base.excerpt,
           body: base.body,
           coverImage: formData.coverImageUrl || null,
+          coverImageAlt: translationsState.ka.coverImageAlt || formData.coverImageAlt || null,
           status,
           slug,
           locale,
@@ -123,7 +125,12 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
           slug: ensureSlug(data.slug, data.title, loc as 'en' | 'ru'),
           excerpt: data.excerpt,
           body: data.body,
+          coverImageAlt: data.coverImageAlt || null,
         })),
+        coverImageAltTranslations: (
+          ['ka', 'en', 'ru'] as const
+        ).map((loc) => ({ locale: loc, alt: translationsState[loc].coverImageAlt }))
+          .filter(({ alt }) => !!alt?.trim()),
         }),
       });
 
@@ -161,10 +168,18 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
     height: number;
     alt: string;
   }) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       coverImageUrl: imageData.url,
-      coverImageId: imageData.id
+      coverImageId: imageData.id,
+      coverImageAlt: imageData.alt || prev.coverImageAlt,
+    }));
+    setTranslationsState((prev) => ({
+      ...prev,
+      [activeLocale]: {
+        ...prev[activeLocale],
+        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
+      },
     }));
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
@@ -181,9 +196,9 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   };
 
   const baseBodyText = useMemo(() => {
-    const plain = tData.ka.body.replace(/<[^>]+>/g, ' ');
+    const plain = translationsState.ka.body.replace(/<[^>]+>/g, ' ');
     return plain.replace(/\s+/g, ' ').trim();
-  }, [tData.ka.body]);
+  }, [translationsState.ka.body]);
 
 
   const normalizeMeta = (value: string) => {
@@ -194,7 +209,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   const ensureSlug = (value: string, title: string, loc: 'ka' | 'en' | 'ru') => {
     const trimmed = value.trim();
     if (trimmed) return trimmed;
-    const baseTitle = title || tData.ka.title;
+    const baseTitle = title || translationsState.ka.title;
     return makeSlug(baseTitle, loc as any);
   };
 
@@ -278,20 +293,20 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
             <div className="space-y-2">
               <Label>Post Title ({activeLocale.toUpperCase()}) *</Label>
               <Input
-                value={tData[activeLocale].title}
+                value={translationsState[activeLocale].title}
                 onChange={(e) => updateLocaleField(activeLocale, 'title', e.target.value)}
                 placeholder="Enter a compelling title"
                 required={activeLocale === 'ka'}
               />
               <p className="text-xs text-muted-foreground">
-                Slug: /posts/{ensureSlug(tData[activeLocale].slug, tData[activeLocale].title, activeLocale)}
+                Slug: /posts/{ensureSlug(translationsState[activeLocale].slug, translationsState[activeLocale].title, activeLocale)}
               </p>
             </div>
 
             <div className="space-y-2">
               <Label>Excerpt ({activeLocale.toUpperCase()})</Label>
               <Textarea
-                value={tData[activeLocale].excerpt}
+                value={translationsState[activeLocale].excerpt}
                 onChange={(e) => updateLocaleField(activeLocale, 'excerpt', e.target.value)}
                 rows={3}
               />
@@ -301,14 +316,14 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
               <Label>Slug ({activeLocale.toUpperCase()})</Label>
               <div className="flex gap-2">
                 <Input
-                  value={tData[activeLocale].slug}
+                  value={translationsState[activeLocale].slug}
                   onChange={(e) => updateLocaleField(activeLocale, 'slug', e.target.value)}
                   placeholder="custom-slug"
                 />
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => updateLocaleField(activeLocale, 'slug', makeSlug(tData[activeLocale].title, activeLocale))}
+                  onClick={() => updateLocaleField(activeLocale, 'slug', makeSlug(translationsState[activeLocale].title, activeLocale))}
                 >
                   Auto
                 </Button>
@@ -317,16 +332,16 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
             </div>
 
               <div className="space-y-2">
-                <Label htmlFor="content">Content *</Label>
+                <Label>Content *</Label>
                 {previewMode ? (
                   <div className="min-h-[400px] rounded-md border border-input bg-background p-4">
                     <div className="prose prose-sm max-w-none">
-                      <h1>{tData[activeLocale].title || 'Untitled Post'}</h1>
-                      {tData[activeLocale].excerpt && (
-                        <p className="text-muted-foreground italic">{tData[activeLocale].excerpt}</p>
+                      <h1>{translationsState[activeLocale].title || 'Untitled Post'}</h1>
+                      {translationsState[activeLocale].excerpt && (
+                        <p className="text-muted-foreground italic">{translationsState[activeLocale].excerpt}</p>
                       )}
                       <div className="whitespace-pre-wrap">
-                        {tData[activeLocale].body || 'No content yet...'}
+                        {translationsState[activeLocale].body || 'No content yet...'}
                       </div>
                     </div>
                   </div>
@@ -334,7 +349,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
                   <RichEditor
                     key={`editor-${activeLocale}`}
                     name={`content-${activeLocale}`}
-                    initialHTML={tData[activeLocale].body}
+                    initialHTML={translationsState[activeLocale].body}
                     label="Content"
                     onChange={(html) => updateLocaleField(activeLocale, 'body', html)}
                   />
@@ -387,6 +402,18 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
                   onError={handleImageError}
                   maxSize={10 * 1024 * 1024}
                   disabled={loading}
+                  defaultAlt={translationsState[activeLocale].coverImageAlt}
+                  altValue={translationsState[activeLocale].coverImageAlt}
+                  onAltChange={(value) =>
+                    setTranslationsState((prev) => ({
+                      ...prev,
+                      [activeLocale]: {
+                        ...prev[activeLocale],
+                        coverImageAlt: value,
+                      },
+                    }))
+                  }
+                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
                 />
                 {formData.coverImageUrl && (
                   <div className="text-xs text-muted-foreground">Current image: {formData.coverImageUrl}</div>
@@ -441,15 +468,15 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
             <CardContent className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">KA Title:</span>
-                <span>{tData.ka.title.length} characters</span>
+                <span>{translationsState.ka.title.length} characters</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">KA Excerpt:</span>
-                <span>{tData.ka.excerpt.length} characters</span>
+                <span>{translationsState.ka.excerpt.length} characters</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Word Count:</span>
-                <span>{tData.ka.body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length} words</span>
+                <span>{translationsState.ka.body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length} words</span>
               </div>
             </CardContent>
           </Card>

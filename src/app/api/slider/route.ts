@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const slides = await prisma.sliderSlide.findMany({ orderBy: { orderIndex: "asc" } });
-    const body = slides.map((s) => ({ light: s.lightUrl, dark: s.darkUrl }));
+    const body = slides.map((s) => ({ light: s.lightUrl, dark: s.darkUrl, lightAlt: s.lightAlt, darkAlt: s.darkAlt }));
     return Response.json(body, {
       headers: {
         // Cache for 1 hour at the edge and allow stale-while-revalidate for 1 day

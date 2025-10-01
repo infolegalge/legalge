@@ -172,6 +172,17 @@ export default function NewsFeed({
         
         return (
           <article key={post.id} className="bg-card rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
+            {post.coverImage && (
+              <div className="relative aspect-video w-full">
+                <Image
+                  src={post.coverImage}
+                  alt={(post as any).coverImageAlt || post.title}
+                  fill
+                  className="object-cover"
+                  priority={false}
+                />
+              </div>
+            )}
             <div className="p-6">
               {/* Categories */}
               {post.categories && post.categories.length > 0 && (

@@ -47,7 +47,7 @@ interface Specialist {
   }>;
 }
 
-type ActionResult<T extends Record<string, unknown> = {}> = {
+type ActionResult<T extends Record<string, unknown> = Record<string, unknown>> = {
   success?: boolean;
   error?: string;
 } & T;
