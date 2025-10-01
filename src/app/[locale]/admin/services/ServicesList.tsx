@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, Trash2, Edit } from "lucide-react";
+import { Search, Trash2, Edit, Plus } from "lucide-react";
 import type { Locale } from "@/i18n/locales";
 import Fuse from "fuse.js";
 
@@ -100,6 +100,16 @@ export default function ServicesList({ locale, services }: ServicesListProps) {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold">All Services</h2>
+        <Link
+          href={`/${locale}/admin/services/new`}
+          className="inline-flex items-center gap-2 rounded bg-primary px-3 py-2 text-sm text-primary-foreground hover:bg-primary/90"
+        >
+          <Plus className="h-4 w-4" />
+          New Service
+        </Link>
+      </div>
       {/* Search Bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

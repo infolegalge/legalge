@@ -19,7 +19,7 @@ function toSlug(text: string, locale?: Locale): string {
   return slugify(text || "", { lower: true, strict: true, locale: "en" });
 }
 
-export default function AutoSlug({ titleName, slugName }: { titleName: string; slugName: string }) {
+export default function AutoSlug({ titleName, slugName, localeField }: { titleName: string; slugName: string; localeField?: string }) {
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const [locked, setLocked] = useState(false);
@@ -35,7 +35,8 @@ export default function AutoSlug({ titleName, slugName }: { titleName: string; s
 
     const onTitle = () => {
       if (locked) return;
-      const currentLocale = (realForm.querySelector("input[name='locale']") as HTMLInputElement | null)?.value as Locale | undefined;
+      const localeSelector = localeField ? `input[name='${localeField}']` : "input[name='locale']";
+      const currentLocale = (realForm.querySelector(localeSelector) as HTMLInputElement | null)?.value as Locale | undefined;
       // Update whenever user hasn't explicitly edited the slug (i.e., not locked)
       if (slug.dataset.autofill !== "false") {
         slug.value = toSlug(title.value, currentLocale);
@@ -55,7 +56,7 @@ export default function AutoSlug({ titleName, slugName }: { titleName: string; s
       title.removeEventListener("input", onTitle);
       slug.removeEventListener("input", onSlug);
     };
-  }, [titleName, slugName, locked]);
+  }, [titleName, slugName, locked, localeField]);
 
   return <div ref={anchorRef} />;
 }
