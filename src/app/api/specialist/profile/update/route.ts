@@ -14,6 +14,8 @@ export async function PATCH(request: NextRequest) {
     const formData = await request.formData();
     
     const id = String(formData.get('id') || '');
+    const section = String(formData.get('section') || 'basic');
+
     const name = String(formData.get('name') || '').trim();
     const slug = String(formData.get('slug') || '').trim();
     const role = String(formData.get('role') || '').trim() || null;
@@ -33,8 +35,8 @@ export async function PATCH(request: NextRequest) {
     const specializations = JSON.stringify(specializationsArray);
     const companyId = String(formData.get('companyId') || '').trim() || null;
 
-    if (!id || !name || !slug) {
-      return NextResponse.json({ error: 'ID, name and slug are required' }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     // Verify the specialist profile belongs to the current user
@@ -50,21 +52,25 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Check if slug already exists (excluding current specialist)
-    const existingSpecialist = await prisma.specialistProfile.findFirst({
-      where: { 
-        slug,
-        id: { not: id }
+    const updateData: Parameters<typeof prisma.specialistProfile.update>[0]['data'] = {};
+
+    if (section === 'basic') {
+      if (!name || !slug) {
+        return NextResponse.json({ error: 'Name and slug are required' }, { status: 400 });
       }
-    });
 
-    if (existingSpecialist) {
-      return NextResponse.json({ error: 'Slug already exists' }, { status: 400 });
-    }
+      const existingSpecialist = await prisma.specialistProfile.findFirst({
+        where: {
+          slug,
+          id: { not: id }
+        }
+      });
 
-    // Update the specialist profile
-    const updatedSpecialist = await prisma.specialistProfile.update({
-      where: { id },
-      data: {
+      if (existingSpecialist) {
+        return NextResponse.json({ error: 'Slug already exists' }, { status: 400 });
+      }
+
+      Object.assign(updateData, {
         name,
         slug,
         role,
@@ -72,16 +78,30 @@ export async function PATCH(request: NextRequest) {
         contactEmail: (session.user as any).email,
         contactPhone: null,
         avatarUrl,
+        languages,
+        specializations,
+        companyId: companyId || null
+      });
+    } else if (section === 'enhanced') {
+      Object.assign(updateData, {
         philosophy,
         focusAreas,
         representativeMatters,
         teachingWriting,
         credentials,
-        values,
-        languages,
-        specializations,
-        companyId: companyId || null
-      },
+        values
+      });
+    } else {
+      return NextResponse.json({ error: 'Unsupported update section' }, { status: 400 });
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json({ error: 'No changes detected' }, { status: 400 });
+    }
+
+    const updatedSpecialist = await prisma.specialistProfile.update({
+      where: { id },
+      data: updateData,
       include: {
         company: {
           select: {

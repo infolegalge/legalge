@@ -203,6 +203,7 @@ export default function MultiLanguageSpecialistEditForm({
               <CardContent>
                 <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
                   <input type="hidden" name="id" value={specialist.id} />
+                  <input type="hidden" name="section" value="basic" />
                   <AutoSlug titleName="name" slugName="slug" />
                   
                   <div>
@@ -363,6 +364,7 @@ export default function MultiLanguageSpecialistEditForm({
               <CardContent>
                 <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
                   <input type="hidden" name="id" value={specialist.id} />
+                  <input type="hidden" name="section" value="enhanced" />
                   
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">Focus Areas</label>

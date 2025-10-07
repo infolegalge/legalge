@@ -18,9 +18,9 @@ export default async function SpecialistProfilePage({
     redirect('/');
   }
 
-  const { locale } = await params;
+  await params;
 
-  return <SessionWrapper locale={locale} />;
+  return <SessionWrapper />;
 }
 
 export const dynamic = "force-dynamic";

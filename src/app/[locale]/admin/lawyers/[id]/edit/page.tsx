@@ -20,6 +20,7 @@ async function updateSpecialist(formData: FormData) {
     await requireSuperAdmin();
     
     const id = String(formData.get("id") || "");
+    const section = String(formData.get("section") || "basic");
     const name = String(formData.get("name") || "").trim();
     const slug = String(formData.get("slug") || "").trim();
     const role = String(formData.get("role") || "").trim() || null;
@@ -41,43 +42,60 @@ async function updateSpecialist(formData: FormData) {
     const specializations = JSON.stringify(specializationsArray);
     const companyId = String(formData.get("companyId") || "").trim() || null;
     
-    if (!id || !name || !slug) {
-      return { error: "ID, name and slug are required" };
+    if (!id) {
+      return { error: "Specialist ID is required" };
     }
-    
-    // Check if slug already exists (excluding current specialist)
-    const existingSpecialist = await prisma.specialistProfile.findFirst({
-      where: { 
-        slug,
-        NOT: { id: id }
+
+    const updateData: Parameters<typeof prisma.specialistProfile.update>[0]["data"] = {};
+
+    if (section === "basic") {
+      if (!name || !slug) {
+        return { error: "Name and slug are required" };
       }
-    });
-    
-    if (existingSpecialist) {
-      return { error: `A specialist with slug "${slug}" already exists. Please choose a different slug.` };
-    }
-    
-    // Update the specialist
-    await prisma.specialistProfile.update({
-      where: { id },
-      data: { 
-        name, 
-        slug, 
+
+      const existingSpecialist = await prisma.specialistProfile.findFirst({
+        where: {
+          slug,
+          NOT: { id }
+        }
+      });
+
+      if (existingSpecialist) {
+        return { error: `A specialist with slug "${slug}" already exists. Please choose a different slug.` };
+      }
+
+      Object.assign(updateData, {
+        name,
+        slug,
         role: role || undefined,
         bio: bio || undefined,
         contactEmail: contactEmail || undefined,
         contactPhone: contactPhone || undefined,
         avatarUrl: avatarUrl || undefined,
+        languages,
+        specializations,
+        companyId: companyId || undefined
+      });
+    } else if (section === "enhanced") {
+      Object.assign(updateData, {
         philosophy: philosophy || undefined,
         focusAreas: focusAreas || undefined,
         representativeMatters: representativeMatters || undefined,
         teachingWriting: teachingWriting || undefined,
         credentials: credentials || undefined,
-        values: values || undefined,
-        languages: languages,
-        specializations: specializations,
-        companyId: companyId || undefined
-      } 
+        values: values || undefined
+      });
+    } else {
+      return { error: "Unsupported section" };
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return { error: "No changes detected" };
+    }
+
+    await prisma.specialistProfile.update({
+      where: { id },
+      data: updateData
     });
     
     revalidatePath("/");

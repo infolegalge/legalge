@@ -72,3 +72,7 @@ export function formatCurrency(value: number, currency: string = "GEL") {
     currency,
   }).format(value);
 }
+
+export function stripHtml(value: string): string {
+  return value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}

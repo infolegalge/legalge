@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { SpecialistProfile } from "@/lib/specialists";
 import type { Locale } from "@/i18n/locales";
 import { Building2, User, Mail, Phone } from "lucide-react";
+import { stripHtml } from "@/lib/utils";
 
 interface SpecialistCardProps {
   specialist: SpecialistProfile;
@@ -122,7 +123,7 @@ export default function SpecialistCard({ specialist, locale, showCompany = true 
         {/* Bio preview */}
         {specialist.bio && (
           <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-            {specialist.bio}
+            {stripHtml(specialist.bio)}
           </p>
         )}
       </div>

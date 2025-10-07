@@ -4,11 +4,7 @@ import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 import MultiLanguageSpecialistEditor from './MultiLanguageSpecialistEditor';
 
-interface SessionWrapperProps {
-  locale: string;
-}
-
-export default function SessionWrapper({ locale }: SessionWrapperProps) {
+export default function SessionWrapper() {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
@@ -28,5 +24,5 @@ export default function SessionWrapper({ locale }: SessionWrapperProps) {
     );
   }
 
-  return <MultiLanguageSpecialistEditor locale={locale} />;
+  return <MultiLanguageSpecialistEditor />;
 }

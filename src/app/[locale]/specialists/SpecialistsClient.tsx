@@ -20,6 +20,7 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
   const [selectedCompany, setSelectedCompany] = useState<string>("all");
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("all");
   const [selectedCity, setSelectedCity] = useState<string>("all");
+  const [activeView, setActiveView] = useState<"all" | "company" | "solo">("all");
   const [showFilters, setShowFilters] = useState(false);
 
   // Get unique values for filter dropdowns
@@ -73,6 +74,31 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
   const hasActiveFilters = searchQuery !== "" || selectedCompany !== "all" || 
     selectedSpecialization !== "all" || selectedCity !== "all";
 
+  const viewFilterOptions: Array<{ key: "all" | "company" | "solo"; label: string }> = [
+    { key: "all", label: t("specialists.view_all", { default: "All" }) },
+    { key: "company", label: t("specialists.view_company", { default: "Company" }) },
+    { key: "solo", label: t("specialists.view_solo", { default: "Solo" }) },
+  ];
+
+  const viewFilters = (
+    <div className="flex flex-wrap gap-2">
+      {viewFilterOptions.map(({ key, label }) => (
+        <button
+          key={key}
+          type="button"
+          onClick={() => setActiveView(key)}
+          className={`rounded-full border px-3 py-1 text-sm transition ${
+            activeView === key
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-input bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          }`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       {/* Header */}
@@ -85,7 +111,7 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
 
       {/* Search and Filter */}
       <div className="mb-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -119,6 +145,7 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
               </button>
             )}
           </div>
+          {viewFilters}
         </div>
 
         {/* Filter Panel */}
@@ -218,48 +245,60 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
       )}
 
       {/* Company Specialists */}
-      {companySpecialists.length > 0 && (
+      {(activeView === "all" || activeView === "company") && (
         <div className="mb-12">
-          <div className="mb-6 flex items-center gap-2">
+          <div className="mb-6 flex flex-wrap items-center gap-2">
             <Building2 className="h-5 w-5 text-primary" />
             <h2 className="text-xl font-semibold">{t("specialists.company_specialists")}</h2>
             <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
               {companySpecialists.length}
             </span>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {companySpecialists.map((specialist) => (
-              <SpecialistCard
-                key={specialist.id}
-                specialist={specialist}
-                locale={locale}
-                showCompany={true}
-              />
-            ))}
-          </div>
+          {companySpecialists.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {companySpecialists.map((specialist) => (
+                <SpecialistCard
+                  key={specialist.id}
+                  specialist={specialist}
+                  locale={locale}
+                  showCompany={true}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-lg border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+              {t("specialists.no_company_results", { default: "No company specialists match the current filters." })}
+            </div>
+          )}
         </div>
       )}
 
       {/* Solo Practitioners */}
-      {soloSpecialists.length > 0 && (
+      {(activeView === "all" || activeView === "solo") && (
         <div>
-          <div className="mb-6 flex items-center gap-2">
+          <div className="mb-6 flex flex-wrap items-center gap-2">
             <User className="h-5 w-5 text-primary" />
             <h2 className="text-xl font-semibold">{t("specialists.solo_practitioners")}</h2>
             <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
               {soloSpecialists.length}
             </span>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {soloSpecialists.map((specialist) => (
-              <SpecialistCard
-                key={specialist.id}
-                specialist={specialist}
-                locale={locale}
-                showCompany={true}
-              />
-            ))}
-          </div>
+          {soloSpecialists.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {soloSpecialists.map((specialist) => (
+                <SpecialistCard
+                  key={specialist.id}
+                  specialist={specialist}
+                  locale={locale}
+                  showCompany={false}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-lg border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+              {t("specialists.no_solo_results", { default: "No solo practitioners match the current filters." })}
+            </div>
+          )}
         </div>
       )}
 

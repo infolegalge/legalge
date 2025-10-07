@@ -30,6 +30,9 @@
     "description": "Познакомьтесь с нашими юридическими специалистами и экспертами",
     "search_placeholder": "Поиск специалистов...",
     "filter": "Фильтр",
+    "view_all": "Все",
+    "view_company": "Компания",
+    "view_solo": "Частные",
     "total_specialists": "Всего специалистов",
     "company_specialists": "Специалисты компаний",
     "solo_practitioners": "Частные практики",
@@ -42,7 +45,9 @@
     "contact_cta_title": "Связаться",
     "contact_cta_description": "Готовы работать с этим специалистом?",
     "send_email": "Отправить email",
-    "call": "Позвонить"
+    "call": "Позвонить",
+    "no_company_results": "По текущим фильтрам специалисты компаний не найдены.",
+    "no_solo_results": "По текущим фильтрам частные практики не найдены."
   },
   "companies": {
     "title": "Компании",

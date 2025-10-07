@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, AlertCircle, Save, Globe, Languages } from "lucide-react";
+import { Loader2, AlertCircle, Save, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,17 +70,13 @@ interface AllCompanies {
   name: string;
 }
 
-interface MultiLanguageSpecialistEditorProps {
-  locale: string;
-}
-
 const locales = [
   { code: 'ka', name: 'ქართული', flag: '🇬🇪' },
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'ru', name: 'Русский', flag: '🇷🇺' }
 ];
 
-export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageSpecialistEditorProps) {
+export default function MultiLanguageSpecialistEditor() {
   const { data: session } = useSession();
   const [specialist, setSpecialist] = useState<Specialist | null>(null);
   const [translations, setTranslations] = useState<SpecialistTranslation[]>([]);
@@ -92,6 +87,7 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
   const [saving, setSaving] = useState<string | null>(null);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -116,7 +112,7 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
           setSpecialist(profileData);
           
           // Initialize selected services and languages
-        setSelectedServices(profileData.services.map((s: any) => s.id));
+        setSelectedServices(profileData.services.map((s: { id: string }) => s.id));
           setSelectedLanguages(JSON.parse(profileData.languages || "[]"));
         } else {
           const errorData = await profileResponse.json();
@@ -166,7 +162,8 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
 
   const updateProfile = async (formData: FormData) => {
     try {
-      setSaving('profile');
+      const section = String(formData.get('section') || 'profile');
+      setSaving(section === 'services' ? 'services' : section === 'enhanced' ? 'enhanced' : 'profile');
       const response = await fetch('/api/specialist/profile/update', {
         method: 'PATCH',
         body: formData,
@@ -176,14 +173,20 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
       if (response.ok) {
         const data = await response.json();
         setSpecialist(data.specialist);
-        setSelectedLanguages(JSON.parse(data.specialist.languages || "[]"));
-        setSelectedServices(data.specialist.services.map((s: any) => s.id));
+        if (section === 'basic') {
+          setSelectedLanguages(JSON.parse(data.specialist.languages || "[]"));
+          setSelectedServices(data.specialist.services.map((s: { id: string }) => s.id));
+        }
+        setError(null);
+        setSuccess(section === 'enhanced' ? 'Enhanced profile updated successfully!' : 'Profile updated successfully!');
       } else {
         const errorData = await response.json();
+        setSuccess(null);
         setError(`Failed to update profile: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      setSuccess(null);
       setError('Failed to update profile');
     } finally {
       setSaving(null);
@@ -327,6 +330,12 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
         </p>
       </div>
 
+      {success && (
+        <Alert>
+          <AlertDescription>{success}</AlertDescription>
+        </Alert>
+      )}
+
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center gap-2">
@@ -354,6 +363,7 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
               <CardContent>
                 <form action={updateProfile} className="grid gap-4 md:grid-cols-2">
                   <input type="hidden" name="id" value={specialist.id} />
+                  <input type="hidden" name="section" value="basic" />
                   <AutoSlug titleName="name" slugName="slug" />
                   
                   <div>
@@ -505,10 +515,7 @@ export default function MultiLanguageSpecialistEditor({ locale }: MultiLanguageS
               <CardContent>
                 <form action={updateProfile} className="grid gap-4 md:grid-cols-2">
                   <input type="hidden" name="id" value={specialist.id} />
-                  <input type="hidden" name="name" value={specialist.name} />
-                  <input type="hidden" name="slug" value={specialist.slug} />
-                  <input type="hidden" name="role" value={specialist.role || ''} />
-                  <input type="hidden" name="bio" value={specialist.bio || ''} />
+                  <input type="hidden" name="section" value="enhanced" />
                   
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">Focus Areas</label>

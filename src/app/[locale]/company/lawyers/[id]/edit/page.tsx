@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/locales";
 import { getServerSession, type Session } from "next-auth";
 import { authOptions } from "@/auth";
 import Link from "next/link";
-import { ArrowLeft, Save, Globe } from "lucide-react";
+import { ArrowLeft, Globe } from "lucide-react";
 import SpecialistEditForm from "@/components/admin/SpecialistEditForm";
 
 type SessionUserCompany = NonNullable<Session["user"]> & {
@@ -45,6 +45,7 @@ async function updateSpecialist(formData: FormData) {
     const user = await requireCompanyAdmin();
     
     const id = String(formData.get("id") || "");
+    const section = String(formData.get("section") || "basic");
     const name = String(formData.get("name") || "").trim();
     const slug = String(formData.get("slug") || "").trim();
     const role = String(formData.get("role") || "").trim() || null;
@@ -65,8 +66,8 @@ async function updateSpecialist(formData: FormData) {
     const specializationsArray = formData.getAll("specializations") as string[];
     const specializations = JSON.stringify(specializationsArray);
     
-    if (!id || !name || !slug) {
-      return { error: "ID, name and slug are required" };
+    if (!id) {
+      return { error: "Specialist ID is required" };
     }
     
     // Get the specialist to check company ownership
@@ -84,39 +85,50 @@ async function updateSpecialist(formData: FormData) {
       return { error: "You can only edit specialists from your own company" };
     }
     
-    // Check if slug already exists (excluding current specialist)
-    const existingSpecialist = await prisma.specialistProfile.findFirst({
-      where: { 
-        slug,
-        NOT: { id: id }
+    const updateData: Parameters<typeof prisma.specialistProfile.update>[0]["data"] = {};
+
+    if (section === "basic") {
+      if (!name || !slug) {
+        return { error: "Name and slug are required" };
       }
-    });
-    
-    if (existingSpecialist) {
-      return { error: `A specialist with slug "${slug}" already exists. Please choose a different slug.` };
+
+      const existingSpecialist = await prisma.specialistProfile.findFirst({
+        where: {
+          slug,
+          NOT: { id }
+        }
+      });
+
+      if (existingSpecialist) {
+        return { error: `A specialist with slug "${slug}" already exists. Please choose a different slug.` };
+      }
+
+      Object.assign(updateData, {
+        name,
+        slug,
+        role: role || undefined,
+        bio: bio || undefined,
+        contactEmail: contactEmail || undefined,
+        contactPhone: contactPhone || undefined,
+        avatarUrl: avatarUrl || undefined,
+        languages,
+        specializations,
+      });
+    } else if (section === "enhanced") {
+      Object.assign(updateData, {
+        philosophy: philosophy || undefined,
+        focusAreas: focusAreas || undefined,
+        representativeMatters: representativeMatters || undefined,
+        teachingWriting: teachingWriting || undefined,
+        credentials: credentials || undefined,
+        values: values || undefined,
+      });
+    } else {
+      return { error: "Unsupported section" };
     }
     
-    // Update the specialist (company admins can't change companyId)
-    const updateData = {
-      name,
-      slug,
-      role: role || undefined,
-      bio: bio || undefined,
-      contactEmail: contactEmail || undefined,
-      contactPhone: contactPhone || undefined,
-      avatarUrl: avatarUrl || undefined,
-      philosophy: philosophy || undefined,
-      focusAreas: focusAreas || undefined,
-      representativeMatters: representativeMatters || undefined,
-      teachingWriting: teachingWriting || undefined,
-      credentials: credentials || undefined,
-      values: values || undefined,
-      languages,
-      specializations,
-    } satisfies Parameters<typeof prisma.specialistProfile.update>[0]["data"];
-    
     // Only super admin can change company
-    if (user.role === "SUPER_ADMIN") {
+    if (user.role === "SUPER_ADMIN" && section === "basic") {
       const companyId = String(formData.get("companyId") || "").trim() || null;
       Object.assign(updateData, { companyId: companyId || undefined });
     }
