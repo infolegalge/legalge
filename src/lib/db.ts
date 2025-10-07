@@ -1,6 +1,17 @@
 import prisma from "@/lib/prisma";
 import type { Locale } from "@/i18n/locales";
 
+const localeMap: Record<string, Locale> = {
+  ka: "ka",
+  en: "en",
+  ru: "ru",
+};
+
+function normalizeLocale(input: Locale): Locale {
+  const base = String(input).split("-")[0]?.toLowerCase() || "";
+  return localeMap[base] ?? ("ka" as Locale);
+}
+
 export type PracticeAreaForLocale = {
   id: string;
   slug: string;
@@ -163,6 +174,7 @@ export async function listServicesForPracticeForLocale(practiceAreaId: string, l
 }
 
 export async function findServiceBySlugForLocale(locale: Locale, slug: string) {
+  const queryLocale = normalizeLocale(locale);
   try {
     slug = decodeURIComponent(slug);
   } catch {}
@@ -170,20 +182,21 @@ export async function findServiceBySlugForLocale(locale: Locale, slug: string) {
     where: {
       OR: [
         { slug },
-        // If someone hits EN locale with a Georgian slug, try mapping via KA translation
-        { translations: { some: { locale, slug } } },
-        ...(locale !== ("ka" as Locale) ? [{ translations: { some: { locale: ("ka" as Locale), slug } } }] : [] as any),
+        { translations: { some: { locale: queryLocale, slug } } },
+        ...(queryLocale !== ("ka" as Locale)
+          ? [{ translations: { some: { locale: ("ka" as Locale), slug } } }]
+          : []),
       ],
     },
-    include: { 
-      translations: true, 
+    include: {
+      translations: true,
       practiceArea: { include: { translations: true } },
-      specialists: true
+      specialists: true,
     },
   });
   if (!s) return null;
-  const t = s.translations.find((x) => x.locale === locale);
-  const pt = s.practiceArea.translations.find((x) => x.locale === locale);
+  const t = s.translations.find((x) => x.locale === queryLocale);
+  const pt = s.practiceArea.translations.find((x) => x.locale === queryLocale);
   const ka = s.translations.find((x) => x.locale === ("ka" as Locale));
   const fallbackDesc = t?.description ?? ka?.description ?? s.description ?? null;
   return {
