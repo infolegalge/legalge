@@ -106,7 +106,8 @@ export default function SpecialistEditForm({
         }
 
         setSuccess('Specialist updated successfully!');
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError("An unexpected error occurred. Please try again.");
       }
     });
@@ -134,7 +135,8 @@ export default function SpecialistEditForm({
         }
 
         setSuccess("Services assigned successfully!");
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError("An unexpected error occurred. Please try again.");
       }
     });
@@ -164,6 +166,8 @@ export default function SpecialistEditForm({
         
         <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
           <input type="hidden" name="id" value={specialist.id} />
+          <input type="hidden" name="name" value={specialist.name} />
+          <input type="hidden" name="slug" value={specialist.slug} />
           <input type="hidden" name="section" value="basic" />
           
           <div>
@@ -317,6 +321,8 @@ export default function SpecialistEditForm({
         
         <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
           <input type="hidden" name="id" value={specialist.id} />
+          <input type="hidden" name="name" value={specialist.name} />
+          <input type="hidden" name="slug" value={specialist.slug} />
           <input type="hidden" name="section" value="enhanced" />
           
           <div className="md:col-span-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Save, AlertCircle, CheckCircle, Globe } from "lucide-react";
 import ImageUpload from "./ImageUpload";
 import ServiceSelector from "./ServiceSelector";
@@ -98,6 +98,7 @@ export default function MultiLanguageSpecialistEditForm({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const enhancedFormRef = useRef<HTMLFormElement | null>(null);
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const values = Array.from(e.target.selectedOptions, option => option.value);
@@ -107,6 +108,9 @@ export default function MultiLanguageSpecialistEditForm({
   const handleUpdate = async (formData: FormData) => {
     setError(null);
     setSuccess(null);
+    if (isPending) {
+      return;
+    }
     
     startTransition(async () => {
       try {
@@ -116,8 +120,12 @@ export default function MultiLanguageSpecialistEditForm({
           setError(result.error);
         } else {
           setSuccess('Specialist updated successfully!');
+          if (formData.get("section") === "enhanced") {
+            enhancedFormRef.current?.reset();
+          }
         }
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError("An unexpected error occurred. Please try again.");
       }
     });
@@ -131,7 +139,8 @@ export default function MultiLanguageSpecialistEditForm({
       try {
         await updateTranslationAction(formData);
         setSuccess(`${locale.toUpperCase()} translation updated successfully!`);
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError(`Failed to update ${locale.toUpperCase()} translation. Please try again.`);
       }
     });
@@ -150,7 +159,8 @@ export default function MultiLanguageSpecialistEditForm({
         } else {
           setSuccess("Services assigned successfully!");
         }
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError("An unexpected error occurred. Please try again.");
       }
     });
@@ -362,9 +372,11 @@ export default function MultiLanguageSpecialistEditForm({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
+                <form action={handleUpdate} className="grid gap-4 md:grid-cols-2" ref={enhancedFormRef}>
                   <input type="hidden" name="id" value={specialist.id} />
                   <input type="hidden" name="section" value="enhanced" />
+                  <input type="hidden" name="name" value={specialist.name} />
+                  <input type="hidden" name="slug" value={specialist.slug} />
                   
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">Focus Areas</label>
