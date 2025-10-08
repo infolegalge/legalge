@@ -5,6 +5,8 @@ const DEFAULT_SITE_URL = "https://legal.ge";
 
 export const SITE_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
 
+export const SUPPORTED_LOCALES: Locale[] = ["ka", "en", "ru"]; // maintain order for hreflang
+
 export function getMetadataBase(): URL {
   try {
     return new URL(SITE_ORIGIN);
@@ -43,17 +45,36 @@ export function buildLocaleCanonicalPath(locale: Locale, path?: string | string[
   return joinPaths(segments);
 }
 
+export type LocalePathMap = Partial<Record<Locale, string | string[] | null>>;
+
+function buildLanguagesMap(defaultPath: string | string[] | null | undefined, overrides?: LocalePathMap): Record<string, string> {
+  return Object.fromEntries(
+    SUPPORTED_LOCALES.map((locale) => {
+      const override = overrides?.[locale];
+      const pathForLocale = override === undefined ? defaultPath : override;
+      return [locale, buildLocaleCanonicalPath(locale, pathForLocale ?? null)];
+    }),
+  );
+}
+
 export function createRouteMetadata(
   path: string | string[] | null | undefined,
   overrides?: Metadata,
+  languageOverrides?: LocalePathMap,
 ): Metadata {
   const { alternates, ...rest } = overrides ?? {};
+  const canonical = buildCanonicalPath(path);
+  const languages = buildLanguagesMap(path ?? null, languageOverrides);
 
   return {
     metadataBase: getMetadataBase(),
     alternates: {
       ...(alternates ?? {}),
-      canonical: buildCanonicalPath(path),
+      canonical,
+      languages: {
+        ...languages,
+        ...(alternates?.languages ?? {}),
+      },
     },
     ...rest,
   } satisfies Metadata;
@@ -63,14 +84,24 @@ export function createLocaleRouteMetadata(
   locale: Locale,
   path?: string | string[] | null,
   overrides?: Metadata,
+  languageOverrides?: LocalePathMap,
 ): Metadata {
   const { alternates, ...rest } = overrides ?? {};
+  const canonical = buildLocaleCanonicalPath(locale, path ?? null);
+  const languages = buildLanguagesMap(path ?? null, languageOverrides);
+
+  // ensure current locale canonical uses actual path for current override if provided
+  languages[locale] = buildLocaleCanonicalPath(locale, (languageOverrides?.[locale] ?? path) ?? null);
 
   return {
     metadataBase: getMetadataBase(),
     alternates: {
       ...(alternates ?? {}),
-      canonical: buildLocaleCanonicalPath(locale, path ?? null),
+      canonical,
+      languages: {
+        ...languages,
+        ...(alternates?.languages ?? {}),
+      },
     },
     ...rest,
   } satisfies Metadata;

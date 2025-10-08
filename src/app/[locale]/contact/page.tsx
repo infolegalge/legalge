@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import ContactInfo from "@/components/ContactInfo";
@@ -21,6 +23,14 @@ async function send(formData: FormData) {
   } catch (error) {
     console.error("Error submitting contact form:", error);
   }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return createLocaleRouteMetadata(locale, "contact", {
+    title: "Contact",
+    description: "Get in touch with Legal Sandbox Georgia",
+  });
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: Locale }> }) {

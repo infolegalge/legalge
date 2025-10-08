@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import RichText from "@/components/RichText";
 import ServicesSidebar from "@/components/ServicesSidebar";
+import { createLocaleRouteMetadata, LocalePathMap } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
@@ -18,35 +19,34 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug, locale } = await params;
   try {
     const item = await findPracticeBySlugForLocale(locale, slug);
-    if (!item) return { title: "Practice area" };
-    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://legal.ge";
-    const canonical = `${base}/${locale}/practice/${item.slug}`;
-    let languages: Record<string, string> | undefined;
+    if (!item) return createLocaleRouteMetadata(locale, ["practice", slug], { title: "Practice area" });
+
+    let languagesOverrides: LocalePathMap | undefined;
     try {
       const p = await prisma.practiceArea.findFirst({
         where: { OR: [{ slug }, { translations: { some: { slug } } }, { translations: { some: { locale, slug } } }] },
         include: { translations: true },
       });
       if (p) {
-        const locales: Array<Locale> = ["ka", "en", "ru"] as unknown as Array<Locale>;
-        languages = Object.fromEntries(
-          locales.map((loc) => {
-            const t = p.translations.find((x) => x.locale === loc);
-            const s = t?.slug || p.slug;
-            return [loc, `${base}/${loc}/practice/${s}`];
-          }),
-        );
+        languagesOverrides = p.translations.reduce((acc, translation) => {
+          if (translation.slug) {
+            acc[translation.locale as Locale] = ["practice", translation.slug];
+          }
+          return acc;
+        }, {} as LocalePathMap);
       }
     } catch {}
-    return {
+
+    return createLocaleRouteMetadata(locale, ["practice", item.slug], {
       title: item.metaTitle?.slice(0, 60) || item.title?.slice(0, 60),
-      description: item.metaDescription || (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : undefined),
-      alternates: { canonical, languages },
-      openGraph: { title: item.title, url: canonical },
+      description:
+        item.metaDescription ||
+        (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : undefined),
+      openGraph: { title: item.title },
       twitter: { title: item.title },
-    };
+    }, languagesOverrides);
   } catch {
-    return { title: "Practice area" };
+    return createLocaleRouteMetadata(locale, ["practice", slug], { title: "Practice area" });
   }
 }
 

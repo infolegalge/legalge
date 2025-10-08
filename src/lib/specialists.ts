@@ -1,6 +1,21 @@
 import prisma from "./prisma";
 import type { Locale } from "@/i18n/locales";
 
+export interface SpecialistTranslation {
+  id: string;
+  locale: Locale;
+  slug: string;
+  name?: string | null;
+  role?: string | null;
+  bio?: string | null;
+  philosophy?: string | null;
+  focusAreas?: string | null;
+  representativeMatters?: string | null;
+  teachingWriting?: string | null;
+  credentials?: string | null;
+  values?: string | null;
+}
+
 export interface SpecialistProfile {
   id: string;
   slug: string;
@@ -20,6 +35,7 @@ export interface SpecialistProfile {
   teachingWriting?: string | null;
   credentials?: string | null;
   values?: string | null;
+  translations?: SpecialistTranslation[];
   company?: {
     id: string;
     slug: string;
@@ -112,6 +128,7 @@ export async function fetchSpecialists(): Promise<SpecialistProfile[]> {
         }
       : undefined,
     services: specialist.services,
+    translations: specialist.translations,
   }));
 }
 
@@ -193,6 +210,7 @@ export async function fetchSpecialist(
         }
       : undefined,
     services: specialist.services,
+    translations: specialist.translations,
   };
 }
 

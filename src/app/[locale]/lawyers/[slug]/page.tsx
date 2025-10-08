@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/locales";
 import { fetchLawyer, fetchLawyers } from "@/lib/wp";
 import RichText from "@/components/RichText";
 import Image from "next/image";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
@@ -17,17 +18,17 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { locale: Locale; slug: string } }): Promise<Metadata> {
   try {
     const item = await fetchLawyer(params.slug);
-    if (!item) return { title: "Lawyer" };
-    return {
+    if (!item) return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], { title: "Lawyer" });
+    return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], {
       title: item.name,
       description: item.role ?? undefined,
       openGraph: { title: item.name, description: item.role ?? undefined },
-    };
+    });
   } catch {
-    return { title: "Lawyer" };
+    return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], { title: "Lawyer" });
   }
 }
 

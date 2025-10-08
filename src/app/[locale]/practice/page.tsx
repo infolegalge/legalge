@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { listPracticeAreasForLocale, listServicesForLocale } from "@/lib/db";
@@ -8,11 +9,12 @@ import PracticeSearch from "@/components/PracticeSearch";
 
 export const revalidate = 3600;
 
-export function generateMetadata(): Metadata {
-  return {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return createLocaleRouteMetadata(locale, "practice", {
     title: "Practice areas",
     description: "Explore legal practice areas",
-  };
+  });
 }
 
 export default async function PracticeIndex({ params }: { params: Promise<{ locale: Locale }> }) {

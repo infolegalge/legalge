@@ -21,6 +21,7 @@ import {
   GraduationCap,
   Heart
 } from "lucide-react";
+import { createLocaleRouteMetadata, buildLocaleCanonicalPath, LocalePathMap } from "@/lib/metadata";
 
 interface SpecialistPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -31,15 +32,27 @@ export async function generateMetadata({ params }: SpecialistPageProps): Promise
   const specialist = await fetchSpecialist(slug, locale);
   
   if (!specialist) {
-    return {
+    return createLocaleRouteMetadata(locale, ["specialists", slug], {
       title: "Specialist Not Found",
-    };
+    });
   }
 
-  return {
-    title: `${specialist.name} - ${specialist.role || 'Legal Specialist'}`,
-    description: specialist.bio || `Meet ${specialist.name}, a legal specialist at ${specialist.company?.name || 'our firm'}.`,
-  };
+  const title = `${specialist.name} - ${specialist.role || 'Legal Specialist'}`;
+  const description = specialist.bio || `Meet ${specialist.name}, a legal specialist at ${specialist.company?.name || 'our firm'}.`;
+
+  const languagesOverrides: LocalePathMap | undefined = specialist.translations
+    ? specialist.translations.reduce((acc, translation) => {
+        if (translation.slug) {
+          acc[translation.locale] = ["specialists", translation.slug];
+        }
+        return acc;
+      }, {} as LocalePathMap)
+    : undefined;
+
+  return createLocaleRouteMetadata(locale, ["specialists", specialist.slug], {
+    title,
+    description,
+  }, languagesOverrides);
 }
 
 export default async function SpecialistPage({ params }: SpecialistPageProps) {

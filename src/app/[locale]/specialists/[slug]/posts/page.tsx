@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, User } from "lucide-react";
 import prisma from "@/lib/prisma";
+import { createLocaleRouteMetadata, LocalePathMap } from "@/lib/metadata";
 
 interface SpecialistPostsPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -27,6 +28,12 @@ async function getSpecialistPosts(locale: Locale, specialistSlug: string, search
       slug: true, 
       role: true,
       contactEmail: true,
+      translations: {
+        select: {
+          locale: true,
+          slug: true,
+        },
+      },
       company: {
         select: { id: true, name: true, slug: true }
       }
@@ -118,25 +125,33 @@ async function getSpecialistPosts(locale: Locale, specialistSlug: string, search
 }
 
 export async function generateMetadata({ params }: SpecialistPostsPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const data = await getSpecialistPosts('en', slug, {});
+  const { locale, slug } = await params;
+  const data = await getSpecialistPosts(locale, slug, {});
   
   if (!data) {
-    return {
+    return createLocaleRouteMetadata(locale, ["specialists", slug, "posts"], {
       title: "Specialist Not Found",
-    };
+    });
   }
 
   const { specialist } = data;
+  const languagesOverrides: LocalePathMap | undefined = specialist.translations
+    ? specialist.translations.reduce((acc, translation) => {
+        if (translation.slug) {
+          acc[translation.locale as Locale] = ["specialists", translation.slug, "posts"];
+        }
+        return acc;
+      }, {} as LocalePathMap)
+    : undefined;
 
-  return {
+  return createLocaleRouteMetadata(locale, ["specialists", specialist.slug, "posts"], {
     title: `${specialist.name} - Posts`,
     description: `All posts and articles by ${specialist.name}, ${specialist.role}.`,
     openGraph: {
       title: `${specialist.name} - Posts`,
       description: `All posts and articles by ${specialist.name}, ${specialist.role}.`,
     },
-  };
+  }, languagesOverrides);
 }
 
 export default async function SpecialistPostsPage({ params, searchParams }: SpecialistPostsPageProps) {

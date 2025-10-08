@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import prisma from "@/lib/prisma";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description: "Terms of Service for Legal Sandbox Georgia",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const termsContent = await getTermsContent(locale);
+  return createLocaleRouteMetadata(locale, "terms", {
+    title: termsContent.metaTitle || "Terms of Service",
+    description: termsContent.metaDescription || "Terms of Service for Legal Sandbox Georgia",
+  });
+}
 
 async function getTermsContent(locale: Locale) {
   try {

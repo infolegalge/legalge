@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { fetchSpecialists } from "@/lib/specialists";
@@ -6,11 +7,12 @@ import SpecialistsClient from "./SpecialistsClient";
 
 export const revalidate = 3600;
 
-export function generateMetadata(): Metadata {
-  return {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return createLocaleRouteMetadata(locale, "specialists", {
     title: "Specialists",
     description: "Meet our legal specialists and experts",
-  };
+  });
 }
 
 export default async function SpecialistsIndex({ params }: { params: Promise<{ locale: Locale }> }) {

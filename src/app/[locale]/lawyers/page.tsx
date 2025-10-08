@@ -3,14 +3,16 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { fetchLawyers } from "@/lib/wp";
 import LawyerCard from "@/components/LawyerCard";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
-export function generateMetadata(): Metadata {
-  return {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return createLocaleRouteMetadata(locale, "lawyers", {
     title: "Lawyers",
     description: "Meet our team",
-  };
+  });
 }
 
 export default async function LawyersIndex({ params }: { params: Promise<{ locale: Locale }> }) {

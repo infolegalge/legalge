@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/locales';
 import NewsFeed from './NewsFeed';
 import NewsSidebar from './NewsSidebar';
 import type { Metadata } from 'next';
+import { createLocaleRouteMetadata } from '@/lib/metadata';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -22,15 +23,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     ru: 'Последние правовые новости и анализ от Legal Sandbox Georgia'
   };
 
-  return {
+  const metadata = createLocaleRouteMetadata(locale, 'news', {
     title: titles[locale],
     description: descriptions[locale],
-    alternates: {
-      types: {
-        'application/rss+xml': `/${locale}/news/rss`
-      }
-    }
+  });
+
+  metadata.alternates = {
+    ...(metadata.alternates ?? {}),
+    types: {
+      ...(metadata.alternates?.types ?? {}),
+      'application/rss+xml': `/${locale}/news/rss`,
+    },
   };
+
+  return metadata;
 }
 
 interface NewsPageProps {

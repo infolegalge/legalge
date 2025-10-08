@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import type { Locale } from '@/i18n/locales';
 import RichText from '@/components/RichText';
 import type { Metadata } from 'next';
+import { createLocaleRouteMetadata, LocalePathMap } from "@/lib/metadata";
 
 interface PostPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -97,43 +98,66 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       where: { slug: resolvedSlug, status: 'PUBLISHED' },
       select: { title: true, excerpt: true, coverImage: true, coverImageAlt: true, slug: true, id: true },
     });
-    if (!post) return { title: 'News' };
-    const site = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002';
-    // Prefer translated slug for the requested locale when present
+    if (!post) return createLocaleRouteMetadata(locale, ["news", slug], { title: 'News' });
+
     let translatedSlug: string | null = null;
+    const translations: LocalePathMap = {};
     try {
-      const t = await (prisma as any).postTranslation.findUnique({
-        where: { postId_locale: { postId: post.id, locale } },
-        select: { slug: true },
-      });
-      translatedSlug = t?.slug || null;
+      const client: any = prisma as any;
+      if (client.postTranslation && typeof client.postTranslation.findMany === 'function') {
+        const allTranslations = await client.postTranslation.findMany({
+          where: { postId: post.id },
+          select: { locale: true, slug: true },
+        });
+        for (const translation of allTranslations) {
+          if (translation.slug) {
+            translations[translation.locale as Locale] = ["news", translation.slug];
+          }
+        }
+        translatedSlug = translations[locale] ? (translations[locale] as string[])[1] : null;
+      } else {
+        const t = await client.postTranslation.findUnique({
+          where: { postId_locale: { postId: post.id, locale } },
+          select: { slug: true },
+        });
+        translatedSlug = t?.slug || null;
+      }
     } catch {}
     const canonicalSlug = translatedSlug || post.slug;
-    const url = `${site}/${locale}/news/${canonicalSlug}`;
-    const img = post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `${site}${post.coverImage}`) : undefined;
-    const imgAlt = post.coverImageAlt || post.title;
     const description = post.excerpt?.slice(0, 180);
-    return {
+
+    const metadata = createLocaleRouteMetadata(locale, ["news", canonicalSlug], {
       title: post.title,
       description,
-      alternates: { canonical: url },
       openGraph: {
         type: 'article',
-        url,
         title: post.title,
         description,
-        locale,
-        images: img ? [{ url: img, width: 1200, height: 630, alt: imgAlt }] : undefined,
       },
       twitter: {
         card: 'summary_large_image',
         title: post.title,
         description,
-        images: img ? [img] : undefined,
       },
-    };
+    }, translations);
+
+    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://legal.ge';
+    const img = post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `${site}${post.coverImage}`) : undefined;
+    const imgAlt = post.coverImageAlt || post.title;
+    if (img) {
+      metadata.openGraph = {
+        ...metadata.openGraph,
+        images: [{ url: img, width: 1200, height: 630, alt: imgAlt }],
+      };
+      metadata.twitter = {
+        ...metadata.twitter,
+        images: [img],
+      };
+    }
+
+    return metadata;
   } catch {
-    return { title: 'News' };
+    return createLocaleRouteMetadata(locale, ["news", slug], { title: 'News' });
   }
 }
 

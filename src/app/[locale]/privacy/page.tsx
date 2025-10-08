@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import prisma from "@/lib/prisma";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "Privacy Policy for Legal Sandbox Georgia",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const privacyContent = await getPrivacyContent(locale);
+  return createLocaleRouteMetadata(locale, "privacy", {
+    title: privacyContent.metaTitle || "Privacy Policy",
+    description: privacyContent.metaDescription || "Privacy Policy for Legal Sandbox Georgia",
+  });
+}
 
 async function getPrivacyContent(locale: Locale) {
   try {
