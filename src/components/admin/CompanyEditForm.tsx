@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { makeSlug } from "@/lib/utils";
 import { Save, AlertCircle, CheckCircle } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
+import { Input } from "@/components/ui/input";
+import { OFFICIAL_PHONE } from "@/config/contact";
 
 interface Company {
   id: string;
@@ -345,7 +347,7 @@ export default function CompanyEditForm({
             type="tel"
             defaultValue={company.phone || ""}
             className="w-full rounded border px-3 py-2" 
-            placeholder="+995 551 911 961"
+            placeholder={OFFICIAL_PHONE}
           />
         </div>
         

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Save, Upload, User, Building2, MapPin, Mail, Phone } from "lucide-react";
+import { OFFICIAL_PHONE } from "@/config/contact";
 
 interface SpecialistProfile {
   id: string;
@@ -279,7 +280,7 @@ export default function SpecialistProfileManagement({ locale }: SpecialistProfil
                 </div>
                 <div className="space-y-2">
                   <Label>Central Phone</Label>
-                  <Input value="+995 551 911 961" disabled className="bg-muted" />
+                  <Input value={OFFICIAL_PHONE} disabled className="bg-muted" />
                 </div>
               </div>
 

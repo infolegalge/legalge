@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Save, Upload, User, Building2, MapPin, Mail, Phone, CheckCircle, Clock, Send } from "lucide-react";
 import RichEditor from "@/components/admin/RichEditor";
 import type { Locale } from "@/i18n/locales";
+import { OFFICIAL_PHONE } from "@/config/contact";
 
 interface SpecialistProfile {
   id: string;
@@ -362,7 +363,7 @@ export default function ComprehensiveSpecialistEditor({ locale }: ComprehensiveS
           <CardDescription>
             Contact details are coordinated centrally by Legal Sandbox Georgia. The public site displays a single contact channel:<br />
             <strong>Email:</strong> {accountEmail || '—'}<br />
-            <strong>Phone:</strong> +995 551 911 961 (Central Number)
+            <strong>Phone:</strong> {OFFICIAL_PHONE} (Central Number)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

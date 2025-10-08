@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { OFFICIAL_PHONE } from '@/config/contact';
 
 const prisma = new PrismaClient();
 
@@ -35,7 +36,7 @@ async function main() {
       `,
       logoUrl: '/logo-light.png',
       website: 'https://legal.ge',
-      phone: '+995 551 911 961',
+      phone: OFFICIAL_PHONE,
       email: 'contact@legal.ge',
       address: 'Georgia, Tbilisi, Agmashnebeli alley N240, 0159',
       mapLink: 'https://www.google.com/maps/dir/?api=1&destination=41.80594854658469,44.767832572133464',
@@ -77,7 +78,7 @@ async function main() {
       languages: JSON.stringify(['Georgian', 'English', 'Russian']),
       specializations: JSON.stringify(['Corporate Law', 'M&A', 'International Business', 'Contract Law']),
       contactEmail: 'nino@legal.ge',
-      contactPhone: '+995 551 911 961',
+      contactPhone: OFFICIAL_PHONE,
       companyId: company1.id,
     },
   });

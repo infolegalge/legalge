@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Save, Globe } from "lucide-react";
+import { OFFICIAL_PHONE } from "@/config/contact";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -427,7 +428,7 @@ export default function MultiLanguageSpecialistEditor() {
                   <div>
                     <label className="mb-1 block text-sm font-medium">Contact Phone</label>
                     <input 
-                      value="+995 551 911 961"
+                      value={OFFICIAL_PHONE}
                       disabled
                       className="w-full rounded border px-3 py-2 bg-muted text-muted-foreground"
                     />

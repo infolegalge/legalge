@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
 import type { Company } from "@/lib/specialists";
 import type { Locale } from "@/i18n/locales";
 import { 
@@ -82,10 +83,10 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary" />
                 <a
-                  href="tel:+995551911961"
+                href={phoneToTelHref(OFFICIAL_PHONE)}
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  +995 551 911 961
+                  {OFFICIAL_PHONE}
                 </a>
               </div>
               

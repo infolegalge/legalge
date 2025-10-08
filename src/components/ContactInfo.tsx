@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
 
 interface ContactInfoProps {
   className?: string;
@@ -9,7 +10,7 @@ export default function ContactInfo({ className = "" }: ContactInfoProps) {
 
   const contactDetails = {
     address: "Georgia, Tbilisi, Agmashnebeli alley N240, 0159",
-    phone: "+995 551 911 961",
+    phone: OFFICIAL_PHONE,
     email: "contact@legal.ge",
     hours: "24/7",
   };
@@ -43,7 +44,7 @@ export default function ContactInfo({ className = "" }: ContactInfoProps) {
             </svg>
             <div>
               <p className="font-medium text-sm">{t("phone")}</p>
-              <a href={`tel:${contactDetails.phone.replace(/\s/g, "")}`} className="text-sm text-muted-foreground hover:text-primary">
+              <a href={phoneToTelHref(contactDetails.phone)} className="text-sm text-muted-foreground hover:text-primary">
                 {contactDetails.phone}
               </a>
             </div>

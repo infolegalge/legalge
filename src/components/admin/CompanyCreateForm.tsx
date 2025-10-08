@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { Save, AlertCircle, CheckCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { OFFICIAL_PHONE } from "@/config/contact";
 
 interface CompanyCreateFormProps {
   createAction: (formData: FormData) => Promise<{ success?: boolean; error?: string; company?: { id: string; name: string; slug: string } }>;
@@ -114,7 +116,7 @@ export default function CompanyCreateForm({ createAction }: CompanyCreateFormPro
             name="phone" 
             type="tel"
             className="w-full rounded border px-3 py-2" 
-            placeholder="+995 551 911 961"
+            placeholder={OFFICIAL_PHONE}
           />
         </div>
         
