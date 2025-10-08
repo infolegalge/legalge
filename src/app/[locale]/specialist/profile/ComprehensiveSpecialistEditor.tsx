@@ -362,7 +362,7 @@ export default function ComprehensiveSpecialistEditor({ locale }: ComprehensiveS
           <CardDescription>
             Contact details are coordinated centrally by Legal Sandbox Georgia. The public site displays a single contact channel:<br />
             <strong>Email:</strong> {accountEmail || '—'}<br />
-            <strong>Phone:</strong> +995 598 295 429 (Central Number)
+            <strong>Phone:</strong> +995 551 911 961 (Central Number)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

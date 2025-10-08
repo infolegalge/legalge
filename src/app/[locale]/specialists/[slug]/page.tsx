@@ -203,7 +203,7 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
         <div className="mb-8">
           <h2 className="mb-4 text-xl font-semibold">{specialistT("bio")}</h2>
           <div 
-            className="prose prose-sm max-w-none text-muted-foreground"
+            className="prose prose-sm max-w-none text-muted-foreground text-justify"
             dangerouslySetInnerHTML={{ __html: specialist.bio }}
           />
         </div>
@@ -217,7 +217,7 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
             {specialistT("philosophy")}
           </h2>
           <div className="rounded-lg border bg-muted/30 p-6">
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed text-justify">
               {specialist.philosophy}
             </p>
           </div>

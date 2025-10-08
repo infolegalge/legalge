@@ -345,7 +345,7 @@ export default function CompanyEditForm({
             type="tel"
             defaultValue={company.phone || ""}
             className="w-full rounded border px-3 py-2" 
-            placeholder="+995 598 295 429"
+            placeholder="+995 551 911 961"
           />
         </div>
         

@@ -114,7 +114,7 @@ export default function CompanyCreateForm({ createAction }: CompanyCreateFormPro
             name="phone" 
             type="tel"
             className="w-full rounded border px-3 py-2" 
-            placeholder="+995 598 295 429"
+            placeholder="+995 551 911 961"
           />
         </div>
         

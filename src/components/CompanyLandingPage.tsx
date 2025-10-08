@@ -82,10 +82,10 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary" />
                 <a
-                  href="tel:+995598295429"
+                  href="tel:+995551911961"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  +995 598 295 429
+                  +995 551 911 961
                 </a>
               </div>
               

@@ -279,7 +279,7 @@ export default function SpecialistProfileManagement({ locale }: SpecialistProfil
                 </div>
                 <div className="space-y-2">
                   <Label>Central Phone</Label>
-                  <Input value="+995 598 295 429" disabled className="bg-muted" />
+                  <Input value="+995 551 911 961" disabled className="bg-muted" />
                 </div>
               </div>
 

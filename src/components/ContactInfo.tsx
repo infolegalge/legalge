@@ -7,12 +7,12 @@ interface ContactInfoProps {
 export default function ContactInfo({ className = "" }: ContactInfoProps) {
   const t = useTranslations("contact");
 
-    const contactDetails = {
-      address: "Georgia, Tbilisi, Agmashnebeli alley N240, 0159",
-      phone: "+995 598 295 429",
-      email: "contact@legal.ge",
-      hours: "24/7"
-    };
+  const contactDetails = {
+    address: "Georgia, Tbilisi, Agmashnebeli alley N240, 0159",
+    phone: "+995 551 911 961",
+    email: "contact@legal.ge",
+    hours: "24/7",
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -43,7 +43,7 @@ export default function ContactInfo({ className = "" }: ContactInfoProps) {
             </svg>
             <div>
               <p className="font-medium text-sm">{t("phone")}</p>
-              <a href={`tel:${contactDetails.phone}`} className="text-sm text-muted-foreground hover:text-primary">
+              <a href={`tel:${contactDetails.phone.replace(/\s/g, "")}`} className="text-sm text-muted-foreground hover:text-primary">
                 {contactDetails.phone}
               </a>
             </div>
