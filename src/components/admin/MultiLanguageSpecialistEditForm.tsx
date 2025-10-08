@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useMemo, useRef, useState, useTransition } from "react";
 import { Save, AlertCircle, CheckCircle, Globe } from "lucide-react";
 import ImageUpload from "./ImageUpload";
 import ServiceSelector from "./ServiceSelector";
@@ -59,6 +59,12 @@ interface SpecialistTranslation {
   bio?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  philosophy?: string | null;
+  focusAreas?: string | null;
+  representativeMatters?: string | null;
+  teachingWriting?: string | null;
+  credentials?: string | null;
+  values?: string | null;
 }
 
 interface MultiLanguageSpecialistEditFormProps {
@@ -99,6 +105,35 @@ export default function MultiLanguageSpecialistEditForm({
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const enhancedFormRef = useRef<HTMLFormElement | null>(null);
+  const normalizedTranslations = useMemo(
+    () =>
+      translations.map((translation) => ({
+        ...translation,
+        focusAreas: translation.focusAreas
+          ? (() => {
+              try {
+                return JSON.parse(translation.focusAreas).join("\n");
+              } catch {
+                return translation.focusAreas ?? "";
+              }
+            })()
+          : "",
+        representativeMatters: translation.representativeMatters
+          ? (() => {
+              try {
+                return JSON.parse(translation.representativeMatters).join("\n");
+              } catch {
+                return translation.representativeMatters ?? "";
+              }
+            })()
+          : "",
+        teachingWriting: translation.teachingWriting || "",
+        credentials: translation.credentials || "",
+        values: translation.values || "",
+        philosophy: translation.philosophy || "",
+      })),
+    [translations],
+  );
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const values = Array.from(e.target.selectedOptions, option => option.value);
@@ -137,6 +172,76 @@ export default function MultiLanguageSpecialistEditForm({
     
     startTransition(async () => {
       try {
+        const focusAreasText = String(formData.get("focusAreas") || "").trim();
+        const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
+        const teachingWritingText = String(formData.get("teachingWriting") || "").trim();
+        const credentialsText = String(formData.get("credentials") || "").trim();
+        const valuesText = String(formData.get("values") || "").trim();
+
+        if (focusAreasText) {
+          formData.set(
+            "focusAreas",
+            JSON.stringify(
+              focusAreasText
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean),
+            ),
+          );
+        } else {
+          formData.set("focusAreas", "");
+        }
+
+        if (representativeMattersText) {
+          formData.set(
+            "representativeMatters",
+            JSON.stringify(
+              representativeMattersText
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean),
+            ),
+          );
+        } else {
+          formData.set("representativeMatters", "");
+        }
+
+        if (teachingWritingText) {
+          try {
+            JSON.parse(teachingWritingText);
+            formData.set("teachingWriting", teachingWritingText);
+          } catch {
+            throw new Error("Invalid JSON in Teaching/Writing field");
+          }
+        }
+
+        if (credentialsText) {
+          try {
+            JSON.parse(credentialsText);
+            formData.set("credentials", credentialsText);
+          } catch {
+            throw new Error("Invalid JSON in Credentials field");
+          }
+        }
+
+        if (valuesText) {
+          try {
+            JSON.parse(valuesText);
+            formData.set("values", valuesText);
+          } catch {
+            throw new Error("Invalid JSON in Values field");
+          }
+        }
+
+        const translationId = formData.get("translationId") as string | null;
+
+        if (!translationId) {
+          const existing = translations.find((t) => t.locale === locale);
+          if (existing?.id) {
+            formData.set("translationId", existing.id);
+          }
+        }
+
         await updateTranslationAction(formData);
         setSuccess(`${locale.toUpperCase()} translation updated successfully!`);
       } catch (error) {
@@ -167,7 +272,7 @@ export default function MultiLanguageSpecialistEditForm({
   };
 
   const getTranslation = (locale: string) => {
-    return translations.find(t => t.locale === locale) || null;
+    return normalizedTranslations.find((t) => t.locale === locale) || null;
   };
 
   return (
@@ -547,6 +652,7 @@ export default function MultiLanguageSpecialistEditForm({
                   >
                     <input type="hidden" name="specialistProfileId" value={specialist.id} />
                     <input type="hidden" name="locale" value={loc.code} />
+                    <input type="hidden" name="translationId" value={translation?.id || ""} />
                     <AutoSlug titleName="name" slugName="slug" />
                     
                     <div className="grid gap-4 md:grid-cols-2">
@@ -607,6 +713,72 @@ export default function MultiLanguageSpecialistEditForm({
                         rows={2} 
                         defaultValue={translation?.metaDescription || ""}
                         className="w-full rounded border px-3 py-2" 
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Philosophy</label>
+                      <textarea
+                        name="philosophy"
+                        rows={3}
+                        defaultValue={translation?.philosophy || ""}
+                        className="w-full rounded border px-3 py-2"
+                        placeholder={`Professional philosophy in ${loc.name}...`}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Focus Areas</label>
+                      <textarea
+                        name="focusAreas"
+                        rows={4}
+                        defaultValue={translation?.focusAreas || ""}
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each focus area on a new line (${loc.name}).`}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Representative Matters</label>
+                      <textarea
+                        name="representativeMatters"
+                        rows={4}
+                        defaultValue={translation?.representativeMatters || ""}
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each matter on a new line (${loc.name}).`}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Teaching, Writing & Speaking (JSON)</label>
+                      <textarea
+                        name="teachingWriting"
+                        rows={4}
+                        defaultValue={translation?.teachingWriting || ""}
+                        className="w-full rounded border px-3 py-2 font-mono text-sm"
+                        placeholder='{"courses": ["Course"], "workshops": ["Workshop"], "topics": ["Topic"]}'
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Credentials & Memberships (JSON)</label>
+                      <textarea
+                        name="credentials"
+                        rows={3}
+                        defaultValue={translation?.credentials || ""}
+                        className="w-full rounded border px-3 py-2 font-mono text-sm"
+                        placeholder='["Credential 1", "Credential 2"]'
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Values & How We Work (JSON)</label>
+                      <textarea
+                        name="values"
+                        rows={4}
+                        defaultValue={translation?.values || ""}
+                        className="w-full rounded border px-3 py-2 font-mono text-sm"
+                        placeholder='{"Value": "Description"}'
                       />
                     </div>
                     

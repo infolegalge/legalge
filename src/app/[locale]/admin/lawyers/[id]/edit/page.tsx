@@ -113,12 +113,21 @@ async function updateTranslation(formData: FormData) {
     
     const id = String(formData.get("id") || "");
     const locale = String(formData.get("locale") || "") as Locale;
+    const translationId = String(formData.get("translationId") || "").trim();
     const name = String(formData.get("name") || "").trim();
     const slug = String(formData.get("slug") || "").trim();
     const role = String(formData.get("role") || "").trim() || null;
     const bio = String(formData.get("bio") || "").trim() || null;
     const metaTitle = String(formData.get("metaTitle") || "").trim() || null;
     const metaDescription = String(formData.get("metaDescription") || "").trim() || null;
+    const philosophy = String(formData.get("philosophy") || "").trim() || null;
+    const focusAreasText = String(formData.get("focusAreas") || "").trim();
+    const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').map((line) => line.trim()).filter(Boolean)) : null;
+    const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
+    const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : null;
+    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
+    const credentials = String(formData.get("credentials") || "").trim() || null;
+    const values = String(formData.get("values") || "").trim() || null;
     
     if (!id || !locale || !name || !slug) {
       return;
@@ -139,7 +148,7 @@ async function updateTranslation(formData: FormData) {
     
     // Update the translation
     await prisma.specialistProfileTranslation.update({
-      where: { id },
+      where: { id: translationId || id },
       data: {
         name,
         slug,
@@ -147,6 +156,12 @@ async function updateTranslation(formData: FormData) {
         bio: bio || undefined,
         metaTitle: metaTitle || undefined,
         metaDescription: metaDescription || undefined,
+        philosophy: philosophy || undefined,
+        focusAreas: focusAreas || undefined,
+        representativeMatters: representativeMatters || undefined,
+        teachingWriting: teachingWriting || undefined,
+        credentials: credentials || undefined,
+        values: values || undefined,
       }
     });
     
