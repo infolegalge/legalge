@@ -4,6 +4,16 @@ import type { Locale } from "@/i18n/locales";
 import Hero from "@/components/Hero";
 import ServicesShowcase from "@/components/ServicesShowcase";
 import AuthRedirect from "@/components/AuthRedirect";
+import type { Metadata } from "next";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return createLocaleRouteMetadata(locale, undefined, {
+    title: "Home",
+  });
+}
 
 export default async function LocalizedHome({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;

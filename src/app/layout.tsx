@@ -18,9 +18,6 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     url: SITE_URL,
   },
-  alternates: {
-    canonical: SITE_URL,
-  },
 };
 
 const webSiteJsonLd = {

@@ -10,6 +10,7 @@ import Image from "next/image";
 import RichText from "@/components/RichText";
 import ServicesSidebar from "@/components/ServicesSidebar";
 import ReadingExperience from "@/components/ReadingExperience";
+import { createLocaleRouteMetadata, buildLocaleCanonicalPath } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
@@ -19,40 +20,49 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; locale: Locale }> }): Promise<Metadata> {
   const { slug, locale } = await params;
+
   try {
     const item = await findServiceBySlugForLocale(locale, slug);
-    if (!item) return { title: "Service" };
-    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://legal.ge";
-    const canonical = `${base}/${locale}/services/${item.slug}`;
+    if (!item) {
+      return createLocaleRouteMetadata(locale, ["services", slug], {
+        title: "Service",
+      });
+    }
+
     const mt = (item as unknown as { metaTitle?: string; metaDescription?: string }).metaTitle;
     const md = (item as unknown as { metaTitle?: string; metaDescription?: string }).metaDescription;
-    // Build language alternates
+
     let languages: Record<string, string> | undefined;
+
     try {
       const svc = await prisma.service.findFirst({
         where: { OR: [{ slug }, { translations: { some: { slug } } }, { translations: { some: { locale, slug } } }] },
         include: { translations: true },
       });
+
       if (svc) {
         const locales: Array<Locale> = ["ka", "en", "ru"] as unknown as Array<Locale>;
         languages = Object.fromEntries(
           locales.map((loc) => {
             const t = svc.translations.find((x) => x.locale === loc);
             const s = t?.slug || svc.slug;
-            return [loc, `${base}/${loc}/services/${s}`];
+            return [loc, buildLocaleCanonicalPath(loc, ["services", s])];
           }),
         );
       }
     } catch {}
-    return {
+
+    return createLocaleRouteMetadata(locale, ["services", item.slug], {
       title: mt?.slice(0, 60) || item.title?.slice(0, 60),
       description: md || (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : undefined),
-      alternates: { canonical, languages },
-      openGraph: { title: item.title, url: canonical },
+      alternates: languages ? { languages } : undefined,
+      openGraph: { title: item.title },
       twitter: { title: item.title },
-    };
+    });
   } catch {
-    return { title: "Service" };
+    return createLocaleRouteMetadata(locale, ["services", slug], {
+      title: "Service",
+    });
   }
 }
 

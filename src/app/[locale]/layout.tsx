@@ -7,12 +7,24 @@ import { isLocale, Locale, defaultLocale } from "@/i18n/locales";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuthSessionProvider from "@/components/AuthSessionProvider";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 
-export const metadata: Metadata = {
-  title: "Legal Sandbox Georgia",
-  description: "Innovating legal services in Georgia",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  if (!isLocale(locale)) {
+    return createLocaleRouteMetadata("ka", undefined, {
+      title: "Legal Sandbox Georgia",
+      description: "Innovating legal services in Georgia",
+    });
+  }
+
+  return createLocaleRouteMetadata(locale, undefined, {
+    title: "Legal Sandbox Georgia",
+    description: "Innovating legal services in Georgia",
+  });
+}
 
 export function generateStaticParams() {
   return [{ locale: "ka" }, { locale: "en" }, { locale: "ru" }];

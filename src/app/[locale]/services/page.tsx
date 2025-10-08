@@ -5,11 +5,17 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { stripHtml } from "@/lib/utils";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
-export function generateMetadata(): Metadata {
-  return { title: "Services", description: "All legal services" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return createLocaleRouteMetadata(locale, "services", {
+    title: "Services",
+    description: "All legal services",
+  });
 }
 
 export default async function ServicesIndex({ params }: { params: Promise<{ locale: Locale }> }) {

@@ -5,14 +5,17 @@ import { fetchCompanies } from "@/lib/specialists";
 import Image from "next/image";
 import Link from "next/link";
 import { Building2, Users, ExternalLink } from "lucide-react";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 export const revalidate = 3600;
 
-export function generateMetadata(): Metadata {
-  return {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return createLocaleRouteMetadata(locale, "companies", {
     title: "Companies",
     description: "Legal companies and firms in our network",
-  };
+  });
 }
 
 export default async function CompaniesIndex({ params }: { params: Promise<{ locale: Locale }> }) {

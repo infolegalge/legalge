@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2 } from "lucide-react";
 import prisma from "@/lib/prisma";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 interface CompanyPostsPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -113,16 +114,16 @@ async function getCompanyPosts(locale: Locale, companySlug: string, searchParams
 }
 
 export async function generateMetadata({ params }: CompanyPostsPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const company = await fetchCompany(slug);
   
   if (!company) {
-    return {
+    return createLocaleRouteMetadata(locale, ["companies", slug, "posts"], {
       title: "Company Not Found",
-    };
+    });
   }
 
-  return {
+  return createLocaleRouteMetadata(locale, ["companies", company.slug, "posts"], {
     title: `${company.name} - Posts`,
     description: `All posts and articles by ${company.name} and their legal specialists.`,
     openGraph: {
@@ -130,7 +131,7 @@ export async function generateMetadata({ params }: CompanyPostsPageProps): Promi
       description: `All posts and articles by ${company.name} and their legal specialists.`,
       images: company.logoUrl ? [{ url: company.logoUrl, alt: company.name }] : [],
     },
-  };
+  });
 }
 
 export default async function CompanyPostsPage({ params, searchParams }: CompanyPostsPageProps) {

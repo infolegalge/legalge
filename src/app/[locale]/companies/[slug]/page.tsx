@@ -6,22 +6,23 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import CompanyLandingPageSimple from "@/components/CompanyLandingPageSimple";
+import { createLocaleRouteMetadata } from "@/lib/metadata";
 
 interface CompanyPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
 export async function generateMetadata({ params }: CompanyPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const company = await fetchCompany(slug);
   
   if (!company) {
-    return {
+    return createLocaleRouteMetadata(locale, ["companies", slug], {
       title: "Company Not Found",
-    };
+    });
   }
 
-  return {
+  return createLocaleRouteMetadata(locale, ["companies", company.slug], {
     title: `${company.name} - Legal Company`,
     description: company.shortDesc || company.description || `Meet the legal specialists at ${company.name}.`,
     openGraph: {
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
       description: company.shortDesc || company.description || `Meet the legal specialists at ${company.name}.`,
       images: company.logoUrl ? [{ url: company.logoUrl, alt: company.logoAlt || company.name }] : [],
     },
-  };
+  });
 }
 
 export default async function CompanyPage({ params }: CompanyPageProps) {
