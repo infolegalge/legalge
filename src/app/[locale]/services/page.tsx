@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
 
   return createLocaleRouteMetadata(locale, "services", {
-    title: "Services",
-    description: "All legal services",
+    title: "Legal Services Catalog",
+    description: "Compare corporate, tax, immigration, and dispute resolution services delivered by Georgian legal experts.",
   });
 }
 

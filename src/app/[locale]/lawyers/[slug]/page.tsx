@@ -22,10 +22,12 @@ export async function generateMetadata({ params }: { params: { locale: Locale; s
   try {
     const item = await fetchLawyer(params.slug);
     if (!item) return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], { title: "Lawyer" });
+    const title = `${item.name} – Lawyer`;
+    const description = item.role ? `${item.role} providing legal guidance in Georgia.` : `Profile of ${item.name}, legal counsel in Georgia.`;
     return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], {
-      title: item.name,
-      description: item.role ?? undefined,
-      openGraph: { title: item.name, description: item.role ?? undefined },
+      title,
+      description,
+      openGraph: { title, description },
     });
   } catch {
     return createLocaleRouteMetadata(params.locale, ["lawyers", params.slug], { title: "Lawyer" });

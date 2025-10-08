@@ -89,6 +89,7 @@
     "email": "Contact email",
     "message": "Message",
     "submit": "Send",
+    "submitting": "Sending...",
     "office": "Head Office",
     "address": "Address",
     "phone": "Telephone",

@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: item.metaTitle?.slice(0, 60) || item.title?.slice(0, 60),
       description:
         item.metaDescription ||
-        (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : undefined),
+        (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : `Overview of ${item.title} services in Georgia.`),
       openGraph: { title: item.title },
       twitter: { title: item.title },
     }, languagesOverrides);

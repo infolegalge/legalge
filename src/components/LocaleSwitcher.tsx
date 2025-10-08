@@ -2,8 +2,9 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { locales, Locale } from "@/i18n/locales";
+import { trackEvent } from "@/lib/analytics";
 
 export default function LocaleSwitcher() {
   const t = useTranslations();
@@ -41,6 +42,7 @@ export default function LocaleSwitcher() {
         const nextPath = "/" + segments.join("/");
         router.push(nextPath);
       }
+      trackEvent("language_switch", { from_locale: current, to_locale: locale });
     } finally {
       setSwitching(false);
     }

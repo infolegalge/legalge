@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/locales';
 import RichText from '@/components/RichText';
 import type { Metadata } from 'next';
 import { createLocaleRouteMetadata, LocalePathMap } from "@/lib/metadata";
+import { buildArticleLd, buildBreadcrumbLd } from '@/lib/structuredData';
 
 interface PostPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -124,7 +125,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       }
     } catch {}
     const canonicalSlug = translatedSlug || post.slug;
-    const description = post.excerpt?.slice(0, 180);
+    const description = post.excerpt?.slice(0, 160) || `Latest legal insight on ${canonicalSlug.replace(/-/g, ' ')}.`;
 
     const metadata = createLocaleRouteMetadata(locale, ["news", canonicalSlug], {
       title: post.title,
@@ -189,6 +190,24 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
+
+  const canonicalUrl = `https://www.legal.ge/${locale}/news/${post.slug}`;
+  const articleLd = buildArticleLd({
+    title: post.title,
+    description: post.excerpt || undefined,
+    url: canonicalUrl,
+    image: post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `https://www.legal.ge${post.coverImage}`) : undefined,
+    datePublished: post.publishedAt?.toISOString() ?? null,
+    dateModified: post.updatedAt?.toISOString() ?? null,
+    authorName: post.author?.name ?? null,
+    locale,
+  });
+  const breadcrumbLd = buildBreadcrumbLd([
+    { name: 'Home', url: 'https://www.legal.ge' },
+    { name: locale.toUpperCase(), url: `https://www.legal.ge/${locale}` },
+    { name: 'News', url: `https://www.legal.ge/${locale}/news` },
+    { name: post.title, url: canonicalUrl },
+  ]);
 
   // Canonicalize URL slug per locale: if a translated slug exists for the
   // requested locale (or base slug differs from the incoming one) redirect.
@@ -465,6 +484,14 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         )}
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
     </div>
   );
 }

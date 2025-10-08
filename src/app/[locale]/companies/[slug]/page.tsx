@@ -22,12 +22,15 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
     });
   }
 
+  const title = `${company.name} – Legal Partner`;
+  const description = (company.shortDesc || company.description || `Meet ${company.name}, a trusted legal partner in Georgia.`).slice(0, 160);
+
   return createLocaleRouteMetadata(locale, ["companies", company.slug], {
-    title: `${company.name} - Legal Company`,
-    description: company.shortDesc || company.description || `Meet the legal specialists at ${company.name}.`,
+    title,
+    description,
     openGraph: {
-      title: `${company.name} - Legal Company`,
-      description: company.shortDesc || company.description || `Meet the legal specialists at ${company.name}.`,
+      title,
+      description,
       images: company.logoUrl ? [{ url: company.logoUrl, alt: company.logoAlt || company.name }] : [],
     },
   });

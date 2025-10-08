@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         destination: "https://www.legal.ge/:path*",
         permanent: true,
       },
+      {
+        source: "/en-us/:path*",
+        destination: "/en/:path*",
+        permanent: true,
+      },
     ];
   },
   async headers() {

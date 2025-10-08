@@ -8,8 +8,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const privacyContent = await getPrivacyContent(locale);
   return createLocaleRouteMetadata(locale, "privacy", {
-    title: privacyContent.metaTitle || "Privacy Policy",
-    description: privacyContent.metaDescription || "Privacy Policy for Legal Sandbox Georgia",
+    title: (privacyContent.metaTitle || "Privacy Policy").slice(0, 60),
+    description:
+      privacyContent.metaDescription?.slice(0, 160) ||
+      "Understand how Legal Sandbox Georgia collects, stores, and protects your personal data.",
   });
 }
 

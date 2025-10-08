@@ -7,20 +7,21 @@ import NewsFeed from './NewsFeed';
 import NewsSidebar from './NewsSidebar';
 import type { Metadata } from 'next';
 import { createLocaleRouteMetadata } from '@/lib/metadata';
+import { buildBreadcrumbLd } from '@/lib/structuredData';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   
   const titles = {
-    ka: 'სიახლეები - Legal Sandbox Georgia',
-    en: 'News - Legal Sandbox Georgia',
-    ru: 'Новости - Legal Sandbox Georgia'
+    ka: 'სიახლეები და სამართლებრივი ანალიზი',
+    en: 'Legal News and Insights',
+    ru: 'Правовые новости и аналитика'
   };
   
   const descriptions = {
-    ka: 'უახლესი სამართლებრივი სიახლეები და ანალიზი',
-    en: 'Latest legal news and analysis from Legal Sandbox Georgia',
-    ru: 'Последние правовые новости и анализ от Legal Sandbox Georgia'
+    ka: 'მიიღეთ უახლესი სამართლებრივი სიახლეები, მიგრაციის, ბიზნესისა და საგადასახადო ცვლილებების აქცენტები.',
+    en: 'Stay updated on Georgian legal reforms, investment rules, and migration policy changes.',
+    ru: 'Следите за правовыми реформами Грузии, инвестиционными правилами и изменениями миграционной политики.'
   };
 
   const metadata = createLocaleRouteMetadata(locale, 'news', {
@@ -154,8 +155,18 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   
   const { posts, categories, hasMore, nextCursor } = await getNewsData(locale, resolvedSearchParams);
 
+  const breadcrumbLd = buildBreadcrumbLd([
+    { name: 'Home', url: 'https://www.legal.ge' },
+    { name: locale.toUpperCase(), url: `https://www.legal.ge/${locale}` },
+    { name: 'News', url: `https://www.legal.ge/${locale}/news` },
+  ]);
+
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         {/* Header */}
         <div className="mb-8">

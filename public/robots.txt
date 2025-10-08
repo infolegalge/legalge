@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /*/admin
+Disallow: /api/auth/
+
+# Host
+Host: https://www.legal.ge
+
+# Sitemaps
+Sitemap: https://www.legal.ge/sitemap.xml

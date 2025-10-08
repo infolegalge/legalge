@@ -11,6 +11,7 @@ import RichText from "@/components/RichText";
 import ServicesSidebar from "@/components/ServicesSidebar";
 import ReadingExperience from "@/components/ReadingExperience";
 import { createLocaleRouteMetadata, buildLocaleCanonicalPath } from "@/lib/metadata";
+import { buildServiceLd, buildBreadcrumbLd } from "@/lib/structuredData";
 
 export const revalidate = 3600;
 
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     return createLocaleRouteMetadata(locale, ["services", item.slug], {
       title: mt?.slice(0, 60) || item.title?.slice(0, 60),
-      description: md || (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : undefined),
+      description:
+        md || (item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 155) : `Learn about ${item.title} services in Georgia.`),
       alternates: languages ? { languages } : undefined,
       openGraph: { title: item.title },
       twitter: { title: item.title },
@@ -111,6 +113,18 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
     return match ? `/practice/migration-to-georgia/${match}` : undefined;
   };
   const heroImg = getHeroImage(item);
+  const canonicalPath = buildLocaleCanonicalPath(locale, ["services", item.slug]);
+  const serviceLd = buildServiceLd({
+    name: item.title,
+    description: item.description ? item.description.replace(/<[^>]+>/g, "").slice(0, 180) : undefined,
+    url: `https://www.legal.ge${canonicalPath}`,
+  });
+  const breadcrumbLd = buildBreadcrumbLd([
+    { name: "Home", url: "https://www.legal.ge" },
+    { name: locale.toUpperCase(), url: `https://www.legal.ge/${locale}` },
+    { name: "Services", url: `https://www.legal.ge/${locale}/services` },
+    { name: item.title, url: `https://www.legal.ge${canonicalPath}` },
+  ]);
   
   // Use specialists assigned to the service instead of the old lawyersForService function
   const heroAlt = item.heroImageAlt || `${item.title} hero image`;
@@ -119,6 +133,14 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
       <div className="grid gap-12 lg:grid-cols-4">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+        />
         {/* Sidebar - Sticky on large screens */}
         <aside className="lg:col-span-1 lg:sticky lg:top-8 lg:h-fit">
           <ServicesSidebar 

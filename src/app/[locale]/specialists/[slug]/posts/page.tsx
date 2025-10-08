@@ -145,11 +145,11 @@ export async function generateMetadata({ params }: SpecialistPostsPageProps): Pr
     : undefined;
 
   return createLocaleRouteMetadata(locale, ["specialists", specialist.slug, "posts"], {
-    title: `${specialist.name} - Posts`,
-    description: `All posts and articles by ${specialist.name}, ${specialist.role}.`,
+    title: `${specialist.name} Articles`,
+    description: `Read legal insights and updates authored by ${specialist.name} for clients in Georgia.`,
     openGraph: {
-      title: `${specialist.name} - Posts`,
-      description: `All posts and articles by ${specialist.name}, ${specialist.role}.`,
+      title: `${specialist.name} Articles`,
+      description: `Read legal insights and updates authored by ${specialist.name} for clients in Georgia.`,
     },
   }, languagesOverrides);
 }

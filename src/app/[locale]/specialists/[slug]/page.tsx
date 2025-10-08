@@ -38,7 +38,9 @@ export async function generateMetadata({ params }: SpecialistPageProps): Promise
   }
 
   const title = `${specialist.name} - ${specialist.role || 'Legal Specialist'}`;
-  const description = specialist.bio || `Meet ${specialist.name}, a legal specialist at ${specialist.company?.name || 'our firm'}.`;
+  const description = specialist.bio
+    ? specialist.bio.slice(0, 160)
+    : `Profile of ${specialist.name}, ${specialist.role || 'legal specialist'}, advising clients in Georgia.`;
 
   const languagesOverrides: LocalePathMap | undefined = specialist.translations
     ? specialist.translations.reduce((acc, translation) => {

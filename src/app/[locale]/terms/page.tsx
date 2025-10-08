@@ -8,8 +8,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const termsContent = await getTermsContent(locale);
   return createLocaleRouteMetadata(locale, "terms", {
-    title: termsContent.metaTitle || "Terms of Service",
-    description: termsContent.metaDescription || "Terms of Service for Legal Sandbox Georgia",
+    title: (termsContent.metaTitle || "Terms of Service").slice(0, 60),
+    description:
+      termsContent.metaDescription?.slice(0, 160) ||
+      "Review the Legal Sandbox Georgia platform terms covering user responsibilities and service access.",
   });
 }
 

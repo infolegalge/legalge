@@ -10,8 +10,8 @@ export const revalidate = 0; // Disable caching for now
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   return createLocaleRouteMetadata(locale, "request", {
-    title: "Request Specialist/Company Access",
-    description: "Apply to become a legal specialist or company on our platform",
+    title: "Apply to Join Legal Sandbox",
+    description: "Submit your request to become a verified legal specialist or company partner with Legal Sandbox Georgia.",
   });
 }
 

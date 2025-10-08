@@ -1,5 +1,8 @@
+'use client';
+
 import { useTranslations } from "next-intl";
 import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
+import { trackEvent } from "@/lib/analytics";
 
 interface ContactInfoProps {
   className?: string;
@@ -44,7 +47,11 @@ export default function ContactInfo({ className = "" }: ContactInfoProps) {
             </svg>
             <div>
               <p className="font-medium text-sm">{t("phone")}</p>
-              <a href={phoneToTelHref(contactDetails.phone)} className="text-sm text-muted-foreground hover:text-primary">
+              <a
+                href={phoneToTelHref(contactDetails.phone)}
+                className="text-sm text-muted-foreground hover:text-primary"
+                onClick={() => trackEvent("contact_phone_click", { method: "tel", value: contactDetails.phone })}
+              >
                 {contactDetails.phone}
               </a>
             </div>
@@ -56,7 +63,11 @@ export default function ContactInfo({ className = "" }: ContactInfoProps) {
             </svg>
             <div>
               <p className="font-medium text-sm">{t("email_contact")}</p>
-              <a href={`mailto:${contactDetails.email}`} className="text-sm text-muted-foreground hover:text-primary">
+              <a
+                href={`mailto:${contactDetails.email}`}
+                className="text-sm text-muted-foreground hover:text-primary"
+                onClick={() => trackEvent("contact_email_click", { method: "email", value: contactDetails.email })}
+              >
                 {contactDetails.email}
               </a>
             </div>

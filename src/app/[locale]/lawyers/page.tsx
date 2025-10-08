@@ -10,8 +10,8 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   return createLocaleRouteMetadata(locale, "lawyers", {
-    title: "Lawyers",
-    description: "Meet our team",
+    title: "Business Lawyers in Georgia",
+    description: "Meet corporate, tax, and dispute resolution lawyers supporting investors and growing companies in Georgia.",
   });
 }
 
