@@ -13,6 +13,7 @@ import {
   Calendar,
   ArrowRight
 } from "lucide-react";
+import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
 
 interface CompanyLandingPageSimpleProps {
   company: Company;
@@ -53,17 +54,15 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
 
             {/* Contact Details */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {company.phone && (
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <a
-                    href={`tel:${company.phone}`}
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    {company.phone}
-                  </a>
-                </div>
-              )}
+              <div className="flex items-center gap-3">
+                <Phone className="h-5 w-5 text-primary" />
+                <a
+                  href={phoneToTelHref(OFFICIAL_PHONE)}
+                  className="text-sm text-muted-foreground hover:text-foreground font-medium text-primary"
+                >
+                  {OFFICIAL_PHONE}
+                </a>
+              </div>
               
               {company.email && (
                 <div className="flex items-center gap-3">

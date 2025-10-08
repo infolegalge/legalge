@@ -1,9 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { SpecialistProfile } from "@/lib/specialists";
 import type { Locale } from "@/i18n/locales";
 import { Building2, User, Mail, Phone } from "lucide-react";
 import { stripHtml } from "@/lib/utils";
+import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
+import type { MouseEvent } from "react";
+
+function handleCallClick(event: MouseEvent<HTMLButtonElement>) {
+  event.preventDefault();
+  event.stopPropagation();
+  window.location.href = phoneToTelHref(OFFICIAL_PHONE);
+}
 
 interface SpecialistCardProps {
   specialist: SpecialistProfile;
@@ -112,14 +122,14 @@ export default function SpecialistCard({ specialist, locale, showCompany = true 
               <span className="truncate">{specialist.contactEmail}</span>
             </div>
           )}
-          {specialist.contactPhone && (
-            <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span className="truncate max-w-[140px] sm:max-w-[160px]">
-                {specialist.contactPhone}
-              </span>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={handleCallClick}
+            className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary transition-colors hover:bg-primary/20"
+          >
+            <Phone className="h-3 w-3" />
+            <span>{OFFICIAL_PHONE}</span>
+          </button>
         </div>
 
         {/* Bio preview */}

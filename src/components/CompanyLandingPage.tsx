@@ -83,11 +83,17 @@ export default function CompanyLandingPage({ company, locale }: CompanyLandingPa
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary" />
                 <a
-                href={phoneToTelHref(OFFICIAL_PHONE)}
-                  className="text-sm text-muted-foreground hover:text-foreground"
+                  href={phoneToTelHref(OFFICIAL_PHONE)}
+                  className="text-sm font-semibold text-primary hover:text-primary/80"
                 >
                   {OFFICIAL_PHONE}
                 </a>
+                <Link
+                  href={`/${locale}/contact?company=${company.slug}`}
+                  className="inline-flex items-center gap-1 rounded-md border border-primary/40 px-3 py-1 text-xs font-medium text-primary hover:bg-primary hover:text-primary-foreground"
+                >
+                  {t("companies.call_to_action")}
+                </Link>
               </div>
               
               {company.email && (
