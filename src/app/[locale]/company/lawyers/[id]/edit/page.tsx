@@ -6,6 +6,7 @@ import { authOptions } from "@/auth";
 import Link from "next/link";
 import { ArrowLeft, Globe } from "lucide-react";
 import SpecialistEditForm from "@/components/admin/SpecialistEditForm";
+import MultiLanguageSpecialistEditForm from "@/components/admin/MultiLanguageSpecialistEditForm";
 
 type SessionUserCompany = NonNullable<Session["user"]> & {
   role?: "SUPER_ADMIN" | "COMPANY" | "SPECIALIST" | "SUBSCRIBER";
@@ -146,6 +147,105 @@ async function updateSpecialist(formData: FormData) {
   }
 }
 
+async function updateTranslation(formData: FormData) {
+  "use server";
+  try {
+    const user = await requireCompanyAdmin();
+
+    const translationId = String(formData.get("translationId") || "").trim();
+    const specialistProfileId = String(formData.get("specialistProfileId") || "").trim();
+    const locale = String(formData.get("locale") || "").trim() as Locale;
+    const name = String(formData.get("name") || "").trim();
+    const slug = String(formData.get("slug") || "").trim();
+    const role = String(formData.get("role") || "").trim() || null;
+    const bio = String(formData.get("bio") || "").trim() || null;
+    const metaTitle = String(formData.get("metaTitle") || "").trim() || null;
+    const metaDescription = String(formData.get("metaDescription") || "").trim() || null;
+    const philosophy = String(formData.get("philosophy") || "").trim() || null;
+    const focusAreas = String(formData.get("focusAreas") || "").trim() || null;
+    const representativeMatters = String(formData.get("representativeMatters") || "").trim() || null;
+    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
+    const credentials = String(formData.get("credentials") || "").trim() || null;
+    const values = String(formData.get("values") || "").trim() || null;
+
+    if (!specialistProfileId || !locale || !name || !slug) {
+      return;
+    }
+
+    const specialist = await prisma.specialistProfile.findUnique({
+      where: { id: specialistProfileId },
+      select: { companyId: true },
+    });
+
+    if (!specialist) {
+      return;
+    }
+
+    if (user.role === "COMPANY" && specialist.companyId && specialist.companyId !== user.companyId) {
+      return;
+    }
+
+    const sanitized = <T extends string | null>(value: T) => {
+      if (!value) return null;
+      const trimmed = value.trim();
+      return trimmed.length ? trimmed : null;
+    };
+
+    const sanitizeJson = (value: string | null) => {
+      if (!value) return null;
+      const trimmed = value.trim();
+      if (!trimmed) return null;
+      try {
+        JSON.parse(trimmed);
+        return trimmed;
+      } catch {
+        return null;
+      }
+    };
+
+    const data = {
+      name,
+      slug,
+      role: sanitized(role),
+      bio: sanitized(bio),
+      metaTitle: sanitized(metaTitle),
+      metaDescription: sanitized(metaDescription),
+      philosophy: sanitized(philosophy),
+      focusAreas: sanitizeJson(focusAreas),
+      representativeMatters: sanitizeJson(representativeMatters),
+      teachingWriting: sanitizeJson(teachingWriting),
+      credentials: sanitizeJson(credentials),
+      values: sanitizeJson(values),
+    };
+
+    if (translationId) {
+      await prisma.specialistProfileTranslation.update({
+        where: { id: translationId },
+        data,
+      });
+    } else {
+      await prisma.specialistProfileTranslation.upsert({
+        where: {
+          specialistProfileId_locale: {
+            specialistProfileId,
+            locale,
+          },
+        },
+        update: data,
+        create: {
+          specialistProfileId,
+          locale,
+          ...data,
+        },
+      });
+    }
+
+    revalidatePath("/");
+  } catch (error) {
+    console.error("Error updating specialist translation:", error);
+  }
+}
+
 async function assignServices(formData: FormData) {
   "use server";
   try {
@@ -241,7 +341,8 @@ export default async function EditCompanySpecialist({
       where: { id },
       include: {
         services: true,
-        company: true
+        company: true,
+        translations: true
       }
     }),
     prisma.service.findMany({ 
@@ -300,8 +401,6 @@ export default async function EditCompanySpecialist({
     );
   }
 
-  const locales: Locale[] = ["en", "ka", "ru"];
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -319,103 +418,16 @@ export default async function EditCompanySpecialist({
       </div>
 
       {/* Main Profile Information */}
-      <SpecialistEditForm 
+      <MultiLanguageSpecialistEditForm 
         specialist={specialist}
         services={services}
         companies={companies}
+        translations={translations}
         updateAction={updateSpecialist}
+        updateTranslationAction={updateTranslation}
         assignServicesAction={assignServices}
         isCompanyAdmin={user.role === "COMPANY"}
       />
-
-      {/* Translations */}
-      <div className="rounded-lg border bg-card p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <Globe className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">Translations</h2>
-        </div>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Manage specialist profiles in different languages. Each language can have its own name, slug, and content.
-        </p>
-        
-        <div className="grid gap-4 md:grid-cols-3">
-          {locales.map((loc) => {
-            const translation = translations.find(t => t.locale === loc);
-            return (
-              <div key={loc} className="rounded-lg border p-4">
-                <div className="mb-3 flex items-center justify-between">
-                  <h3 className="font-semibold">{loc.toUpperCase()}</h3>
-                  {translation ? (
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
-                      Translated
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800">
-                      Not translated
-                    </span>
-                  )}
-                </div>
-                
-                {translation ? (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="mb-1 block text-xs font-medium">Name</label>
-                      <input 
-                        name="name" 
-                        defaultValue={translation.name}
-                        className="w-full rounded border px-2 py-1 text-sm" 
-                        disabled
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="mb-1 block text-xs font-medium">Slug</label>
-                      <input 
-                        name="slug" 
-                        defaultValue={translation.slug}
-                        className="w-full rounded border px-2 py-1 text-sm" 
-                        disabled
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="mb-1 block text-xs font-medium">Role</label>
-                      <input 
-                        name="role" 
-                        defaultValue={translation.role || ""}
-                        className="w-full rounded border px-2 py-1 text-sm" 
-                        disabled
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="mb-1 block text-xs font-medium">Bio</label>
-                      <textarea 
-                        name="bio" 
-                        rows={2}
-                        defaultValue={translation.bio || ""}
-                        className="w-full rounded border px-2 py-1 text-sm" 
-                        disabled
-                      ></textarea>
-                    </div>
-                    
-                    <p className="text-xs text-muted-foreground">
-                      Translation editing is only available to super admins.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-3">No translation available</p>
-                    <p className="text-xs text-muted-foreground">
-                      Translation creation is only available to super admins.
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }
