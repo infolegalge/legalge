@@ -227,6 +227,44 @@ export default function SpecialistProfileEdit({ locale }: SpecialistProfileEditP
     }
   };
 
+  const updateTranslationAction = async (formData: FormData) => {
+    try {
+      const payload = Object.fromEntries(formData.entries());
+      const response = await fetch('/api/specialist/translations', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update translation');
+      }
+
+      const data = await response.json();
+
+      if (data.translation) {
+        setSpecialist((prev) => {
+          if (!prev) return prev;
+
+          const existingTranslations = ((prev as any).translations || []) as any[];
+          const otherTranslations = existingTranslations.filter((t) => t.locale !== data.translation.locale);
+
+          return {
+            ...prev,
+            translations: [...otherTranslations, data.translation],
+          } as Specialist;
+        });
+      }
+    } catch (error) {
+      console.error('Error updating translation:', error);
+      throw error;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -283,6 +321,7 @@ export default function SpecialistProfileEdit({ locale }: SpecialistProfileEditP
         companies={allCompanies}
         updateAction={updateAction}
         assignServicesAction={assignServicesAction}
+        updateTranslationAction={updateTranslationAction}
       />
     </div>
   );
