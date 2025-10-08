@@ -49,7 +49,7 @@ export default function SpecialistCard({ specialist, locale, showCompany = true 
                     {specialist.company.logoUrl ? (
                       <Image
                         src={specialist.company.logoUrl}
-                        alt={specialist.company.name}
+                        alt={specialist.company.logoAlt || specialist.company.name}
                         width={20}
                         height={20}
                         className="h-5 w-5 rounded object-cover"
@@ -105,7 +105,7 @@ export default function SpecialistCard({ specialist, locale, showCompany = true 
         )}
 
         {/* Contact info */}
-        <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
           {specialist.contactEmail && (
             <div className="flex items-center gap-1">
               <Mail className="h-3 w-3" />
@@ -115,7 +115,9 @@ export default function SpecialistCard({ specialist, locale, showCompany = true 
           {specialist.contactPhone && (
             <div className="flex items-center gap-1">
               <Phone className="h-3 w-3" />
-              <span>{specialist.contactPhone}</span>
+              <span className="truncate max-w-[140px] sm:max-w-[160px]">
+                {specialist.contactPhone}
+              </span>
             </div>
           )}
         </div>
