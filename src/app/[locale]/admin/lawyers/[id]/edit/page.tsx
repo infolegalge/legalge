@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/locales";
 import { getServerSession, type Session } from "next-auth";
 import { authOptions } from "@/auth";
 import Link from "next/link";
-import { ArrowLeft, Save, Globe } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import MultiLanguageSpecialistEditForm from "@/components/admin/MultiLanguageSpecialistEditForm";
 
 async function requireSuperAdmin() {
@@ -242,8 +242,6 @@ export default async function EditSpecialist({
       </div>
     );
   }
-
-  const locales: Locale[] = ["en", "ka", "ru"];
 
   return (
     <div className="space-y-6">
