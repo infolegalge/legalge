@@ -4,6 +4,16 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "legal.ge" }],
+        destination: "https://www.legal.ge/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
