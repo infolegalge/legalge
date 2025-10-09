@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/locales';
 import RichText from '@/components/RichText';
 import type { Metadata } from 'next';
 import { createLocaleRouteMetadata, LocalePathMap } from "@/lib/metadata";
+import { stripHtml } from "@/lib/utils";
 import { buildArticleLd, buildBreadcrumbLd } from '@/lib/structuredData';
 
 interface PostPageProps {
@@ -97,62 +98,101 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     const resolvedSlug = decodeURIComponent(slug);
     const post = await prisma.post.findFirst({
       where: { slug: resolvedSlug, status: 'PUBLISHED' },
-      select: { title: true, excerpt: true, coverImage: true, coverImageAlt: true, slug: true, id: true },
+      select: {
+        title: true,
+        excerpt: true,
+        coverImage: true,
+        coverImageAlt: true,
+        slug: true,
+        id: true,
+        publishedAt: true,
+        updatedAt: true,
+        author: { select: { name: true } },
+      },
     });
     if (!post) return createLocaleRouteMetadata(locale, ["news", slug], { title: 'News' });
 
-    let translatedSlug: string | null = null;
     const translations: LocalePathMap = {};
+    let localizedTitle = post.title;
+    let localizedExcerpt = post.excerpt ?? '';
+    let translatedSlug: string | null = null;
     try {
       const client: any = prisma as any;
       if (client.postTranslation && typeof client.postTranslation.findMany === 'function') {
         const allTranslations = await client.postTranslation.findMany({
           where: { postId: post.id },
-          select: { locale: true, slug: true },
+          select: { locale: true, slug: true, title: true, excerpt: true },
         });
         for (const translation of allTranslations) {
           if (translation.slug) {
             translations[translation.locale as Locale] = ["news", translation.slug];
           }
+          if (translation.locale === locale) {
+            translatedSlug = translation.slug || null;
+            localizedTitle = translation.title || localizedTitle;
+            localizedExcerpt = translation.excerpt ?? localizedExcerpt;
+          }
         }
-        translatedSlug = translations[locale] ? (translations[locale] as string[])[1] : null;
       } else {
         const t = await client.postTranslation.findUnique({
           where: { postId_locale: { postId: post.id, locale } },
-          select: { slug: true },
+          select: { slug: true, title: true, excerpt: true },
         });
         translatedSlug = t?.slug || null;
+        localizedTitle = t?.title || localizedTitle;
+        localizedExcerpt = t?.excerpt ?? localizedExcerpt;
       }
     } catch {}
     const canonicalSlug = translatedSlug || post.slug;
-    const description = post.excerpt?.slice(0, 160) || `Latest legal insight on ${canonicalSlug.replace(/-/g, ' ')}.`;
+    const rawDescription = stripHtml(localizedExcerpt || '') || '';
+    const description = rawDescription ? rawDescription.slice(0, 160) : `Latest legal insight on ${canonicalSlug.replace(/-/g, ' ')}.`;
+
+    if (!translations[locale]) {
+      translations[locale] = ["news", canonicalSlug];
+    }
 
     const metadata = createLocaleRouteMetadata(locale, ["news", canonicalSlug], {
-      title: post.title,
+      title: localizedTitle,
       description,
-      openGraph: {
-        type: 'article',
-        title: post.title,
-        description,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: post.title,
-        description,
-      },
     }, translations);
 
-    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://legal.ge';
+    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.legal.ge';
     const img = post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `${site}${post.coverImage}`) : undefined;
     const imgAlt = post.coverImageAlt || post.title;
-    if (img) {
-      metadata.openGraph = {
-        ...metadata.openGraph,
-        images: [{ url: img, width: 1200, height: 630, alt: imgAlt }],
-      };
-      metadata.twitter = {
-        ...metadata.twitter,
-        images: [img],
+
+    const previousOpenGraph = metadata.openGraph ?? {};
+    metadata.openGraph = {
+      ...previousOpenGraph,
+      type: 'article',
+      title: localizedTitle,
+      description,
+      locale,
+      url: `${site}/${locale}/news/${canonicalSlug}`,
+      siteName: 'Legal Sandbox Georgia',
+      publishedTime: post.publishedAt ? post.publishedAt.toISOString() : undefined,
+      modifiedTime: post.updatedAt ? post.updatedAt.toISOString() : undefined,
+      authors: post.author?.name ? [post.author.name] : previousOpenGraph.authors,
+      images: img
+        ? [{ url: img, width: 1200, height: 630, alt: imgAlt }]
+        : previousOpenGraph.images,
+    };
+
+    const previousTwitter = metadata.twitter ?? {};
+    metadata.twitter = {
+      ...previousTwitter,
+      card: 'summary_large_image',
+      title: localizedTitle,
+      description,
+      images: img ? [img] : previousTwitter.images,
+    };
+
+    const publishedISO = post.publishedAt ? post.publishedAt.toISOString() : undefined;
+    const modifiedISO = post.updatedAt ? post.updatedAt.toISOString() : undefined;
+    if (publishedISO || modifiedISO) {
+      metadata.other = {
+        ...(metadata.other ?? {}),
+        ...(publishedISO ? { 'article:published_time': publishedISO } : {}),
+        ...(modifiedISO ? { 'article:modified_time': modifiedISO } : {}),
       };
     }
 
