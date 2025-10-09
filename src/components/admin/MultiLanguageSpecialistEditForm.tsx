@@ -73,7 +73,7 @@ interface MultiLanguageSpecialistEditFormProps {
   companies: Company[];
   translations: SpecialistTranslation[];
   updateAction: (formData: FormData) => Promise<{ success?: boolean; error?: string; specialist?: { id: string; name: string; slug: string } }>;
-  updateTranslationAction: (formData: FormData) => Promise<void>;
+  updateTranslationAction: (formData: FormData) => Promise<{ success?: boolean; error?: string }>;
   assignServicesAction: (formData: FormData) => Promise<{ success?: boolean; error?: string }>;
   isCompanyAdmin?: boolean;
 }
@@ -243,8 +243,8 @@ export default function MultiLanguageSpecialistEditForm({
         }
 
         const result = await updateTranslationAction(formData);
-        if (result && (result as any).error) {
-          setError((result as any).error);
+        if (result && result.error) {
+          setError(result.error);
         } else {
           setSuccess(`${locale.toUpperCase()} translation updated successfully!`);
         }
