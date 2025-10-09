@@ -133,38 +133,43 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
               <div className="rounded-lg border bg-card p-6">
                 <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
                   <Quote className="h-5 w-5 text-primary" />
-                  Mission
+                  {t("companies.mission") || "Mission"}
                 </h2>
                 <p className="text-muted-foreground whitespace-pre-line">{company.mission}</p>
               </div>
             )}
             {company.vision && (
               <div className="rounded-lg border bg-card p-6">
-                <h2 className="text-xl font-semibold mb-3">Vision</h2>
+                <h2 className="text-xl font-semibold mb-3">{t("companies.vision") || "Vision"}</h2>
                 <p className="text-muted-foreground whitespace-pre-line">{company.vision}</p>
               </div>
             )}
           </div>
           {company.history && (
             <div className="rounded-lg border bg-card p-6">
-              <h2 className="text-xl font-semibold mb-3">History</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("companies.history") || "History"}</h2>
               <p className="text-muted-foreground whitespace-pre-line">{company.history}</p>
             </div>
           )}
           {company.contactPrompt && (
             <div className="rounded-lg border bg-card p-6">
-              <h2 className="text-xl font-semibold mb-3">How We Work</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("companies.contact_prompt") || "How we work"}</h2>
               <p className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</p>
             </div>
           )}
           {company.socialLinks && (
             <div className="rounded-lg border bg-card p-6">
-              <h2 className="text-xl font-semibold mb-3">On the Web</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("companies.social_links") || "On the web"}</h2>
               <div className="flex flex-wrap gap-3">
-                {JSON.parse(company.socialLinks).map((link: { label?: string; url?: string }, index: number) => (
+                {(() => {
+                  try {
+                    const parsed = JSON.parse(company.socialLinks as string) as Array<{ label?: string; url?: string }>;
+                    return parsed
+                      .filter((link) => link?.url)
+                      .map((link, index) => (
                   <a
                     key={index}
-                    href={link.url}
+                        href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-muted"
@@ -172,7 +177,11 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
                     <ExternalLink className="h-4 w-4 text-primary" />
                     {link.label || link.url}
                   </a>
-                ))}
+                      ));
+                  } catch {
+                    return null;
+                  }
+                })()}
               </div>
             </div>
           )}
