@@ -88,6 +88,21 @@ export default async function CompanyProfilePage({
     const longDesc = String(formData.get('longDesc') || '').trim() || null
     const longDesc_en = String(formData.get('longDesc_en') || '').trim() || null
     const longDesc_ru = String(formData.get('longDesc_ru') || '').trim() || null
+    const mission = String(formData.get('mission') || '').trim() || null
+    const mission_en = String(formData.get('mission_en') || '').trim() || null
+    const mission_ru = String(formData.get('mission_ru') || '').trim() || null
+    const vision = String(formData.get('vision') || '').trim() || null
+    const vision_en = String(formData.get('vision_en') || '').trim() || null
+    const vision_ru = String(formData.get('vision_ru') || '').trim() || null
+    const history = String(formData.get('history') || '').trim() || null
+    const history_en = String(formData.get('history_en') || '').trim() || null
+    const history_ru = String(formData.get('history_ru') || '').trim() || null
+    const faq = String(formData.get('faq') || '').trim() || null
+    const faq_en = String(formData.get('faq_en') || '').trim() || null
+    const faq_ru = String(formData.get('faq_ru') || '').trim() || null
+    const contactPrompt = String(formData.get('contactPrompt') || '').trim() || null
+    const contactPrompt_en = String(formData.get('contactPrompt_en') || '').trim() || null
+    const contactPrompt_ru = String(formData.get('contactPrompt_ru') || '').trim() || null
     const metaTitle = String(formData.get('metaTitle') || '').trim() || null
     const metaTitle_en = String(formData.get('metaTitle_en') || '').trim() || null
     const metaTitle_ru = String(formData.get('metaTitle_ru') || '').trim() || null
@@ -107,6 +122,19 @@ export default async function CompanyProfilePage({
     const email = String(formData.get('email') || '').trim() || null
     const address = String(formData.get('address') || '').trim() || null
     const mapLink = String(formData.get('mapLink') || '').trim() || null
+    const socialLinksRaw = String(formData.get('socialLinks') || '').trim()
+    let socialLinks: string | null = null
+    if (socialLinksRaw) {
+      try {
+        const parsed = JSON.parse(socialLinksRaw)
+        if (!Array.isArray(parsed)) {
+          return { error: 'Social links must be a JSON array.' }
+        }
+        socialLinks = JSON.stringify(parsed)
+      } catch {
+        return { error: 'Social links must be valid JSON.' }
+      }
+    }
     const slug = String(formData.get('slug') || '').trim()
     const slug_en = String(formData.get('slug_en') || '').trim()
     const slug_ru = String(formData.get('slug_ru') || '').trim()
@@ -127,6 +155,12 @@ export default async function CompanyProfilePage({
           email: email || undefined,
           address: address || undefined,
           mapLink: mapLink || undefined,
+          mission: mission || undefined,
+          vision: vision || undefined,
+          history: history || undefined,
+          faq: faq || undefined,
+          contactPrompt: contactPrompt || undefined,
+          socialLinks: socialLinks || undefined,
           metaTitle: metaTitle || undefined,
           metaDescription: metaDescription || undefined,
           ogTitle: ogTitle || undefined,
@@ -154,6 +188,11 @@ export default async function CompanyProfilePage({
             description: description_en,
             shortDesc: shortDesc_en,
             longDesc: longDesc_en,
+            mission: mission_en || mission,
+            vision: vision_en || vision,
+            history: history_en || history,
+            faq: faq_en || faq,
+            contactPrompt: contactPrompt_en || contactPrompt,
             metaTitle: enMetaTitle,
             metaDescription: enMetaDescription,
             ogTitle: enOgTitle,
@@ -166,6 +205,11 @@ export default async function CompanyProfilePage({
             description: description_en,
             shortDesc: shortDesc_en,
             longDesc: longDesc_en,
+            mission: mission_en || mission,
+            vision: vision_en || vision,
+            history: history_en || history,
+            faq: faq_en || faq,
+            contactPrompt: contactPrompt_en || contactPrompt,
             metaTitle: enMetaTitle,
             metaDescription: enMetaDescription,
             ogTitle: enOgTitle,
@@ -190,6 +234,11 @@ export default async function CompanyProfilePage({
             description: description_ru,
             shortDesc: shortDesc_ru,
             longDesc: longDesc_ru,
+            mission: mission_ru || mission,
+            vision: vision_ru || vision,
+            history: history_ru || history,
+            faq: faq_ru || faq,
+            contactPrompt: contactPrompt_ru || contactPrompt,
             metaTitle: ruMetaTitle,
             metaDescription: ruMetaDescription,
             ogTitle: ruOgTitle,
@@ -202,6 +251,11 @@ export default async function CompanyProfilePage({
             description: description_ru,
             shortDesc: shortDesc_ru,
             longDesc: longDesc_ru,
+            mission: mission_ru || mission,
+            vision: vision_ru || vision,
+            history: history_ru || history,
+            faq: faq_ru || faq,
+            contactPrompt: contactPrompt_ru || contactPrompt,
             metaTitle: ruMetaTitle,
             metaDescription: ruMetaDescription,
             ogTitle: ruOgTitle,

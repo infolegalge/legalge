@@ -21,6 +21,12 @@ interface Company {
   email?: string | null;
   address?: string | null;
   mapLink?: string | null;
+  mission?: string | null;
+  vision?: string | null;
+  history?: string | null;
+  faq?: string | null;
+  contactPrompt?: string | null;
+  socialLinks?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
   ogTitle?: string | null;
@@ -42,6 +48,11 @@ interface CompanyEditFormProps {
     description?: string | null;
     shortDesc?: string | null;
     longDesc?: string | null;
+    mission?: string | null;
+    vision?: string | null;
+    history?: string | null;
+    faq?: string | null;
+    contactPrompt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
     ogTitle?: string | null;
@@ -77,6 +88,11 @@ export default function CompanyEditForm({
     description: string;
     shortDesc: string;
     longDesc: string;
+    mission: string;
+    vision: string;
+    history: string;
+    faq: string;
+    contactPrompt: string;
     metaTitle: string;
     metaDescription: string;
     ogTitle: string;
@@ -87,6 +103,11 @@ export default function CompanyEditForm({
       description: kaTranslation?.description ?? company.description ?? '',
       shortDesc: kaTranslation?.shortDesc ?? company.shortDesc ?? '',
       longDesc: kaTranslation?.longDesc ?? company.longDesc ?? '',
+      mission: kaTranslation?.mission ?? company.mission ?? '',
+      vision: kaTranslation?.vision ?? company.vision ?? '',
+      history: kaTranslation?.history ?? company.history ?? '',
+      faq: kaTranslation?.faq ?? company.faq ?? '',
+      contactPrompt: kaTranslation?.contactPrompt ?? company.contactPrompt ?? '',
       metaTitle: kaTranslation?.metaTitle ?? company.metaTitle ?? '',
       metaDescription: kaTranslation?.metaDescription ?? company.metaDescription ?? '',
       ogTitle: kaTranslation?.ogTitle ?? company.ogTitle ?? '',
@@ -97,6 +118,11 @@ export default function CompanyEditForm({
       description: tMap.get('en')?.description || '',
       shortDesc: tMap.get('en')?.shortDesc || '',
       longDesc: tMap.get('en')?.longDesc || '',
+      mission: tMap.get('en')?.mission || '',
+      vision: tMap.get('en')?.vision || '',
+      history: tMap.get('en')?.history || '',
+      faq: tMap.get('en')?.faq || '',
+      contactPrompt: tMap.get('en')?.contactPrompt || '',
       metaTitle: tMap.get('en')?.metaTitle || '',
       metaDescription: tMap.get('en')?.metaDescription || '',
       ogTitle: tMap.get('en')?.ogTitle || '',
@@ -107,6 +133,11 @@ export default function CompanyEditForm({
       description: tMap.get('ru')?.description || '',
       shortDesc: tMap.get('ru')?.shortDesc || '',
       longDesc: tMap.get('ru')?.longDesc || '',
+      mission: tMap.get('ru')?.mission || '',
+      vision: tMap.get('ru')?.vision || '',
+      history: tMap.get('ru')?.history || '',
+      faq: tMap.get('ru')?.faq || '',
+      contactPrompt: tMap.get('ru')?.contactPrompt || '',
       metaTitle: tMap.get('ru')?.metaTitle || '',
       metaDescription: tMap.get('ru')?.metaDescription || '',
       ogTitle: tMap.get('ru')?.ogTitle || '',
@@ -129,6 +160,11 @@ export default function CompanyEditForm({
           const descKey = isBase ? 'description' : `description_${key}`;
           const shortKey = isBase ? 'shortDesc' : `shortDesc_${key}`;
           const longKey = isBase ? 'longDesc' : `longDesc_${key}`;
+          const missionKey = isBase ? 'mission' : `mission_${key}`;
+          const visionKey = isBase ? 'vision' : `vision_${key}`;
+          const historyKey = isBase ? 'history' : `history_${key}`;
+          const faqKey = isBase ? 'faq' : `faq_${key}`;
+          const contactPromptKey = isBase ? 'contactPrompt' : `contactPrompt_${key}`;
           const metaTitleKey = isBase ? 'metaTitle' : `metaTitle_${key}`;
           const metaDescKey = isBase ? 'metaDescription' : `metaDescription_${key}`;
           const ogTitleKey = isBase ? 'ogTitle' : `ogTitle_${key}`;
@@ -140,6 +176,11 @@ export default function CompanyEditForm({
           formData.set(descKey, copy[key].description);
           formData.set(shortKey, copy[key].shortDesc);
           formData.set(longKey, copy[key].longDesc);
+          formData.set(missionKey, copy[key].mission);
+          formData.set(visionKey, copy[key].vision);
+          formData.set(historyKey, copy[key].history);
+          formData.set(faqKey, copy[key].faq);
+          formData.set(contactPromptKey, copy[key].contactPrompt);
           formData.set(metaTitleKey, copy[key].metaTitle);
           formData.set(metaDescKey, copy[key].metaDescription);
           formData.set(ogTitleKey, copy[key].ogTitle);
@@ -300,6 +341,74 @@ export default function CompanyEditForm({
         </div>
         
         <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">Mission Statement</label>
+          <textarea
+            name={activeLocale==='ka' ? 'mission' : `mission_${activeLocale}`}
+            rows={3}
+            value={copy[activeLocale].mission}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], mission: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Why your company exists and the impact you aim to make"
+          ></textarea>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">Vision / Values</label>
+          <textarea
+            name={activeLocale==='ka' ? 'vision' : `vision_${activeLocale}`}
+            rows={3}
+            value={copy[activeLocale].vision}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], vision: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="What future you work toward and the values that guide you"
+          ></textarea>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">History / Founding Story</label>
+          <textarea
+            name={activeLocale==='ka' ? 'history' : `history_${activeLocale}`}
+            rows={4}
+            value={copy[activeLocale].history}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], history: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Share origin details, milestones, or founding story"
+          ></textarea>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">FAQ</label>
+          <textarea
+            name={activeLocale==='ka' ? 'faq' : `faq_${activeLocale}`}
+            rows={4}
+            value={copy[activeLocale].faq}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], faq: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Common questions and answers (use lists or headings)"
+          ></textarea>
+        </div>
+
+        <div className="md:col-span-2">
           <label className="mb-2 block text-sm font-medium">Company Logo</label>
           <div className="space-y-3">
             <ImageUpload
@@ -382,6 +491,20 @@ export default function CompanyEditForm({
             placeholder="https://maps.google.com/..."
           />
         </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">Social Links</label>
+          <textarea
+            name="socialLinks"
+            defaultValue={company.socialLinks || ""}
+            className="w-full rounded border px-3 py-2 text-sm font-mono"
+            rows={3}
+            placeholder='[{"label":"LinkedIn","url":"https://linkedin.com/company"}]'
+          ></textarea>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Provide JSON array of social profiles. Example: [{'{'}"label":"LinkedIn","url":"https://linkedin.com/company"{'}'}]
+          </p>
+        </div>
         
         <div className="md:col-span-2">
           <label className="mb-1 block text-sm font-medium">Long Description</label>
@@ -399,6 +522,24 @@ export default function CompanyEditForm({
             placeholder="Detailed company information, history, values, etc..."
           ></textarea>
         </div>
+
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">Client / Community Interaction Prompt</label>
+          <textarea
+            name={activeLocale==='ka' ? 'contactPrompt' : `contactPrompt_${activeLocale}`}
+            rows={3}
+            value={copy[activeLocale].contactPrompt}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], contactPrompt: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Encourage visitors to reach out, ask questions, or request services"
+          ></textarea>
+        </div>
+
 
         <div>
           <label className="mb-1 block text-sm font-medium">Meta Title (SEO)</label>

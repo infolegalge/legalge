@@ -170,6 +170,12 @@ model Company {
   address         String?
   city            String? // Dedicated city field for filtering
   mapLink         String? // Google Maps or OSM link
+  mission         String?
+  vision          String?
+  history         String?
+  faq             String?
+  contactPrompt   String?
+  socialLinks     String? // JSON array of { label, url }
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
@@ -198,6 +204,11 @@ model CompanyTranslation {
   shortDesc       String?
   longDesc        String?
   logoAlt         String?
+  mission         String?
+  vision          String?
+  history         String?
+  faq             String?
+  contactPrompt   String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
