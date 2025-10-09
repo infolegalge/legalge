@@ -7,3 +7,7 @@ coverage/
 npm-debug.log*
 yarn-error.log*
 .npm-cache/
+prisma/dev.db
+prisma/dev.db*
+prisma/prisma/
+
