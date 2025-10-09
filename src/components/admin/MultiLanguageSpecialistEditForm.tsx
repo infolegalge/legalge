@@ -84,6 +84,49 @@ const locales = [
   { code: 'ru', name: 'Русский', flag: '🇷🇺' }
 ];
 
+const formatTeachingWritingForTextarea = (value: string | null | undefined) => {
+  if (!value) return "";
+
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      return parsed.join("\n");
+    }
+
+    if (parsed && Array.isArray(parsed.entries)) {
+      return parsed.entries.join("\n");
+    }
+  } catch (error) {
+    // ignore parsing error and fall back to original value
+  }
+
+  return value;
+};
+
+const normalizeTeachingWriting = (value: string) => {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    JSON.parse(trimmed);
+    return trimmed;
+  } catch {
+    const entries = trimmed
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify({ entries });
+  }
+};
+
 export default function MultiLanguageSpecialistEditForm({ 
   specialist, 
   services, 
@@ -127,7 +170,7 @@ export default function MultiLanguageSpecialistEditForm({
               }
             })()
           : "",
-        teachingWriting: translation.teachingWriting || "",
+        teachingWriting: formatTeachingWritingForTextarea(translation.teachingWriting),
         credentials: translation.credentials || "",
         values: translation.values || "",
         philosophy: translation.philosophy || "",
@@ -174,7 +217,7 @@ export default function MultiLanguageSpecialistEditForm({
       try {
         const focusAreasText = String(formData.get("focusAreas") || "").trim();
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-        const teachingWritingText = String(formData.get("teachingWriting") || "").trim();
+        const teachingWritingText = String(formData.get("teachingWriting") || "");
         const credentialsText = String(formData.get("credentials") || "").trim();
         const valuesText = String(formData.get("values") || "").trim();
 
@@ -206,14 +249,8 @@ export default function MultiLanguageSpecialistEditForm({
           formData.set("representativeMatters", "");
         }
 
-        if (teachingWritingText) {
-          try {
-            JSON.parse(teachingWritingText);
-            formData.set("teachingWriting", teachingWritingText);
-          } catch {
-            throw new Error("Invalid JSON in Teaching/Writing field");
-          }
-        }
+        const normalizedTeachingWriting = normalizeTeachingWriting(teachingWritingText);
+        formData.set("teachingWriting", normalizedTeachingWriting);
 
         if (credentialsText) {
           try {
@@ -532,7 +569,7 @@ export default function MultiLanguageSpecialistEditForm({
                     <textarea 
                       name="teachingWriting" 
                       rows={6} 
-                      defaultValue={specialist.teachingWriting || ""}
+                      defaultValue={formatTeachingWritingForTextarea(specialist.teachingWriting)}
                       className="w-full rounded border px-3 py-2 font-mono text-sm" 
                       placeholder='{"courses": ["Cryptocurrency & Blockchain Law", "Practical Private Law"], "workshops": ["Founder legal fundamentals", "Hiring & compliance"], "topics": ["SAFEs in Georgia", "Contractor classification"]}'
                     ></textarea>

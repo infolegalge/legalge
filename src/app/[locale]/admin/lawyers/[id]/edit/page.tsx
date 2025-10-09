@@ -7,6 +7,31 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import MultiLanguageSpecialistEditForm from "@/components/admin/MultiLanguageSpecialistEditForm";
 
+function normalizeTeachingWritingInput(raw: FormDataEntryValue | null | undefined): string | undefined {
+  if (raw === null || raw === undefined) return undefined;
+  const value = String(raw).trim();
+
+  if (!value) {
+    return "";
+  }
+
+  try {
+    JSON.parse(value);
+    return value;
+  } catch {
+    const entries = value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify({ entries });
+  }
+}
+
 async function requireSuperAdmin() {
   const session = await getServerSession(authOptions);
   type AppUser = NonNullable<Session["user"]> & { role?: "SUPER_ADMIN" | "COMPANY" | "LAWYER" | "AUTHOR" };
@@ -29,13 +54,25 @@ async function updateSpecialist(formData: FormData) {
     const contactPhone = String(formData.get("contactPhone") || "").trim() || null;
     const avatarUrl = String(formData.get("avatarUrl") || "").trim() || null;
     const philosophy = String(formData.get("philosophy") || "").trim() || null;
-  const focusAreasText = String(formData.get("focusAreas") || "").trim();
-  const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').filter(line => line.trim())) : undefined;
-  const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-  const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : undefined;
-  const teachingWriting = String(formData.get("teachingWriting") || "").trim() || undefined;
-  const credentials = String(formData.get("credentials") || "").trim() || undefined;
-  const values = String(formData.get("values") || "").trim() || undefined;
+    const focusAreasText = String(formData.get("focusAreas") || "").trim();
+    const focusAreas = focusAreasText
+      ? JSON.stringify(
+          focusAreasText
+            .split("\n")
+            .filter((line) => line.trim()),
+        )
+      : undefined;
+    const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
+    const representativeMatters = representativeMattersText
+      ? JSON.stringify(
+          representativeMattersText
+            .split("\n")
+            .filter((line) => line.trim()),
+        )
+      : undefined;
+    const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
+    const credentials = String(formData.get("credentials") || "").trim() || undefined;
+    const values = String(formData.get("values") || "").trim() || undefined;
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -81,7 +118,7 @@ async function updateSpecialist(formData: FormData) {
         ...(philosophy ? { philosophy } : {}),
         ...(focusAreas ? { focusAreas } : {}),
         ...(representativeMatters ? { representativeMatters } : {}),
-        ...(teachingWriting ? { teachingWriting } : {}),
+        ...(teachingWriting !== undefined ? { teachingWriting } : {}),
         ...(credentials ? { credentials } : {}),
         ...(values ? { values } : {}),
       });
@@ -125,7 +162,7 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
-    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || undefined;
+    const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = String(formData.get("credentials") || "").trim() || undefined;
     const values = String(formData.get("values") || "").trim() || undefined;
     

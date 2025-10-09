@@ -296,6 +296,31 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
       {specialist.teachingWriting && (() => {
         try {
           const teachingData = JSON.parse(specialist.teachingWriting);
+
+          const renderEntriesList = (entries: string[]) => (
+            <div className="rounded-lg border p-4 md:col-span-3">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {entries.map((entry, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-primary">•</span>
+                    <span>{entry}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+
+          const hasStructuredData =
+            (teachingData.courses && teachingData.courses.length > 0) ||
+            (teachingData.workshops && teachingData.workshops.length > 0) ||
+            (teachingData.topics && teachingData.topics.length > 0);
+
+          const entriesArray = Array.isArray(teachingData)
+            ? teachingData
+            : Array.isArray(teachingData?.entries)
+              ? teachingData.entries
+              : null;
+
           return (
             <div className="mb-8">
               <h2 className="mb-4 text-xl font-semibold flex items-center gap-2">
@@ -303,36 +328,42 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
                 {specialistT("teaching_writing")}
               </h2>
               <div className="grid gap-4 md:grid-cols-3">
-                {teachingData.courses && teachingData.courses.length > 0 && (
-                  <div className="rounded-lg border p-4">
-                    <h3 className="font-semibold mb-2">{specialistT("courses")}</h3>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      {teachingData.courses.map((course: string, index: number) => (
-                        <li key={index}>• {course}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {teachingData.workshops && teachingData.workshops.length > 0 && (
-                  <div className="rounded-lg border p-4">
-                    <h3 className="font-semibold mb-2">{specialistT("workshops")}</h3>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      {teachingData.workshops.map((workshop: string, index: number) => (
-                        <li key={index}>• {workshop}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {teachingData.topics && teachingData.topics.length > 0 && (
-                  <div className="rounded-lg border p-4">
-                    <h3 className="font-semibold mb-2">{specialistT("writing_topics")}</h3>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      {teachingData.topics.map((topic: string, index: number) => (
-                        <li key={index}>• {topic}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {hasStructuredData ? (
+                  <>
+                    {teachingData.courses && teachingData.courses.length > 0 && (
+                      <div className="rounded-lg border p-4">
+                        <h3 className="font-semibold mb-2">{specialistT("courses")}</h3>
+                        <ul className="text-sm text-muted-foreground space-y-1">
+                          {teachingData.courses.map((course: string, index: number) => (
+                            <li key={index}>• {course}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {teachingData.workshops && teachingData.workshops.length > 0 && (
+                      <div className="rounded-lg border p-4">
+                        <h3 className="font-semibold mb-2">{specialistT("workshops")}</h3>
+                        <ul className="text-sm text-muted-foreground space-y-1">
+                          {teachingData.workshops.map((workshop: string, index: number) => (
+                            <li key={index}>• {workshop}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {teachingData.topics && teachingData.topics.length > 0 && (
+                      <div className="rounded-lg border p-4">
+                        <h3 className="font-semibold mb-2">{specialistT("writing_topics")}</h3>
+                        <ul className="text-sm text-muted-foreground space-y-1">
+                          {teachingData.topics.map((topic: string, index: number) => (
+                            <li key={index}>• {topic}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : entriesArray && entriesArray.length > 0 ? (
+                  renderEntriesList(entriesArray)
+                ) : null}
               </div>
             </div>
           );
