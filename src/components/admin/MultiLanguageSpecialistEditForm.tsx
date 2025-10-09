@@ -654,6 +654,7 @@ export default function MultiLanguageSpecialistEditForm({
                     action={(formData) => handleTranslationUpdate(loc.code, formData)}
                     className="grid gap-4"
                   >
+                    <input type="hidden" name="id" value={specialist.id} />
                     <input type="hidden" name="specialistProfileId" value={specialist.id} />
                     <input type="hidden" name="locale" value={loc.code} />
                     <input type="hidden" name="translationId" value={translation?.id || ""} />

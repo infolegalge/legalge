@@ -122,12 +122,12 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const metaDescription = String(formData.get("metaDescription") || "").trim() || null;
     const philosophy = String(formData.get("philosophy") || "").trim() || null;
     const focusAreasText = String(formData.get("focusAreas") || "").trim();
-    const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').map((line) => line.trim()).filter(Boolean)) : null;
+    const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-    const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : null;
-    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
-    const credentials = String(formData.get("credentials") || "").trim() || null;
-    const values = String(formData.get("values") || "").trim() || null;
+    const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
+    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || undefined;
+    const credentials = String(formData.get("credentials") || "").trim() || undefined;
+    const values = String(formData.get("values") || "").trim() || undefined;
     
     if (!id || !locale || !name || !slug) {
       return { error: "Missing required translation fields" };
@@ -146,21 +146,65 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
       return { error: "Slug already in use for this locale" };
     }
 
+    const existing = translationId
+      ? await prisma.specialistProfileTranslation.findUnique({ where: { id: translationId } })
+      : await prisma.specialistProfileTranslation.findUnique({
+          where: { specialistProfileId_locale: { specialistProfileId: id, locale } },
+        });
+
+    const toEmptyString = (
+      incoming: string | null,
+      current: string | null | undefined,
+    ): string | undefined => {
+      if (incoming && incoming.trim()) return incoming;
+      if (incoming === "" && current && current.length > 0) {
+        return "";
+      }
+      return undefined;
+    };
+
+    const toJsonString = (
+      incoming: string | null,
+      current: string | null | undefined,
+    ): string | undefined => {
+      if (incoming && incoming.trim()) return incoming;
+      if (incoming === "" && current && current.length > 0) {
+        return "";
+      }
+      return undefined;
+    };
+
     const data: Parameters<typeof prisma.specialistProfileTranslation.upsert>[0]["create"] = {
       specialistProfileId: id,
       locale,
       name,
       slug,
-      role: role || undefined,
-      bio: bio || undefined,
-      metaTitle: metaTitle || undefined,
-      metaDescription: metaDescription || undefined,
-      philosophy: philosophy || undefined,
-      focusAreas: focusAreas || undefined,
-      representativeMatters: representativeMatters || undefined,
-      teachingWriting: teachingWriting || undefined,
-      credentials: credentials || undefined,
-      values: values || undefined,
+      ...(toEmptyString(role, existing?.role) !== undefined ? { role: toEmptyString(role, existing?.role) } : {}),
+      ...(toEmptyString(bio, existing?.bio) !== undefined ? { bio: toEmptyString(bio, existing?.bio) } : {}),
+      ...(toEmptyString(metaTitle, existing?.metaTitle) !== undefined
+        ? { metaTitle: toEmptyString(metaTitle, existing?.metaTitle) }
+        : {}),
+      ...(toEmptyString(metaDescription, existing?.metaDescription) !== undefined
+        ? { metaDescription: toEmptyString(metaDescription, existing?.metaDescription) }
+        : {}),
+      ...(toEmptyString(philosophy, existing?.philosophy) !== undefined
+        ? { philosophy: toEmptyString(philosophy, existing?.philosophy) }
+        : {}),
+      ...(toJsonString(focusAreas, existing?.focusAreas) !== undefined
+        ? { focusAreas: toJsonString(focusAreas, existing?.focusAreas) }
+        : {}),
+      ...(toJsonString(representativeMatters, existing?.representativeMatters) !== undefined
+        ? { representativeMatters: toJsonString(representativeMatters, existing?.representativeMatters) }
+        : {}),
+      ...(toJsonString(teachingWriting, existing?.teachingWriting) !== undefined
+        ? { teachingWriting: toJsonString(teachingWriting, existing?.teachingWriting) }
+        : {}),
+      ...(toJsonString(credentials, existing?.credentials) !== undefined
+        ? { credentials: toJsonString(credentials, existing?.credentials) }
+        : {}),
+      ...(toJsonString(values, existing?.values) !== undefined
+        ? { values: toJsonString(values, existing?.values) }
+        : {}),
     };
 
     await prisma.specialistProfileTranslation.upsert({
