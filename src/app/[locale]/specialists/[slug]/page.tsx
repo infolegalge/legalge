@@ -228,7 +228,6 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
       {specialist.philosophy && (
         <div className="mb-8">
           <h2 className="mb-4 text-xl font-semibold flex items-center gap-2">
-            <Heart className="h-5 w-5 text-primary" />
             {specialistT("philosophy")}
           </h2>
           <div className="rounded-lg border bg-muted/30 p-6">
