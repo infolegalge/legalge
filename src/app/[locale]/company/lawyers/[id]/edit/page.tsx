@@ -147,7 +147,7 @@ async function updateSpecialist(formData: FormData) {
   }
 }
 
-async function updateTranslation(formData: FormData) {
+async function updateTranslation(formData: FormData): Promise<{ success?: boolean; error?: string }> {
   "use server";
   try {
     const user = await requireCompanyAdmin();
@@ -169,7 +169,7 @@ async function updateTranslation(formData: FormData) {
     const values = String(formData.get("values") || "").trim() || null;
 
     if (!specialistProfileId || !locale || !name || !slug) {
-      return;
+      return { error: "Missing required translation fields" };
     }
 
     const specialist = await prisma.specialistProfile.findUnique({
@@ -178,11 +178,11 @@ async function updateTranslation(formData: FormData) {
     });
 
     if (!specialist) {
-      return;
+      return { error: "Specialist not found" };
     }
 
     if (user.role === "COMPANY" && specialist.companyId && specialist.companyId !== user.companyId) {
-      return;
+      return { error: "You can only edit specialists from your own company" };
     }
 
     const sanitized = <T extends string | null>(value: T) => {
@@ -241,8 +241,10 @@ async function updateTranslation(formData: FormData) {
     }
 
     revalidatePath("/");
+    return { success: true };
   } catch (error) {
     console.error("Error updating specialist translation:", error);
+    return { error: "Failed to update translation" };
   }
 }
 
