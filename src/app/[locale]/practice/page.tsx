@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createLocaleRouteMetadata } from "@/lib/metadata";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { listPracticeAreasForLocale, listServicesForLocale } from "@/lib/db";
 import Link from "next/link";
@@ -19,8 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function PracticeIndex({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations("practice");
+  const t = await getTranslations({ locale, namespace: "practice" });
   const [areas, services] = await Promise.all([listPracticeAreasForLocale(locale), listServicesForLocale(locale)]);
   const imageFor = (title: string) => {
     const base = title
