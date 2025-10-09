@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createLocaleRouteMetadata } from "@/lib/metadata";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import ContactInfo from "@/components/ContactInfo";
 import OpenStreetMap from "@/components/OpenStreetMap";
@@ -16,8 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations("contact");
+  const t = await getTranslations({ locale, namespace: "contact" });
 
   const formTranslations = {
     name: t("name"),
