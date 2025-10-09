@@ -93,7 +93,9 @@
   },
   "contact": {
     "title": "Contact",
+    "heading": "Get in touch",
     "description": "Reach out to our team",
+    "form_heading": "Send us a message",
     "name": "Full name",
     "email": "Email",
     "message": "How can we help?",
