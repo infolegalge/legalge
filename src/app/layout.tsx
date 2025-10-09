@@ -3,8 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
 const SITE_NAME = "Law is our playground - Legal Sandbox Georgia";
 const SITE_URL = "https://www.legal.ge";
@@ -73,7 +73,7 @@ gtag('config', '${GA_MEASUREMENT_ID}', { anonymize_ip: true });
           </>
         ) : null}
       </head>
-      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body suppressHydrationWarning className={`${geistSans.className} ${geistMono.className} antialiased`}>
         {children}
       </body>
     </html>
