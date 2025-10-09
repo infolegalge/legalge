@@ -6,18 +6,67 @@ module.exports = {
   generateRobotsTxt: true,
   sitemapSize: 5000,
   changefreq: 'weekly',
-  exclude: ['/api/*'],
-  transform: async (config, path) => ({
-    loc: path,
-    changefreq: 'weekly',
-    priority: 0.7,
-  }),
+  exclude: [
+    '/api/*',
+    '/api/auth/*',
+    '/auth',
+    '/auth/*',
+    '/subscriber',
+    '/subscriber/*',
+    '/admin',
+    '/admin/*',
+    '/*/admin',
+    '/*/admin/*',
+  ],
+  transform: async (config, path) => {
+    const excludedPatterns = [
+      /^\/auth(\/|$)/,
+      /^\/subscriber(\/|$)/,
+      /^\/admin(\/|$)/,
+      /^\/api\/auth(\/|$)/,
+    ];
+
+    const urlPath = (() => {
+      try {
+        return new URL(path, siteUrl).pathname;
+      } catch {
+        return path;
+      }
+    })();
+
+    if (excludedPatterns.some((pattern) => pattern.test(urlPath))) {
+      return null;
+    }
+
+    return {
+      ...config,
+      loc: path,
+      changefreq: 'weekly',
+      priority: 0.7,
+    };
+  },
+  alternateRefs: [
+    { href: 'https://legal.ge/ka', hreflang: 'ka' },
+    { href: 'https://legal.ge/en', hreflang: 'en' },
+    { href: 'https://legal.ge/ru', hreflang: 'ru' },
+  ],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/*/admin', '/api/auth/'],
+        disallow: [
+          '/auth',
+          '/auth/*',
+          '/subscriber',
+          '/subscriber/*',
+          '/api/auth',
+          '/api/auth/*',
+          '/admin',
+          '/admin/*',
+          '/*/admin',
+          '/*/admin/*',
+        ],
       },
     ],
     additionalSitemaps: [`${siteUrl}/sitemap.xml`],
