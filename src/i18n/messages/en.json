@@ -19,7 +19,15 @@
   },
   "practice": {
     "title": "Practice areas",
-    "description": "Explore our legal practices"
+    "description": "Explore our legal practices",
+    "search_label": "Search practice areas or services",
+    "search_practices": "Practice areas",
+    "search_services": "Services",
+    "search_no_matches": "No matches",
+    "search_practice_tag": "Practice",
+    "search_service_tag": "Service",
+    "search_services_count": "{count} services",
+    "parent_practice": "Part of {practice}"
   },
   "lawyers": {
     "title": "Lawyers",
@@ -84,11 +92,11 @@
   },
   "contact": {
     "title": "Contact",
-    "description": "Text us",
-    "name": "Name",
-    "email": "Contact email",
-    "message": "Message",
-    "submit": "Send",
+    "description": "Reach out to our team",
+    "name": "Full name",
+    "email": "Email",
+    "message": "How can we help?",
+    "submit": "Send message",
     "submitting": "Sending...",
     "office": "Head Office",
     "address": "Address",

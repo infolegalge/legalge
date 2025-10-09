@@ -10,9 +10,19 @@ type Props = {
   locale: string;
   practices: Practice[];
   services: Service[];
+  inputLabel?: string;
+  headingLabels?: {
+    practices?: string;
+    services?: string;
+    noMatches?: string;
+    practiceTag?: string;
+    serviceTag?: string;
+    servicesCount?: string;
+    parentPractice?: string;
+  };
 };
 
-export default function PracticeSearch({ locale, practices, services }: Props) {
+export default function PracticeSearch({ locale, practices, services, inputLabel, headingLabels }: Props) {
   const [query, setQuery] = useState("");
 
   const practiceFuse = useMemo(
@@ -57,8 +67,8 @@ export default function PracticeSearch({ locale, practices, services }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full rounded-xl border bg-background/80 px-4 py-3 text-sm shadow-sm outline-none backdrop-blur focus:border-primary focus:ring-2 focus:ring-primary/20"
-          placeholder="Search practice areas or services"
-          aria-label="Search practice areas or services"
+          placeholder={inputLabel ?? "Search practice areas or services"}
+          aria-label={inputLabel ?? "Search practice areas or services"}
         />
         <div className="pointer-events-none absolute inset-y-0 right-3 hidden items-center gap-2 sm:flex">
           <kbd className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-foreground/70">⌘</kbd>
@@ -69,9 +79,9 @@ export default function PracticeSearch({ locale, practices, services }: Props) {
       {query.trim() ? (
         <div className="mt-4 grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-sm font-medium">Practice areas</h3>
+            <h3 className="text-sm font-medium">{headingLabels?.practices ?? "Practice areas"}</h3>
             {practiceResults.length === 0 ? (
-              <p className="mt-2 text-sm text-foreground/60">No matches</p>
+              <p className="mt-2 text-sm text-foreground/60">{headingLabels?.noMatches ?? "No matches"}</p>
             ) : (
               <ul className="mt-2 space-y-2">
                 {practiceResults.map((p) => (
@@ -81,10 +91,14 @@ export default function PracticeSearch({ locale, practices, services }: Props) {
                       className="block rounded-md border px-3 py-2 hover:bg-muted/50"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="rounded bg-muted px-2 py-0.5 text-xs">Practice</span>
+                        <span className="rounded bg-muted px-2 py-0.5 text-xs">{headingLabels?.practiceTag ?? "Practice"}</span>
                         <span className="font-medium">{p.title}</span>
                       </div>
-                      <div className="mt-1 text-xs text-foreground/60">{(p.servicesCount ?? p.services?.length ?? 0)} services</div>
+                      <div className="mt-1 text-xs text-foreground/60">
+                        {headingLabels?.servicesCount
+                          ? headingLabels.servicesCount.replace("{count}", `${p.servicesCount ?? p.services?.length ?? 0}`)
+                          : `${p.servicesCount ?? p.services?.length ?? 0} services`}
+                      </div>
                     </Link>
                   </li>
                 ))}
@@ -92,9 +106,9 @@ export default function PracticeSearch({ locale, practices, services }: Props) {
             )}
           </div>
           <div>
-            <h3 className="text-sm font-medium">Services</h3>
+            <h3 className="text-sm font-medium">{headingLabels?.services ?? "Services"}</h3>
             {serviceResults.length === 0 ? (
-              <p className="mt-2 text-sm text-foreground/60">No matches</p>
+              <p className="mt-2 text-sm text-foreground/60">{headingLabels?.noMatches ?? "No matches"}</p>
             ) : (
               <ul className="mt-2 space-y-2">
                 {serviceResults.map((s) => (
@@ -104,10 +118,14 @@ export default function PracticeSearch({ locale, practices, services }: Props) {
                       className="block rounded-md border px-3 py-2 hover:bg-muted/50"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="rounded bg-muted px-2 py-0.5 text-xs">Service</span>
+                        <span className="rounded bg-muted px-2 py-0.5 text-xs">{headingLabels?.serviceTag ?? "Service"}</span>
                         <span className="font-medium">{s.title}</span>
                       </div>
-                      <div className="mt-1 text-xs text-foreground/60">{parentTitleById[s.parentId]}</div>
+                      <div className="mt-1 text-xs text-foreground/60">
+                        {headingLabels?.parentPractice
+                          ? headingLabels.parentPractice.replace("{practice}", parentTitleById[s.parentId] ?? "")
+                          : parentTitleById[s.parentId]}
+                      </div>
                     </Link>
                   </li>
                 ))}

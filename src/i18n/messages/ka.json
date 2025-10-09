@@ -19,7 +19,15 @@
   },
   "practice": {
     "title": "პრაქტიკა",
-    "description": "გაიცანით ჩვენი იურიდიული მიმართულებები"
+    "description": "გაიცანით ჩვენი იურიდიული მიმართულებები",
+    "search_label": "პრაქტიკებისა და სერვისების ძიება",
+    "search_practices": "პრაქტიკა",
+    "search_services": "სერვისები",
+    "search_no_matches": "შედეგები არ მოიძებნა",
+    "search_practice_tag": "პრაქტიკა",
+    "search_service_tag": "სერვისი",
+    "search_services_count": "{count} სერვისი",
+    "parent_practice": "შეერძენილია {practice}"
   },
   "lawyers": {
     "title": "იურისტები",

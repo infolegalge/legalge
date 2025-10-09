@@ -19,7 +19,15 @@
   },
   "practice": {
     "title": "Практики",
-    "description": "Наши юридические направления"
+    "description": "Наши юридические направления",
+    "search_label": "Поиск практик или услуг",
+    "search_practices": "Практики",
+    "search_services": "Услуги",
+    "search_no_matches": "Совпадения не найдены",
+    "search_practice_tag": "Практика",
+    "search_service_tag": "Услуга",
+    "search_services_count": "{count} услуг",
+    "parent_practice": "Относится к {practice}"
   },
   "lawyers": {
     "title": "Юристы",

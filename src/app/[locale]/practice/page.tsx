@@ -52,7 +52,21 @@ export default async function PracticeIndex({ params }: { params: Promise<{ loca
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <h1 className="text-2xl font-semibold">{t("practice.title")}</h1>
       <div className="mt-3">
-        <PracticeSearch locale={locale} practices={areas} services={services} />
+        <PracticeSearch
+          locale={locale}
+          practices={areas}
+          services={services}
+          inputLabel={t("practice.search_label")}
+          headingLabels={{
+            practices: t("practice.search_practices"),
+            services: t("practice.search_services"),
+            noMatches: t("practice.search_no_matches"),
+            practiceTag: t("practice.search_practice_tag"),
+            serviceTag: t("practice.search_service_tag"),
+            servicesCount: t("practice.search_services_count"),
+            parentPractice: t("practice.parent_practice"),
+          }}
+        />
       </div>
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {areas.length === 0 ? (
@@ -82,7 +96,9 @@ export default async function PracticeIndex({ params }: { params: Promise<{ loca
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-4">
                     <div className="font-medium text-white drop-shadow-sm">{a.title}</div>
-                    <div className="mt-1 text-xs text-white/90 drop-shadow-sm">{a.servicesCount} services</div>
+                    <div className="mt-1 text-xs text-white/90 drop-shadow-sm">
+                      {t("practice.services_count", { count: a.servicesCount })}
+                    </div>
                   </div>
                 </div>
               </Link>
