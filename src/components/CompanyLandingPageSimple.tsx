@@ -11,7 +11,8 @@ import {
   MapPin, 
   ExternalLink,
   Calendar,
-  ArrowRight
+  ArrowRight,
+  Quote
 } from "lucide-react";
 import { OFFICIAL_PHONE, phoneToTelHref } from "@/config/contact";
 
@@ -121,6 +122,60 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
             className="prose prose-lg max-w-none text-muted-foreground"
             dangerouslySetInnerHTML={{ __html: company.longDesc }}
           />
+        </div>
+      )}
+
+      {/* Mission / Vision / History / Prompt */}
+      {(company.mission || company.vision || company.history || company.contactPrompt || company.socialLinks) && (
+        <div className="mb-12 space-y-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            {company.mission && (
+              <div className="rounded-lg border bg-card p-6">
+                <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                  <Quote className="h-5 w-5 text-primary" />
+                  Mission
+                </h2>
+                <p className="text-muted-foreground whitespace-pre-line">{company.mission}</p>
+              </div>
+            )}
+            {company.vision && (
+              <div className="rounded-lg border bg-card p-6">
+                <h2 className="text-xl font-semibold mb-3">Vision</h2>
+                <p className="text-muted-foreground whitespace-pre-line">{company.vision}</p>
+              </div>
+            )}
+          </div>
+          {company.history && (
+            <div className="rounded-lg border bg-card p-6">
+              <h2 className="text-xl font-semibold mb-3">History</h2>
+              <p className="text-muted-foreground whitespace-pre-line">{company.history}</p>
+            </div>
+          )}
+          {company.contactPrompt && (
+            <div className="rounded-lg border bg-card p-6">
+              <h2 className="text-xl font-semibold mb-3">How We Work</h2>
+              <p className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</p>
+            </div>
+          )}
+          {company.socialLinks && (
+            <div className="rounded-lg border bg-card p-6">
+              <h2 className="text-xl font-semibold mb-3">On the Web</h2>
+              <div className="flex flex-wrap gap-3">
+                {JSON.parse(company.socialLinks).map((link: { label?: string; url?: string }, index: number) => (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-muted"
+                  >
+                    <ExternalLink className="h-4 w-4 text-primary" />
+                    {link.label || link.url}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

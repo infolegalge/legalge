@@ -67,6 +67,11 @@ export interface Company {
   address?: string | null;
   city?: string | null;
   mapLink?: string | null;
+  mission?: string | null;
+  vision?: string | null;
+  history?: string | null;
+  contactPrompt?: string | null;
+  socialLinks?: string | null;
   specialists: SpecialistProfile[];
   posts: Array<{
     id: string;
@@ -264,6 +269,11 @@ export async function fetchCompanies(): Promise<Company[]> {
     address: company.address ?? null,
     city: company.city ?? null,
     mapLink: company.mapLink ?? null,
+    mission: company.mission ?? null,
+    vision: company.vision ?? null,
+    history: company.history ?? null,
+    contactPrompt: company.contactPrompt ?? null,
+    socialLinks: company.socialLinks ?? null,
     posts: company.posts.map((post) => ({
       id: post.id,
       slug: post.slug,
@@ -349,6 +359,11 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
     address: company.address ?? null,
     city: company.city ?? null,
     mapLink: company.mapLink ?? null,
+    mission: company.mission ?? null,
+    vision: company.vision ?? null,
+    history: company.history ?? null,
+    contactPrompt: company.contactPrompt ?? null,
+    socialLinks: company.socialLinks ?? null,
     posts: company.posts.map((post) => ({
       id: post.id,
       slug: post.slug,
