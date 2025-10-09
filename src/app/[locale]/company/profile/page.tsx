@@ -2,7 +2,6 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import type { Locale } from '@/i18n/locales'
 import prisma from '@/lib/prisma'
-import type { Prisma } from '@prisma/client'
 import CompanyEditForm from '@/components/admin/CompanyEditForm'
 import CompanyProfileManagement from './CompanyProfileManagement'
 import { redirect } from 'next/navigation'
@@ -32,9 +31,33 @@ const companySelect = {
   metaDescription: true,
   ogTitle: true,
   ogDescription: true,
-} satisfies Prisma.CompanySelect
+} as const
 
-type ProfileCompany = Prisma.CompanyGetPayload<{ select: typeof companySelect }>
+interface ProfileCompany {
+  id: string
+  slug: string
+  name: string
+  city: string | null
+  description: string | null
+  shortDesc: string | null
+  longDesc: string | null
+  logoUrl: string | null
+  logoAlt: string | null
+  website: string | null
+  phone: string | null
+  email: string | null
+  address: string | null
+  mapLink: string | null
+  mission: string | null
+  vision: string | null
+  history: string | null
+  contactPrompt: string | null
+  socialLinks: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  ogTitle: string | null
+  ogDescription: string | null
+}
 
 export default async function CompanyProfilePage({
   params,
@@ -54,10 +77,10 @@ export default async function CompanyProfilePage({
   let company: ProfileCompany | null = null
   let userCompanyId = (session.user as { companyId?: string | null })?.companyId || undefined
   if (userCompanyId) {
-    company = await prisma.company.findUnique({
+    company = (await prisma.company.findUnique({
       where: { id: userCompanyId },
-      select: companySelect,
-    })
+      select: companySelect as any,
+    })) as ProfileCompany | null
   }
   if (!company) {
     // Try to load user record to get company linkage
@@ -67,15 +90,15 @@ export default async function CompanyProfilePage({
     })
     if (dbUser?.companyId) {
       userCompanyId = dbUser.companyId
-      company = await prisma.company.findUnique({
+      company = (await prisma.company.findUnique({
         where: { id: dbUser.companyId },
-        select: companySelect,
-      })
+        select: companySelect as any,
+      })) as ProfileCompany | null
     } else if (dbUser?.companySlug) {
-      company = await prisma.company.findUnique({
+      company = (await prisma.company.findUnique({
         where: { slug: dbUser.companySlug },
-        select: companySelect,
-      })
+        select: companySelect as any,
+      })) as ProfileCompany | null
     }
   }
   if (!company) {
