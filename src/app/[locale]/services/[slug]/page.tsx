@@ -163,13 +163,14 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
             {heroImg ? (
               <div className="mb-8 overflow-hidden rounded-lg border shadow-sm">
                 <div className="relative w-full aspect-[16/9] bg-muted">
-                  <Image 
-                    src={heroImg} 
+                  <Image
+                    src={heroImg}
                     alt={heroAlt}
-                    fill 
-                    className="object-cover" 
+                    fill
+                    className="object-cover"
                     loading="lazy"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 60vw"
+                    placeholder="empty"
                   />
                 </div>
               </div>

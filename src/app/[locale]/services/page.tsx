@@ -55,7 +55,9 @@ export default async function ServicesIndex({ params }: { params: Promise<{ loca
                     alt={s.heroImageAlt || s.title}
                     fill
                     className="object-cover"
+                    loading="lazy"
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    placeholder="empty"
                   />
                 </div>
               ) : (

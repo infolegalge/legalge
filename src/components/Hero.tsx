@@ -4,12 +4,22 @@ import { useTranslations } from "next-intl";
 import type { Locale } from "@/i18n/locales";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import Image from "next/image";
+
+type Slide = {
+  light: string;
+  dark: string;
+  lightAvif?: string | null;
+  darkAvif?: string | null;
+  lightAlt?: string | null;
+  darkAlt?: string | null;
+};
 
 export default function Hero({ locale }: { locale: Locale }) {
   const t = useTranslations();
   const [index, setIndex] = useState(0);
 
-  const fallbackSlides = [
+  const fallbackSlides: Slide[] = [
     { light: "/slider/01lightmtkvari.webp", dark: "/slider/01darkmtkvari.webp" },
     { light: "/slider/02lighcity.webp", dark: "/slider/02darkcity.webp" },
   ];
@@ -17,7 +27,7 @@ export default function Hero({ locale }: { locale: Locale }) {
   const { data } = useSWR("/api/slider", async (url) => {
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed slider fetch");
-    return (await res.json()) as Array<{ light: string; dark: string; lightAlt?: string | null; darkAlt?: string | null }>;
+    return (await res.json()) as Slide[];
   }, { suspense: false, revalidateOnFocus: false });
 
   const slides = Array.isArray(data) && data.length > 0 ? data : fallbackSlides;
@@ -38,17 +48,28 @@ export default function Hero({ locale }: { locale: Locale }) {
       <div className="absolute inset-0">
         {slides[index] ? (
           <>
-            <picture>
-              <source media="(prefers-color-scheme: dark)" srcSet={slides[index].dark} />
-              <img 
-                src={slides[index].light} 
-                alt={(slides[index] as any).lightAlt || t("site.title")}
-                className="h-full w-full object-cover" 
-                aria-hidden 
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
-            </picture>
+            <Image
+              key={`light-${slides[index].light}`}
+              src={slides[index].light}
+              alt={slides[index].lightAlt || t("site.title")}
+              fill
+              className="object-cover dark:hidden"
+              priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+              placeholder="empty"
+            />
+            <Image
+              key={`dark-${slides[index].dark || slides[index].light}`}
+              src={slides[index].dark || slides[index].light}
+              alt={slides[index].darkAlt || slides[index].lightAlt || t("site.title")}
+              fill
+              className="hidden object-cover dark:block"
+              priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+              placeholder="empty"
+            />
           </>
         ) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-background dark:from-black/30" aria-hidden />

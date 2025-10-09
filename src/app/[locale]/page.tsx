@@ -1,12 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
-import Hero from "@/components/Hero";
-import ServicesShowcase from "@/components/ServicesShowcase";
-import AuthRedirect from "@/components/AuthRedirect";
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { createLocaleRouteMetadata } from "@/lib/metadata";
 import { buildOrganizationLd, buildBreadcrumbLd } from "@/lib/structuredData";
+import Hero from "@/components/Hero";
+import AuthRedirect from "@/components/AuthRedirect";
+const ServicesShowcase = dynamic(() => import("@/components/ServicesShowcase"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
