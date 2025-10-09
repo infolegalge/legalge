@@ -29,13 +29,13 @@ async function updateSpecialist(formData: FormData) {
     const contactPhone = String(formData.get("contactPhone") || "").trim() || null;
     const avatarUrl = String(formData.get("avatarUrl") || "").trim() || null;
     const philosophy = String(formData.get("philosophy") || "").trim() || null;
-    const focusAreasText = String(formData.get("focusAreas") || "").trim();
-    const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').filter(line => line.trim())) : null;
-    const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-    const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : null;
-    const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
-    const credentials = String(formData.get("credentials") || "").trim() || null;
-    const values = String(formData.get("values") || "").trim() || null;
+  const focusAreasText = String(formData.get("focusAreas") || "").trim();
+  const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').filter(line => line.trim())) : undefined;
+  const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
+  const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : undefined;
+  const teachingWriting = String(formData.get("teachingWriting") || "").trim() || undefined;
+  const credentials = String(formData.get("credentials") || "").trim() || undefined;
+  const values = String(formData.get("values") || "").trim() || undefined;
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -78,12 +78,12 @@ async function updateSpecialist(formData: FormData) {
       });
     } else if (section === "enhanced") {
       Object.assign(updateData, {
-        philosophy: philosophy || undefined,
-        focusAreas: focusAreas || undefined,
-        representativeMatters: representativeMatters || undefined,
-        teachingWriting: teachingWriting || undefined,
-        credentials: credentials || undefined,
-        values: values || undefined
+        ...(philosophy ? { philosophy } : {}),
+        ...(focusAreas ? { focusAreas } : {}),
+        ...(representativeMatters ? { representativeMatters } : {}),
+        ...(teachingWriting ? { teachingWriting } : {}),
+        ...(credentials ? { credentials } : {}),
+        ...(values ? { values } : {}),
       });
     } else {
       return { error: "Unsupported section" };
@@ -135,39 +135,47 @@ async function updateTranslation(formData: FormData) {
     
     // Check if slug already exists in this locale (excluding current translation)
     const existingTranslation = await prisma.specialistProfileTranslation.findFirst({
-      where: { 
+      where: {
         locale,
         slug,
-        NOT: { id: id }
-      }
+        NOT: { id: translationId || undefined },
+      },
     });
-    
+
     if (existingTranslation) {
-      return;
+      return { error: "Slug already in use for this locale" };
     }
-    
-    // Update the translation
-    await prisma.specialistProfileTranslation.update({
-      where: { id: translationId || id },
-      data: {
-        name,
-        slug,
-        role: role || undefined,
-        bio: bio || undefined,
-        metaTitle: metaTitle || undefined,
-        metaDescription: metaDescription || undefined,
-        philosophy: philosophy || undefined,
-        focusAreas: focusAreas || undefined,
-        representativeMatters: representativeMatters || undefined,
-        teachingWriting: teachingWriting || undefined,
-        credentials: credentials || undefined,
-        values: values || undefined,
-      }
+
+    const data: Parameters<typeof prisma.specialistProfileTranslation.upsert>[0]["create"] = {
+      specialistProfileId: id,
+      locale,
+      name,
+      slug,
+      role: role || undefined,
+      bio: bio || undefined,
+      metaTitle: metaTitle || undefined,
+      metaDescription: metaDescription || undefined,
+      philosophy: philosophy || undefined,
+      focusAreas: focusAreas || undefined,
+      representativeMatters: representativeMatters || undefined,
+      teachingWriting: teachingWriting || undefined,
+      credentials: credentials || undefined,
+      values: values || undefined,
+    };
+
+    await prisma.specialistProfileTranslation.upsert({
+      where: translationId
+        ? { id: translationId }
+        : { specialistProfileId_locale: { specialistProfileId: id, locale } },
+      create: data,
+      update: data,
     });
     
     revalidatePath("/");
+    return { success: true };
   } catch (error) {
     console.error("Error updating translation:", error);
+    return { error: "Failed to update translation" };
   }
 }
 
