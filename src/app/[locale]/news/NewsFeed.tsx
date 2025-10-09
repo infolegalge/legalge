@@ -173,7 +173,7 @@ export default function NewsFeed({
         return (
           <article key={post.id} className="bg-card rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
             {post.coverImage && (
-              <div className="relative aspect-video w-full">
+              <div className="relative aspect-video w-full overflow-hidden">
                 <Image
                   src={post.coverImage}
                   alt={(post as any).coverImageAlt || post.title}
@@ -181,6 +181,8 @@ export default function NewsFeed({
                   className="object-cover"
                   priority={false}
                 />
+                <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 group-hover:opacity-0 dark:bg-black/25" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/20 to-transparent" />
               </div>
             )}
             <div className="p-6">

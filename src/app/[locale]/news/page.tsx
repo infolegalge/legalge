@@ -197,7 +197,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {/* Main Content */}
           <div className="lg:col-span-3">
             <Suspense fallback={<div>Loading news...</div>}>
