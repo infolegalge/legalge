@@ -153,7 +153,7 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
         });
 
     const toEmptyString = (
-      incoming: string | null,
+      incoming: string | null | undefined,
       current: string | null | undefined,
     ): string | undefined => {
       if (incoming && incoming.trim()) return incoming;
@@ -164,7 +164,7 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     };
 
     const toJsonString = (
-      incoming: string | null,
+      incoming: string | null | undefined,
       current: string | null | undefined,
     ): string | undefined => {
       if (incoming && incoming.trim()) return incoming;
