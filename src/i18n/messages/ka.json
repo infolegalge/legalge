@@ -93,8 +93,8 @@
   },
   "contact": {
     "title": "კონტაქტი",
-    "heading": "დაგვიკავშირდით",
-    "description": "მოგვწერეთ",
+    "heading": "",
+    "description": "",
     "form_heading": "მოგვწერეთ",
     "name": "სახელი",
     "email": "ელ-ფოსტა",
