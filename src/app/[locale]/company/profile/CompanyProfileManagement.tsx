@@ -1,196 +1,160 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Building2, Globe, Mail, MapPin, Phone } from 'lucide-react';
-import Image from 'next/image'
+import { Building2, ExternalLink, Globe, Mail, MapPin, Phone } from 'lucide-react';
+import Image from 'next/image';
+import type { ProfileCompany } from './page';
 
 interface CompanyProfileManagementProps {
   locale: string;
+  company: ProfileCompany;
 }
 
-interface CompanyProfile {
-  name: string;
-  description: string | null;
-  shortDesc: string | null;
-  city: string | null;
-  email: string | null;
-  phone: string | null;
-  website: string | null;
-  address: string | null;
-  mapLink: string | null;
-  logoUrl: string | null;
-  logoAlt: string | null;
-  mission: string | null;
-  vision: string | null;
-  history: string | null;
-  contactPrompt: string | null;
-}
+const SOCIAL_HINTS: Array<[label: string, key: keyof ProfileCompany]> = [
+  ['Facebook', 'socialLinks'],
+];
 
-export default function CompanyProfileManagement({ locale }: CompanyProfileManagementProps) {
-  const [company, setCompany] = useState<CompanyProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let active = true;
-
-    async function loadCompany() {
-      setLoading(true);
-      try {
-        const res = await fetch('/api/company/profile', { credentials: 'include' });
-        if (!res.ok) {
-          const payload = await res.json().catch(() => ({}));
-          throw new Error(payload.error || res.statusText);
-        }
-        const payload = await res.json();
-        if (active) {
-          setCompany(payload);
-        }
-      } catch (err) {
-        if (active) {
-          setError(err instanceof Error ? err.message : 'Failed to load company profile');
-        }
-      } finally {
-        if (active) setLoading(false);
+export default function CompanyProfileManagement({ locale, company }: CompanyProfileManagementProps) {
+  const socialLinks = (() => {
+    if (!company.socialLinks) return [] as Array<{ label: string; url: string }>;
+    try {
+      const parsed = JSON.parse(company.socialLinks);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((entry) => entry?.url).map((entry) => ({
+          label: entry.label || entry.url,
+          url: entry.url,
+        }));
       }
+    } catch (error) {
+      console.warn('Invalid social links JSON', error);
     }
+    return [] as Array<{ label: string; url: string }>;
+  })();
 
-    loadCompany();
-    return () => {
-      active = false;
-    };
-  }, []);
+  const summaryLabel = locale === 'ka' ? 'საჯარო ინფორმაცია' : locale === 'ru' ? 'Публичная информация' : 'Public Profile';
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Building2 className="h-5 w-5" />
-          {locale === 'ka' ? 'პროფილის შეჯამება' : locale === 'ru' ? 'Сводка профиля' : 'Profile Summary'}
-        </CardTitle>
-        <CardDescription>
-          {locale === 'ka'
-            ? 'თქვენი კომპანიის საჯარო პრეზენტაციის სწრაფი შეხსენება'
-            : locale === 'ru'
-            ? 'Краткое представление публичного профиля компании'
-            : 'At-a-glance information from your public company profile'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {loading ? (
-          <p className="text-sm text-muted-foreground">
-            {locale === 'ka' ? 'იტვირთება...' : locale === 'ru' ? 'Загрузка...' : 'Loading...'}
-          </p>
-        ) : error ? (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        ) : company ? (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded bg-muted flex items-center justify-center overflow-hidden">
-                {company.logoUrl ? (
-                  <Image
-                    src={company.logoUrl}
-                    alt={company.logoAlt || 'Company logo'}
-                    width={48}
-                    height={48}
-                    className="h-full w-full object-cover"
-                    priority={false}
-                  />
-                ) : (
-                  <Building2 className="h-6 w-6 text-muted-foreground" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-semibold leading-tight">{company.name}</h3>
-                {company.shortDesc && (
-                  <p className="text-xs text-muted-foreground">{company.shortDesc}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span>{company.city || company.address || (locale === 'ka' ? 'მისამართი მიუთითეთ' : locale === 'ru' ? 'Укажите адрес' : 'Add address')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span>{company.email || (locale === 'ka' ? 'ელფოსტა მიუთითეთ' : locale === 'ru' ? 'Укажите email' : 'Provide email')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span>{company.phone || (locale === 'ka' ? 'ტელეფონი მიუთითეთ' : locale === 'ru' ? 'Укажите телефон' : 'Add phone')}</span>
-              </div>
-              {company.website && (
-                <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <a
-                    href={company.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    {company.website.replace(/^https?:\/\//, '')}
-                  </a>
-                </div>
-              )}
-            </div>
-
-            {company.description && (
-              <div className="rounded border bg-muted/30 px-3 py-3 text-sm">
-                {company.description}
-              </div>
-            )}
-
-            <dl className="space-y-3 text-sm">
-              {company.mission && (
-                <div>
-                  <dt className="font-semibold">Mission</dt>
-                  <dd className="text-muted-foreground whitespace-pre-line">{company.mission}</dd>
-                </div>
-              )}
-              {company.vision && (
-                <div>
-                  <dt className="font-semibold">Vision</dt>
-                  <dd className="text-muted-foreground whitespace-pre-line">{company.vision}</dd>
-                </div>
-              )}
-              {company.history && (
-                <div>
-                  <dt className="font-semibold">History</dt>
-                  <dd className="text-muted-foreground whitespace-pre-line">{company.history}</dd>
-                </div>
-              )}
-              {company.contactPrompt && (
-                <div>
-                  <dt className="font-semibold">Client Prompt</dt>
-                  <dd className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</dd>
-                </div>
-              )}
-            </dl>
-
-            {company.mapLink && (
-              <a
-                href={company.mapLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded border px-3 py-1 text-xs text-muted-foreground hover:text-foreground"
-              >
-                {locale === 'ka' ? 'გახსენი რუკა' : locale === 'ru' ? 'Открыть карту' : 'Open map'}
-              </a>
+    <div className="space-y-6">
+      <div className="rounded-lg border bg-card p-6 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="h-16 w-16 rounded bg-muted flex items-center justify-center overflow-hidden">
+            {company.logoUrl ? (
+              <Image
+                src={company.logoUrl}
+                alt={company.logoAlt || company.name}
+                width={64}
+                height={64}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Building2 className="h-8 w-8 text-muted-foreground" />
             )}
           </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            {locale === 'ka' ? 'კომპანიის მონაცემი ვერ მოიძებნა' : locale === 'ru' ? 'Данные компании не найдены' : 'Company profile not found'}
-          </p>
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold leading-tight">{company.name}</h2>
+            {company.shortDesc && <p className="text-sm text-muted-foreground">{company.shortDesc}</p>}
+          </div>
+        </div>
+
+        <div className="space-y-3 text-sm text-muted-foreground">
+          <h3 className="text-sm font-medium text-foreground">{summaryLabel}</h3>
+          <div className="flex items-center gap-2">
+            <Phone className="h-4 w-4" />
+            <span>{company.phone || (locale === 'ka' ? 'სერვისი მართავს მხარდაჭერა' : locale === 'ru' ? 'Контактом управляет поддержка' : 'Managed by support')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            <span>{company.email || (locale === 'ka' ? 'ელფოსტა მიუთითეთ' : locale === 'ru' ? 'Укажите email' : 'Email not set')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Globe className="h-4 w-4" />
+            {company.website ? (
+              <a href={company.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                {company.website.replace(/^https?:\/\//, '')}
+              </a>
+            ) : (
+              <span>{locale === 'ka' ? 'ვებგვერდი არაა მითითებული' : locale === 'ru' ? 'Сайт не указан' : 'Website not set'}</span>
+            )}
+          </div>
+          <div className="flex items-start gap-2">
+            <MapPin className="h-4 w-4 mt-0.5" />
+            <span>{company.address || (locale === 'ka' ? 'მისამართი მიუთითეთ' : locale === 'ru' ? 'Укажите адрес' : 'Address not set')}</span>
+          </div>
+        </div>
+
+        {socialLinks.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-foreground">Social</h3>
+            <div className="flex flex-wrap gap-2">
+              {socialLinks.map((link, index) => (
+                <a
+                  key={`${link.url}-${index}`}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs hover:bg-muted"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
         )}
-      </CardContent>
-    </Card>
+
+        {(company.description || company.mission || company.vision || company.history || company.contactPrompt) && (
+          <div className="space-y-3 text-sm">
+            {company.description && (
+              <p className="whitespace-pre-line text-foreground/80">{company.description}</p>
+            )}
+            {company.mission && (
+              <div>
+                <h4 className="text-xs uppercase tracking-wide text-muted-foreground">Mission</h4>
+                <p className="whitespace-pre-line text-foreground/80">{company.mission}</p>
+              </div>
+            )}
+            {company.vision && (
+              <div>
+                <h4 className="text-xs uppercase tracking-wide text-muted-foreground">Vision</h4>
+                <p className="whitespace-pre-line text-foreground/80">{company.vision}</p>
+              </div>
+            )}
+            {company.history && (
+              <div>
+                <h4 className="text-xs uppercase tracking-wide text-muted-foreground">History</h4>
+                <p className="whitespace-pre-line text-foreground/80">{company.history}</p>
+              </div>
+            )}
+            {company.contactPrompt && (
+              <div>
+                <h4 className="text-xs uppercase tracking-wide text-muted-foreground">Client Prompt</h4>
+                <p className="whitespace-pre-line text-foreground/80">{company.contactPrompt}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {company.mapLink && (
+          <a
+            href={company.mapLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded border px-3 py-1 text-xs text-muted-foreground hover:text-foreground"
+          >
+            {locale === 'ka' ? 'გახსენი რუკა' : locale === 'ru' ? 'Открыть карту' : 'Open map'}
+          </a>
+        )}
+
+        <div className="space-y-1 text-xs text-muted-foreground">
+          <p>
+            {locale === 'ka'
+              ? 'სოციალური ბმულები: ჩასვით სრული URL Facebook, Instagram, LinkedIn ან X-ზე.'
+              : locale === 'ru'
+              ? 'Социальные ссылки: вставляйте полный URL для Facebook, Instagram, LinkedIn или X.'
+              : 'Social links: paste full URLs for Facebook, Instagram, LinkedIn, or X.'}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -33,7 +33,7 @@ const companySelect = {
   ogDescription: true,
 } as const
 
-interface ProfileCompany {
+export interface ProfileCompany {
   id: string
   slug: string
   name: string
@@ -189,18 +189,17 @@ export default async function CompanyProfilePage({
     const email = String(formData.get('email') || '').trim() || null
     const address = String(formData.get('address') || '').trim() || null
     const mapLink = String(formData.get('mapLink') || '').trim() || null
-    const socialLinksRaw = String(formData.get('socialLinks') || '').trim()
+  const socialLinksRaw = String(formData.get('socialLinks') || '').trim()
+    const socialLinksEntries = socialLinksRaw
+      ? socialLinksRaw
+          .split('\n')
+          .map((entry) => entry.trim())
+          .filter(Boolean)
+      : []
     let socialLinks: string | null = null
-    if (socialLinksRaw) {
-      try {
-        const parsed = JSON.parse(socialLinksRaw)
-        if (!Array.isArray(parsed)) {
-          return { error: 'Social links must be a JSON array.' }
-        }
-        socialLinks = JSON.stringify(parsed)
-      } catch {
-        return { error: 'Social links must be valid JSON.' }
-      }
+    if (socialLinksEntries.length > 0) {
+      const jsonEntries = socialLinksEntries.map((url) => ({ label: url, url }))
+      socialLinks = JSON.stringify(jsonEntries)
     }
     const slug = String(formData.get('slug') || '').trim()
     const slug_en = String(formData.get('slug_en') || '').trim()
@@ -242,7 +241,7 @@ export default async function CompanyProfilePage({
         const enMetaDescription = metaDescription_en || metaDescription
         const enOgTitle = ogTitle_en || ogTitle
         const enOgDescription = ogDescription_en || ogDescription
-        const enLogoAlt = String(formData.get('logoAlt_en') || '').trim() || logoAlt
+        const enLogoAlt = logoAlt
 
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'en' } },
@@ -286,7 +285,7 @@ export default async function CompanyProfilePage({
         const ruMetaDescription = metaDescription_ru || metaDescription
         const ruOgTitle = ogTitle_ru || ogTitle
         const ruOgDescription = ogDescription_ru || ogDescription
-        const ruLogoAlt = String(formData.get('logoAlt_ru') || '').trim() || logoAlt
+        const ruLogoAlt = logoAlt
 
         tx.push(client.companyTranslation.upsert({
           where: { companyId_locale: { companyId: resolvedCompany.id, locale: 'ru' } },

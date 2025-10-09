@@ -7,6 +7,66 @@ import ImageUpload from "@/components/ImageUpload";
 import { Input } from "@/components/ui/input";
 import { OFFICIAL_PHONE } from "@/config/contact";
 
+const SOCIAL_NETWORKS = ["facebook", "instagram", "linkedin", "x"] as const;
+type SocialNetwork = typeof SOCIAL_NETWORKS[number];
+
+const SOCIAL_LABELS: Record<SocialNetwork, string> = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  x: "X",
+};
+
+function parseSocialLinksValue(raw?: string | null): Record<SocialNetwork, string> {
+  const base = {
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    x: "",
+  } satisfies Record<SocialNetwork, string>;
+
+  if (!raw) {
+    return base;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      for (const entry of parsed) {
+        if (!entry || typeof entry !== "object") continue;
+        const url = typeof entry.url === "string" ? entry.url.trim() : "";
+        if (!url) continue;
+        const label = typeof entry.label === "string" ? entry.label.toLowerCase() : "";
+        const key = SOCIAL_NETWORKS.find((network) =>
+          label.includes(network) || url.toLowerCase().includes(network)
+        );
+        if (key) {
+          base[key] = url;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to parse social links", err);
+  }
+
+  return base;
+}
+
+function buildSocialLinksValue(socials: Record<SocialNetwork, string>): string {
+  const entries = SOCIAL_NETWORKS
+    .map((network) => {
+      const value = socials[network].trim();
+      if (!value) return null;
+      return {
+        label: SOCIAL_LABELS[network],
+        url: value,
+      };
+    })
+    .filter(Boolean) as Array<{ label: string; url: string }>;
+
+  return entries.length > 0 ? JSON.stringify(entries) : "";
+}
+
 interface Company {
   id: string;
   name: string;
@@ -482,11 +542,11 @@ export default function CompanyEditForm({
             name="socialLinks"
             defaultValue={company.socialLinks || ""}
             className="w-full rounded border px-3 py-2 text-sm font-mono"
-            rows={3}
-            placeholder='[{"label":"LinkedIn","url":"https://linkedin.com/company"}]'
+            rows={4}
+            placeholder="https://facebook.com/your-company\nhttps://instagram.com/your-company"
           ></textarea>
           <p className="mt-1 text-xs text-muted-foreground">
-            Provide JSON array of social profiles. Example: [{'{'}"label":"LinkedIn","url":"https://linkedin.com/company"{'}'}]
+            Paste one full URL per line (supports Facebook, Instagram, LinkedIn, X).
           </p>
         </div>
         
