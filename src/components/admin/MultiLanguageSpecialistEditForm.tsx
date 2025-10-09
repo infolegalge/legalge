@@ -243,7 +243,7 @@ export default function MultiLanguageSpecialistEditForm({
         }
 
         const result = await updateTranslationAction(formData);
-        if (result && result.error) {
+        if (result?.error) {
           setError(result.error);
         } else {
           setSuccess(`${locale.toUpperCase()} translation updated successfully!`);

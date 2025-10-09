@@ -106,7 +106,7 @@ async function updateSpecialist(formData: FormData) {
   }
 }
 
-async function updateTranslation(formData: FormData) {
+async function updateTranslation(formData: FormData): Promise<{ success?: boolean; error?: string }> {
   "use server";
   try {
     await requireSuperAdmin();
@@ -130,7 +130,7 @@ async function updateTranslation(formData: FormData) {
     const values = String(formData.get("values") || "").trim() || null;
     
     if (!id || !locale || !name || !slug) {
-      return;
+      return { error: "Missing required translation fields" };
     }
     
     // Check if slug already exists in this locale (excluding current translation)
