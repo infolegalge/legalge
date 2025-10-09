@@ -136,6 +136,11 @@ model Company {
   address         String?
   city            String?
   mapLink         String?
+  mission         String?
+  vision          String?
+  history         String?
+  contactPrompt   String?
+  socialLinks     String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
@@ -161,6 +166,10 @@ model CompanyTranslation {
   shortDesc       String?
   longDesc        String?
   logoAlt         String?
+  mission         String?
+  vision          String?
+  history         String?
+  contactPrompt   String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
