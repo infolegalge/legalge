@@ -130,6 +130,8 @@ export default function CompanyEditForm({
   const [isPending, startTransition] = useTransition();
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
   const [logoUrl, setLogoUrl] = useState<string>(company.logoUrl || "");
+  const [logoAlt, setLogoAlt] = useState<string>(company.logoAlt || "");
+  const [socials, setSocials] = useState<Record<SocialNetwork, string>>(() => parseSocialLinksValue(company.socialLinks));
 
   const tMap = new Map(translations.map(t => [t.locale, t] as const));
   const kaTranslation = tMap.get('ka');
@@ -154,7 +156,6 @@ export default function CompanyEditForm({
     metaDescription: string;
     ogTitle: string;
     ogDescription: string;
-    logoAlt: string;
   }>>({
     ka: {
       description: kaTranslation?.description ?? company.description ?? '',
@@ -168,7 +169,6 @@ export default function CompanyEditForm({
       metaDescription: kaTranslation?.metaDescription ?? company.metaDescription ?? '',
       ogTitle: kaTranslation?.ogTitle ?? company.ogTitle ?? '',
       ogDescription: kaTranslation?.ogDescription ?? company.ogDescription ?? '',
-      logoAlt: kaTranslation?.logoAlt ?? company.logoAlt ?? '',
     },
     en: {
       description: tMap.get('en')?.description || '',
@@ -182,7 +182,6 @@ export default function CompanyEditForm({
       metaDescription: tMap.get('en')?.metaDescription || '',
       ogTitle: tMap.get('en')?.ogTitle || '',
       ogDescription: tMap.get('en')?.ogDescription || '',
-      logoAlt: tMap.get('en')?.logoAlt || '',
     },
     ru: {
       description: tMap.get('ru')?.description || '',
@@ -196,7 +195,6 @@ export default function CompanyEditForm({
       metaDescription: tMap.get('ru')?.metaDescription || '',
       ogTitle: tMap.get('ru')?.ogTitle || '',
       ogDescription: tMap.get('ru')?.ogDescription || '',
-      logoAlt: tMap.get('ru')?.logoAlt || '',
     },
   });
 
@@ -222,7 +220,6 @@ export default function CompanyEditForm({
           const metaDescKey = isBase ? 'metaDescription' : `metaDescription_${key}`;
           const ogTitleKey = isBase ? 'ogTitle' : `ogTitle_${key}`;
           const ogDescKey = isBase ? 'ogDescription' : `ogDescription_${key}`;
-          const logoAltKey = isBase ? 'logoAlt' : `logoAlt_${key}`;
 
           formData.set(nameKey, loc[key].name);
           formData.set(slugKey, loc[key].slug);
@@ -237,10 +234,11 @@ export default function CompanyEditForm({
           formData.set(metaDescKey, copy[key].metaDescription);
           formData.set(ogTitleKey, copy[key].ogTitle);
           formData.set(ogDescKey, copy[key].ogDescription);
-          formData.set(logoAltKey, copy[key].logoAlt.trim());
         });
         // Controlled logo value
         formData.set('logoUrl', logoUrl || '');
+        formData.set('logoAlt', logoAlt.trim());
+        formData.set('socialLinks', buildSocialLinksValue(socials));
         
         const result = await updateAction(formData);
 
@@ -282,7 +280,7 @@ export default function CompanyEditForm({
         </div>
       )}
       
-      <form action={handleUpdate} className="grid gap-4 md:grid-cols-2">
+      <form action={handleUpdate} className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
         <input type="hidden" name="id" value={company.id} />
         {/* locale tabs */}
         <div className="md:col-span-2 -mb-2 flex gap-2">
@@ -359,195 +357,203 @@ export default function CompanyEditForm({
             </div>
           ))}
         
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Description</label>
-          <textarea 
-            name={activeLocale==='ka' ? 'description' : `description_${activeLocale}`}
-            rows={3}
-            value={copy[activeLocale].description}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], description: value } }));
-            }}
-            className="w-full rounded border px-3 py-2" 
-            placeholder="Brief company description..."
-          ></textarea>
-        </div>
-        
-        <div>
-          <label className="mb-1 block text-sm font-medium">Short Description</label>
-          <input 
-            name={activeLocale==='ka' ? 'shortDesc' : `shortDesc_${activeLocale}`}
-            value={copy[activeLocale].shortDesc}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLInputElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], shortDesc: value } }));
-            }}
-            className="w-full rounded border px-3 py-2" 
-            placeholder="One-line description for cards"
-          />
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Mission Statement</label>
-          <textarea
-            name={activeLocale==='ka' ? 'mission' : `mission_${activeLocale}`}
-            rows={3}
-            value={copy[activeLocale].mission}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], mission: value } }));
-            }}
-            className="w-full rounded border px-3 py-2"
-            placeholder="Why your company exists and the impact you aim to make"
-          ></textarea>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Vision / Values</label>
-          <textarea
-            name={activeLocale==='ka' ? 'vision' : `vision_${activeLocale}`}
-            rows={3}
-            value={copy[activeLocale].vision}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], vision: value } }));
-            }}
-            className="w-full rounded border px-3 py-2"
-            placeholder="What future you work toward and the values that guide you"
-          ></textarea>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">History / Founding Story</label>
-          <textarea
-            name={activeLocale==='ka' ? 'history' : `history_${activeLocale}`}
-            rows={4}
-            value={copy[activeLocale].history}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], history: value } }));
-            }}
-            className="w-full rounded border px-3 py-2"
-            placeholder="Share origin details, milestones, or founding story"
-          ></textarea>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="mb-2 block text-sm font-medium">Company Logo</label>
-          <div className="space-y-3">
-            <ImageUpload
-              onImageUploaded={(img) => {
-                const nextValue = img.webpUrl || img.url;
-                setLogoUrl(nextValue);
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1 block text-sm font-medium">Description</label>
+            <textarea 
+              name={activeLocale==='ka' ? 'description' : `description_${activeLocale}`}
+              rows={3}
+              value={copy[activeLocale].description}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], description: value } }));
               }}
-              defaultAlt={copy[activeLocale].logoAlt}
-              altValue={copy[activeLocale].logoAlt}
-              onAltChange={(value) => {
-                setCopy((prev) => ({
-                  ...prev,
-                  [activeLocale]: { ...prev[activeLocale], logoAlt: value },
-                }));
+              className="w-full rounded border px-3 py-2" 
+              placeholder="Brief company description..."
+            ></textarea>
+          </div>
+          
+          <div>
+            <label className="mb-1 block text-sm font-medium">Short Description</label>
+            <input 
+              name={activeLocale==='ka' ? 'shortDesc' : `shortDesc_${activeLocale}`}
+              value={copy[activeLocale].shortDesc}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLInputElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], shortDesc: value } }));
               }}
-              altLabel={`Logo alt (${activeLocale.toUpperCase()})`}
-              onError={() => {}}
-              maxSize={10 * 1024 * 1024}
+              className="w-full rounded border px-3 py-2" 
+              placeholder="One-line description for cards"
             />
-            <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
-            {company.logoUrl && (
-              <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Provide a localized logo description for {activeLocale.toUpperCase()} users.
-            </p>
+          </div>
+          
+          <div>
+            <label className="mb-1 block text-sm font-medium">Mission Statement</label>
+            <textarea
+              name={activeLocale==='ka' ? 'mission' : `mission_${activeLocale}`}
+              rows={3}
+              value={copy[activeLocale].mission}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], mission: value } }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="Why your company exists and the impact you aim to make"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Vision / Values</label>
+            <textarea
+              name={activeLocale==='ka' ? 'vision' : `vision_${activeLocale}`}
+              rows={3}
+              value={copy[activeLocale].vision}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], vision: value } }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="What future you work toward and the values that guide you"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">History / Founding Story</label>
+            <textarea
+              name={activeLocale==='ka' ? 'history' : `history_${activeLocale}`}
+              rows={4}
+              value={copy[activeLocale].history}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], history: value } }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="Share origin details, milestones, or founding story"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Map Link</label>
+            <input 
+              name="mapLink" 
+              type="url"
+              defaultValue={company.mapLink || ""}
+              className="w-full rounded border px-3 py-2" 
+              placeholder="https://maps.google.com/..."
+            />
           </div>
         </div>
-        
-        <div>
-          <label className="mb-1 block text-sm font-medium">Website</label>
-          <input 
-            name="website" 
-            type="url"
-            defaultValue={company.website || ""}
-            className="w-full rounded border px-3 py-2 bg-muted/50" 
-            placeholder="https://example.com"
-            readOnly
-            tabIndex={-1}
-          />
-          <p className="mt-1 text-xs text-muted-foreground">Website URL is managed by Legal Sandbox support.</p>
-        </div>
-        
-        <div>
-          <label className="mb-1 block text-sm font-medium">Phone</label>
-          <input 
-            name="phone" 
-            type="tel"
-            defaultValue={company.phone || ""}
-            className="w-full rounded border px-3 py-2 bg-muted/50" 
-            placeholder={OFFICIAL_PHONE}
-            readOnly
-            tabIndex={-1}
-          />
-          <p className="mt-1 text-xs text-muted-foreground">Phone number is managed by Legal Sandbox support.</p>
-        </div>
-        
-        <div>
-          <label className="mb-1 block text-sm font-medium">Email</label>
-          <input 
-            name="email" 
-            type="email"
-            defaultValue={company.email || ""}
-            className="w-full rounded border px-3 py-2 bg-muted/50" 
-            placeholder="contact@company.com"
-            readOnly
-            tabIndex={-1}
-          />
-          <p className="mt-1 text-xs text-muted-foreground">Email is managed by Legal Sandbox support.</p>
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Address</label>
-          <input 
-            name="address" 
-            defaultValue={company.address || ""}
-            className="w-full rounded border px-3 py-2" 
-            placeholder="Georgia, Tbilisi, Agmashnebeli alley N240, 0159"
-          />
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Map Link</label>
-          <input 
-            name="mapLink" 
-            type="url"
-            defaultValue={company.mapLink || ""}
-            className="w-full rounded border px-3 py-2" 
-            placeholder="https://maps.google.com/..."
-          />
-        </div>
 
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Social Links</label>
-          <textarea
-            name="socialLinks"
-            defaultValue={company.socialLinks || ""}
-            className="w-full rounded border px-3 py-2 text-sm font-mono"
-            rows={4}
-            placeholder="https://facebook.com/your-company\nhttps://instagram.com/your-company"
-          ></textarea>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Paste one full URL per line (supports Facebook, Instagram, LinkedIn, X).
-          </p>
+        <div className="space-y-4">
+          <div>
+            <label className="mb-2 block text-sm font-medium">Company Logo</label>
+            <div className="space-y-3">
+              <ImageUpload
+                onImageUploaded={(img) => {
+                  const nextValue = img.webpUrl || img.url;
+                  setLogoUrl(nextValue);
+                }}
+                defaultAlt={logoAlt}
+                altValue={logoAlt}
+                onAltChange={(value) => {
+                  setLogoAlt(value);
+                }}
+                altLabel="Logo alt text"
+                onError={() => {}}
+                maxSize={10 * 1024 * 1024}
+              />
+              <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
+              {company.logoUrl && (
+                <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Provide a localized logo description for {activeLocale.toUpperCase()} users.
+              </p>
+            </div>
+          </div>
+          
+          <div className="space-y-3 rounded border p-4">
+            <h3 className="text-sm font-medium">Contact Information</h3>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Website</label>
+              <input 
+                name="website" 
+                type="url"
+                defaultValue={company.website || ""}
+                className="w-full rounded border px-3 py-2 bg-muted/50" 
+                placeholder="https://example.com"
+                readOnly
+                tabIndex={-1}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Phone</label>
+              <input 
+                name="phone" 
+                type="tel"
+                defaultValue={company.phone || ""}
+                className="w-full rounded border px-3 py-2 bg-muted/50" 
+                placeholder={OFFICIAL_PHONE}
+                readOnly
+                tabIndex={-1}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Email</label>
+              <input 
+                name="email" 
+                type="email"
+                defaultValue={company.email || ""}
+                className="w-full rounded border px-3 py-2 bg-muted/50" 
+                placeholder="contact@company.com"
+                readOnly
+                tabIndex={-1}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Address</label>
+              <input 
+                name="address" 
+                defaultValue={company.address || ""}
+                className="w-full rounded border px-3 py-2" 
+                placeholder="Georgia, Tbilisi, Agmashnebeli alley N240, 0159"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-3 rounded border p-4">
+            <h3 className="text-sm font-medium">Social Links</h3>
+            {SOCIAL_NETWORKS.map((network) => (
+              <div key={network}>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">{SOCIAL_LABELS[network]}</label>
+                <input
+                  name={`social_${network}`}
+                  value={socials[network]}
+                  onChange={(event) => {
+                    const target = event.target;
+                    if (!(target instanceof HTMLInputElement)) return;
+                    const value = target.value ?? '';
+                    setSocials((prev) => ({ ...prev, [network]: value }));
+                  }}
+                  className="w-full rounded border px-3 py-2 text-sm"
+                  placeholder={`https://${network}.com/your-company`}
+                />
+              </div>
+            ))}
+            <p className="text-xs text-muted-foreground">
+              Paste full URLs. Leave blank to hide any network.
+            </p>
+          </div>
         </div>
         
         <div className="md:col-span-2">

@@ -189,18 +189,17 @@ export default async function CompanyProfilePage({
     const email = String(formData.get('email') || '').trim() || null
     const address = String(formData.get('address') || '').trim() || null
     const mapLink = String(formData.get('mapLink') || '').trim() || null
-  const socialLinksRaw = String(formData.get('socialLinks') || '').trim()
-    const socialLinksEntries = socialLinksRaw
-      ? socialLinksRaw
-          .split('\n')
-          .map((entry) => entry.trim())
-          .filter(Boolean)
-      : []
-    let socialLinks: string | null = null
-    if (socialLinksEntries.length > 0) {
-      const jsonEntries = socialLinksEntries.map((url) => ({ label: url, url }))
-      socialLinks = JSON.stringify(jsonEntries)
-    }
+    const socialFacebook = String(formData.get('social_facebook') || '').trim()
+    const socialInstagram = String(formData.get('social_instagram') || '').trim()
+    const socialLinkedin = String(formData.get('social_linkedin') || '').trim()
+    const socialX = String(formData.get('social_x') || '').trim()
+    const socialEntries = [
+      socialFacebook ? { label: 'Facebook', url: socialFacebook } : null,
+      socialInstagram ? { label: 'Instagram', url: socialInstagram } : null,
+      socialLinkedin ? { label: 'LinkedIn', url: socialLinkedin } : null,
+      socialX ? { label: 'X', url: socialX } : null,
+    ].filter(Boolean) as Array<{ label: string; url: string }>
+    const socialLinks = socialEntries.length > 0 ? JSON.stringify(socialEntries) : null
     const slug = String(formData.get('slug') || '').trim()
     const slug_en = String(formData.get('slug_en') || '').trim()
     const slug_ru = String(formData.get('slug_ru') || '').trim()
@@ -344,7 +343,13 @@ export default async function CompanyProfilePage({
             <CompanyEditForm company={resolvedCompany} translations={translations as any} updateAction={updateCompany} />
           </div>
         </div>
-        <CompanyProfileManagement locale={locale} company={resolvedCompany} />
+        <CompanyProfileManagement
+          name={resolvedCompany.name}
+          slug={resolvedCompany.slug}
+          shortDesc={resolvedCompany.shortDesc}
+          logoUrl={resolvedCompany.logoUrl}
+          logoAlt={resolvedCompany.logoAlt}
+        />
       </div>
     </div>
   )
