@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { fetchCompanies } from "@/lib/specialists";
 import Image from "next/image";
@@ -20,8 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function CompaniesIndex({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations();
+  const t = await getTranslations({ locale, namespace: "companies" });
   
   let companies: Awaited<ReturnType<typeof fetchCompanies>> = [];
   try {
@@ -34,9 +33,9 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">{t("companies.title")}</h1>
+        <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          {t("companies.description")}
+          {t("description")}
         </p>
       </div>
 
@@ -45,14 +44,14 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
         <div className="rounded-lg border bg-card p-4">
           <div className="flex items-center gap-2">
             <Building2 className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium">{t("companies.total_companies")}</span>
+            <span className="text-sm font-medium">{t("total_companies")}</span>
           </div>
           <p className="text-2xl font-bold text-foreground">{companies.length}</p>
         </div>
         <div className="rounded-lg border bg-card p-4">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium">{t("companies.total_specialists")}</span>
+            <span className="text-sm font-medium">{t("total_specialists")}</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
             {companies.reduce((total, company) => total + company.specialists.length, 0)}
@@ -92,7 +91,7 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
                     {company.website && (
                       <div className="flex items-center gap-1">
                         <ExternalLink className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">Website</span>
+                        <span className="text-xs text-muted-foreground">{t("website")}</span>
                       </div>
                     )}
                   </div>
@@ -108,9 +107,7 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
                 {/* Specialists Count */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Users className="h-4 w-4" />
-                  <span>
-                    {company.specialists.length} {company.specialists.length === 1 ? 'specialist' : 'specialists'}
-                  </span>
+                  <span>{t("specialist_count", { count: company.specialists.length })}</span>
                 </div>
 
                 {/* Specialists Preview */}
@@ -153,8 +150,8 @@ export default async function CompaniesIndex({ params }: { params: Promise<{ loc
       ) : (
         <div className="text-center py-12">
           <Building2 className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">{t("companies.no_companies")}</h3>
-          <p className="mt-2 text-muted-foreground">{t("companies.no_companies_description")}</p>
+          <h3 className="mt-4 text-lg font-semibold">{t("no_companies")}</h3>
+          <p className="mt-2 text-muted-foreground">{t("no_companies_description")}</p>
         </div>
       )}
     </div>

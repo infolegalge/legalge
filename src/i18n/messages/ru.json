@@ -65,6 +65,8 @@
     "description": "Юридические компании и фирмы в нашей сети",
     "total_companies": "Всего компаний",
     "total_specialists": "Всего специалистов",
+    "specialist_count": "{count, plural, one {# специалист} few {# специалиста} many {# специалистов} other {# специалистов}}",
+    "website": "Сайт",
     "no_companies": "Компании не найдены",
     "no_companies_description": "Мы работаем над добавлением профилей компаний. Заходите позже!",
     "specialists": "Специалисты",

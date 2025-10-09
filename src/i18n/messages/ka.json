@@ -65,6 +65,8 @@
     "description": "იურიდიული კომპანიები და ფირმები ჩვენს ქსელში",
     "total_companies": "სულ კომპანიები",
     "total_specialists": "სულ სპეციალისტები",
+    "specialist_count": "{count, plural, one {# სპეციალისტი} other {# სპეციალისტი}}",
+    "website": "ვებსაიტი",
     "no_companies": "კომპანიები ვერ მოიძებნა",
     "no_companies_description": "ჩვენ ვმუშაობთ კომპანიების პროფილების დამატებაზე. მალე შეამოწმეთ!",
     "specialists": "სპეციალისტები",
