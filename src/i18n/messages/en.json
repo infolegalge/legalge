@@ -27,6 +27,7 @@
     "search_practice_tag": "Practice",
     "search_service_tag": "Service",
     "search_services_count": "{count} services",
+    "services_count": "{count} services",
     "parent_practice": "Part of {practice}"
   },
   "lawyers": {

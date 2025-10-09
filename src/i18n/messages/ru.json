@@ -27,6 +27,7 @@
     "search_practice_tag": "Практика",
     "search_service_tag": "Услуга",
     "search_services_count": "{count} услуг",
+    "services_count": "{count} услуг",
     "parent_practice": "Относится к {practice}"
   },
   "lawyers": {

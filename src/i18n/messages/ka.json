@@ -27,6 +27,7 @@
     "search_practice_tag": "პრაქტიკა",
     "search_service_tag": "სერვისი",
     "search_services_count": "{count} სერვისი",
+    "services_count": "{count} სერვისი",
     "parent_practice": "შეერძენილია {practice}"
   },
   "lawyers": {
