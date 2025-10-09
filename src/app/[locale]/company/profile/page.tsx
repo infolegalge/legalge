@@ -339,13 +339,13 @@ export default async function CompanyProfilePage({
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Company Profile</h1>
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr] items-start">
+        <div className="space-y-6">
           <div className="rounded-lg border bg-card p-6">
             <CompanyEditForm company={resolvedCompany} translations={translations as any} updateAction={updateCompany} />
           </div>
         </div>
-        <CompanyProfileManagement locale={locale} />
+        <CompanyProfileManagement locale={locale} company={resolvedCompany} />
       </div>
     </div>
   )
