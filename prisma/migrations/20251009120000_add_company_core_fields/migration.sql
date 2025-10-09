@@ -1,6 +1,5 @@
 -- AlterTable
 ALTER TABLE "Company" ADD COLUMN "contactPrompt" TEXT;
-ALTER TABLE "Company" ADD COLUMN "faq" TEXT;
 ALTER TABLE "Company" ADD COLUMN "history" TEXT;
 ALTER TABLE "Company" ADD COLUMN "mission" TEXT;
 ALTER TABLE "Company" ADD COLUMN "socialLinks" TEXT;
@@ -8,7 +7,6 @@ ALTER TABLE "Company" ADD COLUMN "vision" TEXT;
 
 -- AlterTable
 ALTER TABLE "CompanyTranslation" ADD COLUMN "contactPrompt" TEXT;
-ALTER TABLE "CompanyTranslation" ADD COLUMN "faq" TEXT;
 ALTER TABLE "CompanyTranslation" ADD COLUMN "history" TEXT;
 ALTER TABLE "CompanyTranslation" ADD COLUMN "mission" TEXT;
 ALTER TABLE "CompanyTranslation" ADD COLUMN "vision" TEXT;

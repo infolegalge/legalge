@@ -1,56 +1,34 @@
-// Prisma schema for NextAuth and app roles
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum Locale {
-  ka
-  en
-  ru
-}
-
-enum Role {
-  SUPER_ADMIN
-  COMPANY
-  LAWYER
-  SPECIALIST
-  AUTHOR
-  SUBSCRIBER
-}
-
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(SUBSCRIBER)
-  // Optional linkage to domain entities
-  companySlug   String?
-  lawyerSlug    String?
-  // Password for email/password auth
-  password      String?
-  // Company relation for permissions
-  companyId     String?
-  company       Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  // Bio approval workflow
-  bioApproved   Boolean   @default(false)
-  bioApprovedBy String?
-  bioApprovedAt DateTime?
-
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  role           Role      @default("SUBSCRIBER")
+  companySlug    String?
+  lawyerSlug     String?
+  password       String?
+  companyId      String?
+  bioApproved    Boolean   @default(false)
+  bioApprovedBy  String?
+  bioApprovedAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   accounts       Account[]
-  sessions       Session[]
-  requests       Request[]
-  posts          Post[]
   uploadedImages Image[]   @relation("UserUploadedImages")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  posts          Post[]
+  requests       Request[]
+  sessions       Session[]
+  company        Company?  @relation(fields: [companyId], references: [id])
 }
 
 model Account {
@@ -66,8 +44,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -89,12 +66,11 @@ model VerificationToken {
 }
 
 model EmailVerification {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  code     String // 6-digit verification code
-  expires  DateTime
-  verified Boolean  @default(false)
-
+  id        String   @id @default(cuid())
+  email     String   @unique
+  code      String
+  expires   DateTime
+  verified  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -104,23 +80,18 @@ model Request {
   email           String
   phone           String
   message         String
-  requestType     String // "SPECIALIST" or "COMPANY"
-  companyId       String? // If requesting to join a company
-  company         Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  status          String   @default("PENDING") // "PENDING", "APPROVED", "DENIED", "HANGING"
-  userId          String? // Link to user if approved
-  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  requestType     String
+  companyId       String?
+  status          String   @default("PENDING")
+  userId          String?
   currentRole     String?
   requestedRole   String?
   targetCompanyId String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User?    @relation(fields: [userId], references: [id])
+  company         Company? @relation(fields: [companyId], references: [id])
 }
-
-// -----------------------------
-// CMS MODELS
-// -----------------------------
 
 model PracticeArea {
   id               String                    @id @default(cuid())
@@ -128,74 +99,61 @@ model PracticeArea {
   title            String
   description      String?
   heroImageUrl     String?
-  // New: separate hero for detail page
   pageHeroImageUrl String?
-  services         Service[]
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
   translations     PracticeAreaTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  services         Service[]
 }
 
 model Service {
-  id           String  @id @default(cuid())
-  slug         String  @unique
-  title        String
-  description  String?
-  heroImageUrl String?
-  heroImageAlt String?
-
+  id             String               @id @default(cuid())
+  slug           String               @unique
+  title          String
+  description    String?
+  heroImageUrl   String?
+  heroImageAlt   String?
   practiceAreaId String
-  practiceArea   PracticeArea @relation(fields: [practiceAreaId], references: [id], onDelete: Cascade)
-
-  specialists  SpecialistProfile[]
-  translations ServiceTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  practiceArea   PracticeArea         @relation(fields: [practiceAreaId], references: [id], onDelete: Cascade)
+  translations   ServiceTranslation[]
+  specialists    SpecialistProfile[]  @relation("ServiceToSpecialistProfile")
 }
 
 model Company {
-  id              String  @id @default(cuid())
-  slug            String  @unique
+  id              String               @id @default(cuid())
+  slug            String               @unique
   name            String
   description     String?
-  shortDesc       String? // Tagline / short description
-  longDesc        String? // Longer about section
+  shortDesc       String?
+  longDesc        String?
   logoUrl         String?
   logoAlt         String?
   website         String?
   phone           String?
   email           String?
   address         String?
-  city            String? // Dedicated city field for filtering
-  mapLink         String? // Google Maps or OSM link
-  mission         String?
-  vision          String?
-  history         String?
-  contactPrompt   String?
-  socialLinks     String? // JSON array of { label, url }
+  city            String?
+  mapLink         String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
-
-  specialists  SpecialistProfile[]
-  posts        Post[]
-  requests     Request[]
-  users        User[]
-  categories   Category[]
-  settings     CompanySettings?
-  translations CompanyTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  categories      Category[]
+  settings        CompanySettings?
+  translations    CompanyTranslation[]
+  posts           Post[]
+  requests        Request[]
+  specialists     SpecialistProfile[]
+  users           User[]
 }
 
 model CompanyTranslation {
   id              String  @id @default(cuid())
   companyId       String
-  company         Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   locale          Locale
   name            String
   slug            String
@@ -203,14 +161,11 @@ model CompanyTranslation {
   shortDesc       String?
   longDesc        String?
   logoAlt         String?
-  mission         String?
-  vision          String?
-  history         String?
-  contactPrompt   String?
   metaTitle       String?
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
+  company         Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([companyId, locale])
   @@unique([locale, slug])
@@ -219,7 +174,6 @@ model CompanyTranslation {
 model CompanySettings {
   id                     String   @id @default(cuid())
   companyId              String   @unique
-  company                Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   suspendSubmissions     Boolean  @default(false)
   autoApproveSpecialists Boolean  @default(false)
   notificationEmail      String?
@@ -228,44 +182,38 @@ model CompanySettings {
   notifyChannel          String   @default("EMAIL")
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+  company                Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model SpecialistProfile {
-  id              String  @id @default(cuid())
-  slug            String  @unique
-  name            String
-  role            String?
-  bio             String?
-  avatarUrl       String?
-  languages       String  @default("[]") // JSON array as string
-  specializations String  @default("[]") // JSON array as string
-  contactEmail    String?
-  contactPhone    String?
-  city            String? // Dedicated city field for filtering (for solo practitioners)
-  status          String  @default("ACTIVE")
-
-  // Enhanced profile fields
-  philosophy            String? // Professional philosophy
-  focusAreas            String? // JSON array of focus areas
-  representativeMatters String? // JSON array of case studies
-  teachingWriting       String? // JSON array of teaching/writing activities
-  credentials           String? // JSON array of credentials and memberships
-  values                String? // JSON array of values and work approach
-
-  // Company relationship (nullable for solo practitioners)
-  companyId String?
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-
-  // Bidirectional relationship with services
-  services     Service[] // ✅ SpecialistProfile has many services
-  translations SpecialistProfileTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String                         @id @default(cuid())
+  slug                  String                         @unique
+  name                  String
+  role                  String?
+  bio                   String?
+  avatarUrl             String?
+  languages             String                         @default("[]")
+  specializations       String                         @default("[]")
+  contactEmail          String?
+  contactPhone          String?
+  city                  String?
+  status                String                         @default("ACTIVE")
+  philosophy            String?
+  focusAreas            String?
+  representativeMatters String?
+  teachingWriting       String?
+  credentials           String?
+  values                String?
+  companyId             String?
+  createdAt             DateTime                       @default(now())
+  updatedAt             DateTime                       @updatedAt
+  company               Company?                       @relation(fields: [companyId], references: [id])
+  translations          SpecialistProfileTranslation[]
+  services              Service[]                      @relation("ServiceToSpecialistProfile")
 }
 
 model Post {
-  id              String    @id @default(cuid())
+  id              String            @id @default(cuid())
   title           String
   slug            String
   coverImage      String?
@@ -276,23 +224,21 @@ model Post {
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
-  status          String    @default("DRAFT")
+  status          String            @default("DRAFT")
   publishedAt     DateTime?
-  updatedAt       DateTime  @updatedAt
+  updatedAt       DateTime          @updatedAt
   authorType      String
   authorId        String
   companyId       String?
   readingTime     Int?
-  viewCount       Int       @default(0)
-  locale          Locale    @default(ka)
-  createdAt       DateTime  @default(now())
-
-  // Relations
-  author       User              @relation(fields: [authorId], references: [id])
-  company      Company?          @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  categories   PostCategory[]
-  tags         PostTag[]
-  translations PostTranslation[]
+  viewCount       Int               @default(0)
+  locale          Locale            @default("ka")
+  createdAt       DateTime          @default(now())
+  company         Company?          @relation(fields: [companyId], references: [id])
+  author          User              @relation(fields: [authorId], references: [id])
+  categories      PostCategory[]
+  tags            PostTag[]
+  translations    PostTranslation[]
 
   @@unique([slug, locale])
   @@index([status, publishedAt])
@@ -302,20 +248,18 @@ model Post {
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  slug      String
-  name      String
-  type      String   @default("GLOBAL")
-  companyId String?
-  isPublic  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id           String                @id @default(cuid())
+  slug         String                @unique
+  name         String
+  type         String                @default("GLOBAL")
+  companyId    String?
+  isPublic     Boolean               @default(true)
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
   company      Company?              @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  posts        PostCategory[]
   translations CategoryTranslation[]
+  posts        PostCategory[]
 
-  @@unique([slug])
   @@unique([slug, companyId])
 }
 
@@ -324,9 +268,8 @@ model PostCategory {
   postId     String
   categoryId String
   createdAt  DateTime @default(now())
-
-  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, categoryId])
 }
@@ -334,10 +277,10 @@ model PostCategory {
 model CategoryTranslation {
   id         String   @id @default(cuid())
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   locale     Locale
   name       String
   slug       String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, locale])
   @@unique([locale, slug])
@@ -348,8 +291,7 @@ model PostTag {
   postId    String
   tag       String
   createdAt DateTime @default(now())
-
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, tag])
 }
@@ -357,7 +299,6 @@ model PostTag {
 model PostTranslation {
   id              String  @id @default(cuid())
   postId          String
-  post            Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
   locale          Locale
   title           String
   slug            String
@@ -367,31 +308,30 @@ model PostTranslation {
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
+  post            Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, locale])
   @@unique([locale, slug])
 }
 
 model Media {
-  id     String @id @default(cuid())
-  url    String
-  alt    String @default("")
-  width  Int?
-  height Int?
-
+  id        String   @id @default(cuid())
+  url       String
+  alt       String   @default("")
+  width     Int?
+  height    Int?
   createdAt DateTime @default(now())
 }
 
 model SliderSlide {
-  id         String  @id @default(cuid())
-  orderIndex Int     @default(0)
+  id         String   @id @default(cuid())
+  orderIndex Int      @default(0)
   lightUrl   String
   lightAlt   String?
   darkUrl    String
   darkAlt    String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model LegalPage {
@@ -400,16 +340,14 @@ model LegalPage {
   title        String
   content      String
   lastUpdated  DateTime               @default(now())
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
   translations LegalPageTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model PracticeAreaTranslation {
   id               String       @id @default(cuid())
   practiceAreaId   String
-  practiceArea     PracticeArea @relation(fields: [practiceAreaId], references: [id], onDelete: Cascade)
   locale           Locale
   title            String
   slug             String
@@ -420,6 +358,7 @@ model PracticeAreaTranslation {
   metaDescription  String?
   ogTitle          String?
   ogDescription    String?
+  practiceArea     PracticeArea @relation(fields: [practiceAreaId], references: [id], onDelete: Cascade)
 
   @@unique([practiceAreaId, locale])
   @@unique([locale, slug])
@@ -428,7 +367,6 @@ model PracticeAreaTranslation {
 model ServiceTranslation {
   id              String  @id @default(cuid())
   serviceId       String
-  service         Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   locale          Locale
   title           String
   slug            String
@@ -438,6 +376,7 @@ model ServiceTranslation {
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
+  service         Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@unique([serviceId, locale])
   @@unique([locale, slug])
@@ -446,7 +385,6 @@ model ServiceTranslation {
 model SpecialistProfileTranslation {
   id                    String            @id @default(cuid())
   specialistProfileId   String
-  specialistProfile     SpecialistProfile @relation(fields: [specialistProfileId], references: [id], onDelete: Cascade)
   locale                Locale
   name                  String
   slug                  String
@@ -462,6 +400,7 @@ model SpecialistProfileTranslation {
   teachingWriting       String?
   credentials           String?
   values                String?
+  specialistProfile     SpecialistProfile @relation(fields: [specialistProfileId], references: [id], onDelete: Cascade)
 
   @@unique([specialistProfileId, locale])
   @@unique([locale, slug])
@@ -470,7 +409,6 @@ model SpecialistProfileTranslation {
 model LegalPageTranslation {
   id              String    @id @default(cuid())
   legalPageId     String
-  legalPage       LegalPage @relation(fields: [legalPageId], references: [id], onDelete: Cascade)
   locale          Locale
   title           String
   slug            String
@@ -479,6 +417,7 @@ model LegalPageTranslation {
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
+  legalPage       LegalPage @relation(fields: [legalPageId], references: [id], onDelete: Cascade)
 
   @@unique([legalPageId, locale])
   @@unique([locale, slug])
@@ -491,7 +430,7 @@ model AudioFile {
   filePath  String   @unique
   fileSize  Int
   mimeType  String
-  duration  Int? // Duration in seconds
+  duration  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -499,27 +438,41 @@ model AudioFile {
 model ImageTranslation {
   id      String @id @default(cuid())
   imageId String
-  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
   locale  Locale
   alt     String
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   @@unique([imageId, locale])
 }
 
 model Image {
-  id         String   @id @default(cuid())
-  filename   String
-  mimeType   String
-  size       Int
-  width      Int?
-  height     Int?
-  data       String
-  webpData   String?
-  alt        String?
-  uploadedBy String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  uploader     User?              @relation(name: "UserUploadedImages", fields: [uploadedBy], references: [id], onDelete: SetNull)
+  id           String             @id @default(cuid())
+  filename     String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  data         String
+  webpData     String?
+  alt          String?
+  uploadedBy   String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  uploader     User?              @relation("UserUploadedImages", fields: [uploadedBy], references: [id])
   translations ImageTranslation[]
+}
+
+enum Locale {
+  ka
+  en
+  ru
+}
+
+enum Role {
+  SUPER_ADMIN
+  COMPANY
+  LAWYER
+  SPECIALIST
+  AUTHOR
+  SUBSCRIBER
 }

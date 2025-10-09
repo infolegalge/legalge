@@ -12,6 +12,25 @@ interface ProfileCompany {
   slug: string
   name: string
   city: string | null
+  description: string | null
+  shortDesc: string | null
+  longDesc: string | null
+  logoUrl: string | null
+  logoAlt: string | null
+  website: string | null
+  phone: string | null
+  email: string | null
+  address: string | null
+  mapLink: string | null
+  mission: string | null
+  vision: string | null
+  history: string | null
+  contactPrompt: string | null
+  socialLinks: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  ogTitle: string | null
+  ogDescription: string | null
 }
 
 export default async function CompanyProfilePage({
@@ -32,7 +51,34 @@ export default async function CompanyProfilePage({
   let company: ProfileCompany | null = null
   let userCompanyId = (session.user as { companyId?: string | null })?.companyId || undefined
   if (userCompanyId) {
-    company = await prisma.company.findUnique({ where: { id: userCompanyId }, select: { id: true, slug: true, name: true, city: true } })
+    company = await prisma.company.findUnique({
+      where: { id: userCompanyId },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        city: true,
+        description: true,
+        shortDesc: true,
+        longDesc: true,
+        logoUrl: true,
+        logoAlt: true,
+        website: true,
+        phone: true,
+        email: true,
+        address: true,
+        mapLink: true,
+        mission: true,
+        vision: true,
+        history: true,
+        contactPrompt: true,
+        socialLinks: true,
+        metaTitle: true,
+        metaDescription: true,
+        ogTitle: true,
+        ogDescription: true,
+      },
+    })
   }
   if (!company) {
     // Try to load user record to get company linkage
@@ -42,9 +88,63 @@ export default async function CompanyProfilePage({
     })
     if (dbUser?.companyId) {
       userCompanyId = dbUser.companyId
-      company = await prisma.company.findUnique({ where: { id: dbUser.companyId }, select: { id: true, slug: true, name: true, city: true } })
+      company = await prisma.company.findUnique({
+        where: { id: dbUser.companyId },
+        select: {
+          id: true,
+          slug: true,
+          name: true,
+          city: true,
+          description: true,
+          shortDesc: true,
+          longDesc: true,
+          logoUrl: true,
+          logoAlt: true,
+          website: true,
+          phone: true,
+          email: true,
+          address: true,
+          mapLink: true,
+          mission: true,
+          vision: true,
+          history: true,
+          contactPrompt: true,
+          socialLinks: true,
+          metaTitle: true,
+          metaDescription: true,
+          ogTitle: true,
+          ogDescription: true,
+        },
+      })
     } else if (dbUser?.companySlug) {
-      company = await prisma.company.findUnique({ where: { slug: dbUser.companySlug }, select: { id: true, slug: true, name: true, city: true } })
+      company = await prisma.company.findUnique({
+        where: { slug: dbUser.companySlug },
+        select: {
+          id: true,
+          slug: true,
+          name: true,
+          city: true,
+          description: true,
+          shortDesc: true,
+          longDesc: true,
+          logoUrl: true,
+          logoAlt: true,
+          website: true,
+          phone: true,
+          email: true,
+          address: true,
+          mapLink: true,
+          mission: true,
+          vision: true,
+          history: true,
+          contactPrompt: true,
+          socialLinks: true,
+          metaTitle: true,
+          metaDescription: true,
+          ogTitle: true,
+          ogDescription: true,
+        },
+      })
     }
   }
   if (!company) {
@@ -61,7 +161,23 @@ export default async function CompanyProfilePage({
     if (client.companyTranslation && typeof client.companyTranslation.findMany === 'function') {
       translations = await client.companyTranslation.findMany({
         where: { companyId: resolvedCompany.id },
-        select: { locale: true, name: true, slug: true, description: true, shortDesc: true, longDesc: true, logoAlt: true },
+        select: {
+          locale: true,
+          name: true,
+          slug: true,
+          description: true,
+          shortDesc: true,
+          longDesc: true,
+          mission: true,
+          vision: true,
+          history: true,
+          contactPrompt: true,
+          logoAlt: true,
+          metaTitle: true,
+          metaDescription: true,
+          ogTitle: true,
+          ogDescription: true,
+        },
       })
     }
   } catch {}
