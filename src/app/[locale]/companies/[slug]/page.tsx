@@ -43,7 +43,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: undefined });
   
-  const company = await fetchCompany(slug);
+  const company = await fetchCompany(slug, locale);
   
   if (!company) {
     notFound();

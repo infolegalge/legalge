@@ -310,7 +310,7 @@ export async function fetchCompanies(): Promise<Company[]> {
   }));
 }
 
-export async function fetchCompany(slug: string): Promise<Company | null> {
+export async function fetchCompany(slug: string, locale?: Locale): Promise<Company | null> {
   const company = await prisma.company.findUnique({
     where: { slug },
     include: {
@@ -339,30 +339,42 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
           publishedAt: 'desc',
         },
       },
+      translations: true,
     },
   });
 
   if (!company) return null;
 
+  const translation = locale && locale !== 'ka'
+    ? company.translations.find((t) => t.locale === locale)
+    : null;
+
+  const mergeText = (base?: string | null, translated?: string | null) => {
+    if (translated && translated.trim().length > 0) {
+      return translated;
+    }
+    return base ?? null;
+  };
+
   return {
     id: company.id,
     slug: company.slug,
     name: company.name,
-    description: company.description ?? null,
-    shortDesc: company.shortDesc ?? null,
-    longDesc: company.longDesc ?? null,
+    description: mergeText(company.description, translation?.description),
+    shortDesc: mergeText(company.shortDesc, translation?.shortDesc),
+    longDesc: mergeText(company.longDesc, translation?.longDesc),
     logoUrl: company.logoUrl ?? null,
-    logoAlt: company.logoAlt ?? null,
+    logoAlt: mergeText(company.logoAlt, translation?.logoAlt),
     website: company.website ?? null,
     phone: company.phone ?? null,
     email: company.email ?? null,
     address: company.address ?? null,
     city: company.city ?? null,
     mapLink: company.mapLink ?? null,
-    mission: company.mission ?? null,
-    vision: company.vision ?? null,
-    history: company.history ?? null,
-    contactPrompt: company.contactPrompt ?? null,
+    mission: mergeText(company.mission, translation?.mission),
+    vision: mergeText(company.vision, translation?.vision),
+    history: mergeText(company.history, translation?.history),
+    contactPrompt: mergeText(company.contactPrompt, translation?.contactPrompt),
     socialLinks: company.socialLinks ?? null,
     posts: company.posts.map((post) => ({
       id: post.id,
@@ -389,9 +401,9 @@ export async function fetchCompany(slug: string): Promise<Company | null> {
       company: {
         id: company.id,
         slug: company.slug,
-        name: company.name,
+        name: mergeText(company.name, translation?.name) ?? company.name,
         logoUrl: company.logoUrl ?? null,
-        logoAlt: company.logoAlt ?? null,
+        logoAlt: mergeText(company.logoAlt, translation?.logoAlt),
         website: company.website ?? null,
         city: company.city ?? null,
       },
