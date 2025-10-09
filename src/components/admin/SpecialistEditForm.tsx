@@ -176,7 +176,12 @@ export default function SpecialistEditForm({
         };
 
         if (representativeMattersText) {
-          formData.set("representativeMatters", toJsonArray(representativeMattersText));
+          try {
+            JSON.parse(representativeMattersText);
+            formData.set("representativeMatters", representativeMattersText);
+          } catch {
+            formData.set("representativeMatters", toJsonArray(representativeMattersText));
+          }
         } else {
           formData.set("representativeMatters", "");
         }

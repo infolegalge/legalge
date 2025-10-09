@@ -250,35 +250,25 @@ export default function MultiLanguageSpecialistEditForm({
     
     startTransition(async () => {
       try {
-        const focusAreasText = String(formData.get("focusAreas") || "").trim();
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
         const teachingWritingText = String(formData.get("teachingWriting") || "");
         const credentialsText = String(formData.get("credentials") || "");
 
-        if (focusAreasText) {
-          formData.set(
-            "focusAreas",
-            JSON.stringify(
-              focusAreasText
-                .split("\n")
-                .map((line) => line.trim())
-                .filter(Boolean),
-            ),
-          );
-        } else {
-          formData.set("focusAreas", "");
-        }
-
         if (representativeMattersText) {
-          formData.set(
-            "representativeMatters",
-            JSON.stringify(
-              representativeMattersText
-                .split("\n")
-                .map((line) => line.trim())
-                .filter(Boolean),
-            ),
-          );
+          try {
+            JSON.parse(representativeMattersText);
+            formData.set("representativeMatters", representativeMattersText);
+          } catch {
+            formData.set(
+              "representativeMatters",
+              JSON.stringify(
+                representativeMattersText
+                  .split("\n")
+                  .map((line) => line.trim())
+                  .filter(Boolean),
+              ),
+            );
+          }
         } else {
           formData.set("representativeMatters", "");
         }

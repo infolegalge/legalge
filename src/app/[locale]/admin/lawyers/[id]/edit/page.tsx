@@ -88,13 +88,19 @@ async function updateSpecialist(formData: FormData) {
         )
       : undefined;
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-    const representativeMatters = representativeMattersText
-      ? JSON.stringify(
-          representativeMattersText
-            .split("\n")
-            .filter((line) => line.trim()),
-        )
-      : undefined;
+    const representativeMatters = (() => {
+      if (!representativeMattersText) return undefined;
+      try {
+        JSON.parse(representativeMattersText);
+        return representativeMattersText;
+      } catch {
+        const entries = representativeMattersText
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+        return entries.length > 0 ? JSON.stringify(entries) : "";
+      }
+    })();
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
     const languagesArray = formData.getAll("languages") as string[];
@@ -184,7 +190,19 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const focusAreasText = String(formData.get("focusAreas") || "").trim();
     const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-    const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
+    const representativeMatters = (() => {
+      if (!representativeMattersText) return undefined;
+      try {
+        JSON.parse(representativeMattersText);
+        return representativeMattersText;
+      } catch {
+        const entries = representativeMattersText
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean);
+        return entries.length > 0 ? JSON.stringify(entries) : "";
+      }
+    })();
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
     

@@ -114,13 +114,19 @@ async function updateSpecialist(formData: FormData) {
         )
       : null;
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
-    const representativeMatters = representativeMattersText
-      ? JSON.stringify(
-          representativeMattersText
-            .split("\n")
-            .filter((line) => line.trim()),
-        )
-      : null;
+    const representativeMatters = (() => {
+      if (!representativeMattersText) return null;
+      try {
+        JSON.parse(representativeMattersText);
+        return representativeMattersText;
+      } catch {
+        const entries = representativeMattersText
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean);
+        return entries.length > 0 ? JSON.stringify(entries) : "";
+      }
+    })();
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
     const languagesArray = formData.getAll("languages") as string[];
@@ -223,7 +229,22 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const metaDescription = String(formData.get("metaDescription") || "").trim() || null;
     const philosophy = String(formData.get("philosophy") || "").trim() || null;
     const focusAreas = String(formData.get("focusAreas") || "").trim() || null;
-    const representativeMatters = String(formData.get("representativeMatters") || "").trim() || null;
+    const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
+    const representativeMattersValue = (() => {
+      if (!representativeMattersText) return null;
+      const trimmed = representativeMattersText.trim();
+      if (!trimmed) return null;
+      try {
+        JSON.parse(trimmed);
+        return trimmed;
+      } catch {
+        const entries = trimmed
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean);
+        return entries.length > 0 ? JSON.stringify(entries) : "";
+      }
+    })();
     const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
     const credentials = normalizeStringListInput(formData.get("credentials"));
 
@@ -271,7 +292,7 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
       metaDescription: sanitized(metaDescription),
       philosophy: sanitized(philosophy),
       focusAreas: sanitizeJson(focusAreas),
-      representativeMatters: sanitizeJson(representativeMatters),
+      representativeMatters: sanitizeJson(representativeMattersValue),
       teachingWriting: sanitizeJson(teachingWriting),
       credentials: sanitizeJson(credentials),
     };
