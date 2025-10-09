@@ -2,36 +2,39 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import type { Locale } from '@/i18n/locales'
 import prisma from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import CompanyEditForm from '@/components/admin/CompanyEditForm'
 import CompanyProfileManagement from './CompanyProfileManagement'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
-interface ProfileCompany {
-  id: string
-  slug: string
-  name: string
-  city: string | null
-  description: string | null
-  shortDesc: string | null
-  longDesc: string | null
-  logoUrl: string | null
-  logoAlt: string | null
-  website: string | null
-  phone: string | null
-  email: string | null
-  address: string | null
-  mapLink: string | null
-  mission: string | null
-  vision: string | null
-  history: string | null
-  contactPrompt: string | null
-  socialLinks: string | null
-  metaTitle: string | null
-  metaDescription: string | null
-  ogTitle: string | null
-  ogDescription: string | null
-}
+const companySelect = {
+  id: true,
+  slug: true,
+  name: true,
+  city: true,
+  description: true,
+  shortDesc: true,
+  longDesc: true,
+  logoUrl: true,
+  logoAlt: true,
+  website: true,
+  phone: true,
+  email: true,
+  address: true,
+  mapLink: true,
+  mission: true,
+  vision: true,
+  history: true,
+  contactPrompt: true,
+  socialLinks: true,
+  metaTitle: true,
+  metaDescription: true,
+  ogTitle: true,
+  ogDescription: true,
+} satisfies Prisma.CompanySelect
+
+type ProfileCompany = Prisma.CompanyGetPayload<{ select: typeof companySelect }>
 
 export default async function CompanyProfilePage({
   params,
@@ -53,31 +56,7 @@ export default async function CompanyProfilePage({
   if (userCompanyId) {
     company = await prisma.company.findUnique({
       where: { id: userCompanyId },
-      select: {
-        id: true,
-        slug: true,
-        name: true,
-        city: true,
-        description: true,
-        shortDesc: true,
-        longDesc: true,
-        logoUrl: true,
-        logoAlt: true,
-        website: true,
-        phone: true,
-        email: true,
-        address: true,
-        mapLink: true,
-        mission: true,
-        vision: true,
-        history: true,
-        contactPrompt: true,
-        socialLinks: true,
-        metaTitle: true,
-        metaDescription: true,
-        ogTitle: true,
-        ogDescription: true,
-      },
+      select: companySelect,
     })
   }
   if (!company) {
@@ -90,60 +69,12 @@ export default async function CompanyProfilePage({
       userCompanyId = dbUser.companyId
       company = await prisma.company.findUnique({
         where: { id: dbUser.companyId },
-        select: {
-          id: true,
-          slug: true,
-          name: true,
-          city: true,
-          description: true,
-          shortDesc: true,
-          longDesc: true,
-          logoUrl: true,
-          logoAlt: true,
-          website: true,
-          phone: true,
-          email: true,
-          address: true,
-          mapLink: true,
-          mission: true,
-          vision: true,
-          history: true,
-          contactPrompt: true,
-          socialLinks: true,
-          metaTitle: true,
-          metaDescription: true,
-          ogTitle: true,
-          ogDescription: true,
-        },
+        select: companySelect,
       })
     } else if (dbUser?.companySlug) {
       company = await prisma.company.findUnique({
         where: { slug: dbUser.companySlug },
-        select: {
-          id: true,
-          slug: true,
-          name: true,
-          city: true,
-          description: true,
-          shortDesc: true,
-          longDesc: true,
-          logoUrl: true,
-          logoAlt: true,
-          website: true,
-          phone: true,
-          email: true,
-          address: true,
-          mapLink: true,
-          mission: true,
-          vision: true,
-          history: true,
-          contactPrompt: true,
-          socialLinks: true,
-          metaTitle: true,
-          metaDescription: true,
-          ogTitle: true,
-          ogDescription: true,
-        },
+        select: companySelect,
       })
     }
   }
