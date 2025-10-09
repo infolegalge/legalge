@@ -162,7 +162,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
             {/* Hero Image with lazy loading */}
             {heroImg ? (
               <div className="mb-8 overflow-hidden rounded-lg border shadow-sm">
-                <div className="relative w-full aspect-[16/9] bg-muted">
+                <div className="group relative w-full aspect-[16/9] bg-muted">
                   <Image
                     src={heroImg}
                     alt={heroAlt}
@@ -172,7 +172,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ loca
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 60vw"
                     placeholder="empty"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 dark:bg-black/25" />
+                  <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 dark:bg-black/25 group-hover:opacity-0" />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
                 </div>
               </div>
