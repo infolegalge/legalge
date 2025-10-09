@@ -78,7 +78,6 @@ export async function PATCH(request: NextRequest) {
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : null;
     const teachingWriting = normalizeTeachingWritingInput(formData.get('teachingWriting'));
     const credentials = normalizeStringListInput(formData.get('credentials'));
-    const values = normalizeStringListInput(formData.get('values'));
     const languagesArray = formData.getAll('languages') as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll('specializations') as string[];
@@ -139,7 +138,6 @@ export async function PATCH(request: NextRequest) {
         representativeMatters,
         teachingWriting,
         credentials,
-        values
       });
     } else {
       return NextResponse.json({ error: 'Unsupported update section' }, { status: 400 });

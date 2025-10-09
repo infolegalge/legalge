@@ -97,7 +97,6 @@ async function updateSpecialist(formData: FormData) {
       : undefined;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
-    const values = normalizeStringListInput(formData.get("values"));
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -144,8 +143,7 @@ async function updateSpecialist(formData: FormData) {
         ...(focusAreas ? { focusAreas } : {}),
         ...(representativeMatters ? { representativeMatters } : {}),
         ...(teachingWriting !== undefined ? { teachingWriting } : {}),
-        ...(credentials ? { credentials } : {}),
-        ...(values ? { values } : {}),
+        ...(credentials !== undefined ? { credentials } : {}),
       });
     } else {
       return { error: "Unsupported section" };
@@ -189,7 +187,6 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
-    const values = normalizeStringListInput(formData.get("values"));
     
     if (!id || !locale || !name || !slug) {
       return { error: "Missing required translation fields" };
@@ -263,9 +260,6 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
         : {}),
       ...(toJsonString(credentials, existing?.credentials) !== undefined
         ? { credentials: toJsonString(credentials, existing?.credentials) }
-        : {}),
-      ...(toJsonString(values, existing?.values) !== undefined
-        ? { values: toJsonString(values, existing?.values) }
         : {}),
     };
 

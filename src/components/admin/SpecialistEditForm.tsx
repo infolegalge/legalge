@@ -157,7 +157,6 @@ export default function SpecialistEditForm({
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
         const teachingWritingText = String(formData.get("teachingWriting") || "").trim();
         const credentialsText = String(formData.get("credentials") || "");
-        const valuesText = String(formData.get("values") || "");
 
         const toJsonArray = (value: string) =>
           JSON.stringify(
@@ -184,7 +183,6 @@ export default function SpecialistEditForm({
 
         validateJson(teachingWritingText, "Teaching & Writing");
         formData.set("credentials", toJsonArray(credentialsText));
-        formData.set("values", toJsonArray(valuesText));
 
         const translationId = formData.get("translationId") as string | null;
         if (!translationId) {
@@ -480,24 +478,6 @@ export default function SpecialistEditForm({
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
-                    <textarea
-                      name="values"
-                      rows={6}
-                      defaultValue={specialist.values ? (() => {
-                        try {
-                          return JSON.parse(specialist.values).join("\n");
-                        } catch {
-                          return specialist.values;
-                        }
-                      })() : ""}
-                      className="w-full rounded border px-3 py-2 text-sm"
-                      placeholder="Value name: description\nAnother value: description"
-                    />
-                    <p className="mt-1 text-xs text-muted-foreground">Enter each value on a new line. Saved as a list.</p>
-                  </div>
-
-                  <div className="md:col-span-2">
                     <button
                       type="submit"
                       disabled={isPending}
@@ -663,17 +643,6 @@ export default function SpecialistEditForm({
                         defaultValue={translation?.credentials || specialist.credentials || ""}
                         className="w-full rounded border px-3 py-2 text-sm"
                         placeholder={`Enter each credential on a new line (${loc.name}).`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
-                      <textarea
-                        name="values"
-                        rows={4}
-                        defaultValue={translation?.values || specialist.values || ""}
-                        className="w-full rounded border px-3 py-2 text-sm"
-                        placeholder={`Enter each value on a new line (${loc.name}).`}
                       />
                     </div>
 

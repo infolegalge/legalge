@@ -208,7 +208,6 @@ export default function MultiLanguageSpecialistEditForm({
           : "",
         teachingWriting: formatTeachingWritingForTextarea(translation.teachingWriting),
         credentials: formatJsonListForTextarea(translation.credentials),
-        values: formatJsonListForTextarea(translation.values),
         philosophy: translation.philosophy || "",
       })),
     [translations],
@@ -255,7 +254,6 @@ export default function MultiLanguageSpecialistEditForm({
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
         const teachingWritingText = String(formData.get("teachingWriting") || "");
         const credentialsText = String(formData.get("credentials") || "");
-        const valuesText = String(formData.get("values") || "");
 
         if (focusAreasText) {
           formData.set(
@@ -290,9 +288,6 @@ export default function MultiLanguageSpecialistEditForm({
 
         const normalizedCredentials = normalizeStringList(credentialsText);
         formData.set("credentials", normalizedCredentials);
-
-        const normalizedValues = normalizeStringList(valuesText);
-        formData.set("values", normalizedValues);
 
         const translationId = formData.get("translationId") as string | null;
 
@@ -595,20 +590,6 @@ export default function MultiLanguageSpecialistEditForm({
                       Enter one credential per line. These will be stored as a list.
                     </p>
                   </div>
-
-                  <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
-                    <textarea 
-                      name="values" 
-                      rows={6} 
-                      defaultValue={formatJsonListForTextarea(specialist.values)}
-                      className="w-full rounded border px-3 py-2 text-sm" 
-                      placeholder="Value name: description\nAnother value: description"
-                    ></textarea>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Enter each value on a new line. These will be stored as a list.
-                    </p>
-                  </div>
                   
                   <div className="md:col-span-2">
                     <button 
@@ -803,17 +784,6 @@ export default function MultiLanguageSpecialistEditForm({
                         defaultValue={translation?.credentials || ""}
                         className="w-full rounded border px-3 py-2 text-sm"
                         placeholder={`Enter each credential on a new line (${loc.name}).`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
-                      <textarea
-                        name="values"
-                        rows={4}
-                        defaultValue={translation?.values || ""}
-                        className="w-full rounded border px-3 py-2 text-sm"
-                        placeholder={`Enter each value on a new line (${loc.name}).`}
                       />
                     </div>
                     

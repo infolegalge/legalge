@@ -269,7 +269,12 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
       {/* Representative Matters */}
       {specialist.representativeMatters && (() => {
         try {
-          const matters = JSON.parse(specialist.representativeMatters);
+          const parsed = JSON.parse(specialist.representativeMatters);
+          const matters = Array.isArray(parsed)
+            ? parsed
+            : parsed && typeof parsed === "object"
+              ? Object.values(parsed)
+              : [];
           return matters.length > 0 ? (
             <div className="mb-8">
               <h2 className="mb-4 text-xl font-semibold flex items-center gap-2">
@@ -277,10 +282,10 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
                 {specialistT("representative_matters")}
               </h2>
               <div className="space-y-4">
-                {matters.map((matter: string, index: number) => (
+                {matters.map((matter: unknown, index: number) => (
                   <div key={index} className="rounded-lg border p-4">
                     <p className="text-muted-foreground">
-                      {matter}
+                      {String(matter)}
                     </p>
                   </div>
                 ))}

@@ -123,7 +123,6 @@ async function updateSpecialist(formData: FormData) {
       : null;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
     const credentials = normalizeStringListInput(formData.get("credentials"));
-    const values = normalizeStringListInput(formData.get("values"));
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -184,7 +183,6 @@ async function updateSpecialist(formData: FormData) {
         representativeMatters: representativeMatters || undefined,
         teachingWriting: teachingWriting || undefined,
         credentials: credentials || undefined,
-        values: values || undefined,
       });
     } else {
       return { error: "Unsupported section" };
@@ -228,7 +226,6 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const representativeMatters = String(formData.get("representativeMatters") || "").trim() || null;
     const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
     const credentials = normalizeStringListInput(formData.get("credentials"));
-    const values = normalizeStringListInput(formData.get("values"));
 
     if (!specialistProfileId || !locale || !name || !slug) {
       return { error: "Missing required translation fields" };
@@ -277,7 +274,6 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
       representativeMatters: sanitizeJson(representativeMatters),
       teachingWriting: sanitizeJson(teachingWriting),
       credentials: sanitizeJson(credentials),
-      values: sanitizeJson(values),
     };
 
     if (translationId) {
