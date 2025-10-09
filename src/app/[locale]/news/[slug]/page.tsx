@@ -354,13 +354,17 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Cover Image */}
           {post.coverImage && (
             <div className="aspect-video w-full overflow-hidden">
-              <img
-                src={post.coverImage}
-                alt={post.coverImageAlt || post.title}
-                className="w-full h-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
+              <div className="relative h-full w-full">
+                <img
+                  src={post.coverImage}
+                  alt={post.coverImageAlt || post.title}
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 dark:bg-black/25" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
+              </div>
             </div>
           )}
 

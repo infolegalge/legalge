@@ -96,8 +96,10 @@ export default async function PracticeDetail({
             {item.heroImageUrl ? (
               <figure className="relative mx-auto w-[90%] overflow-hidden rounded-lg border" style={{ aspectRatio: "4/3" }}>
                 <Image src={`${item.heroImageUrl}`} alt={item.heroImageAlt || item.title} fill className="object-cover" />
+                <div className="pointer-events-none absolute inset-0 bg-white/35 opacity-100 transition-opacity duration-300 dark:bg-black/25" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
                 {item.heroImageAlt ? (
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-black/40 px-2 py-1 text-xs text-white">
+                  <figcaption className="absolute inset-x-0 bottom-0 z-10 bg-black/50 px-2 py-1 text-xs text-white">
                     {item.heroImageAlt}
                   </figcaption>
                 ) : null}
