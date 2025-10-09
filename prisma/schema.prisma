@@ -173,7 +173,6 @@ model Company {
   mission         String?
   vision          String?
   history         String?
-  faq             String?
   contactPrompt   String?
   socialLinks     String? // JSON array of { label, url }
   metaTitle       String?
@@ -207,7 +206,6 @@ model CompanyTranslation {
   mission         String?
   vision          String?
   history         String?
-  faq             String?
   contactPrompt   String?
   metaTitle       String?
   metaDescription String?

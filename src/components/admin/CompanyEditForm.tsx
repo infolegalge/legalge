@@ -24,7 +24,6 @@ interface Company {
   mission?: string | null;
   vision?: string | null;
   history?: string | null;
-  faq?: string | null;
   contactPrompt?: string | null;
   socialLinks?: string | null;
   metaTitle?: string | null;
@@ -51,7 +50,6 @@ interface CompanyEditFormProps {
     mission?: string | null;
     vision?: string | null;
     history?: string | null;
-    faq?: string | null;
     contactPrompt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -91,7 +89,6 @@ export default function CompanyEditForm({
     mission: string;
     vision: string;
     history: string;
-    faq: string;
     contactPrompt: string;
     metaTitle: string;
     metaDescription: string;
@@ -106,7 +103,6 @@ export default function CompanyEditForm({
       mission: kaTranslation?.mission ?? company.mission ?? '',
       vision: kaTranslation?.vision ?? company.vision ?? '',
       history: kaTranslation?.history ?? company.history ?? '',
-      faq: kaTranslation?.faq ?? company.faq ?? '',
       contactPrompt: kaTranslation?.contactPrompt ?? company.contactPrompt ?? '',
       metaTitle: kaTranslation?.metaTitle ?? company.metaTitle ?? '',
       metaDescription: kaTranslation?.metaDescription ?? company.metaDescription ?? '',
@@ -121,7 +117,6 @@ export default function CompanyEditForm({
       mission: tMap.get('en')?.mission || '',
       vision: tMap.get('en')?.vision || '',
       history: tMap.get('en')?.history || '',
-      faq: tMap.get('en')?.faq || '',
       contactPrompt: tMap.get('en')?.contactPrompt || '',
       metaTitle: tMap.get('en')?.metaTitle || '',
       metaDescription: tMap.get('en')?.metaDescription || '',
@@ -136,7 +131,6 @@ export default function CompanyEditForm({
       mission: tMap.get('ru')?.mission || '',
       vision: tMap.get('ru')?.vision || '',
       history: tMap.get('ru')?.history || '',
-      faq: tMap.get('ru')?.faq || '',
       contactPrompt: tMap.get('ru')?.contactPrompt || '',
       metaTitle: tMap.get('ru')?.metaTitle || '',
       metaDescription: tMap.get('ru')?.metaDescription || '',
@@ -163,7 +157,6 @@ export default function CompanyEditForm({
           const missionKey = isBase ? 'mission' : `mission_${key}`;
           const visionKey = isBase ? 'vision' : `vision_${key}`;
           const historyKey = isBase ? 'history' : `history_${key}`;
-          const faqKey = isBase ? 'faq' : `faq_${key}`;
           const contactPromptKey = isBase ? 'contactPrompt' : `contactPrompt_${key}`;
           const metaTitleKey = isBase ? 'metaTitle' : `metaTitle_${key}`;
           const metaDescKey = isBase ? 'metaDescription' : `metaDescription_${key}`;
@@ -179,7 +172,6 @@ export default function CompanyEditForm({
           formData.set(missionKey, copy[key].mission);
           formData.set(visionKey, copy[key].vision);
           formData.set(historyKey, copy[key].history);
-          formData.set(faqKey, copy[key].faq);
           formData.set(contactPromptKey, copy[key].contactPrompt);
           formData.set(metaTitleKey, copy[key].metaTitle);
           formData.set(metaDescKey, copy[key].metaDescription);
@@ -392,23 +384,6 @@ export default function CompanyEditForm({
         </div>
 
         <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">FAQ</label>
-          <textarea
-            name={activeLocale==='ka' ? 'faq' : `faq_${activeLocale}`}
-            rows={4}
-            value={copy[activeLocale].faq}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], faq: value } }));
-            }}
-            className="w-full rounded border px-3 py-2"
-            placeholder="Common questions and answers (use lists or headings)"
-          ></textarea>
-        </div>
-
-        <div className="md:col-span-2">
           <label className="mb-2 block text-sm font-medium">Company Logo</label>
           <div className="space-y-3">
             <ImageUpload
@@ -444,9 +419,12 @@ export default function CompanyEditForm({
             name="website" 
             type="url"
             defaultValue={company.website || ""}
-            className="w-full rounded border px-3 py-2" 
+            className="w-full rounded border px-3 py-2 bg-muted/50" 
             placeholder="https://example.com"
+            readOnly
+            tabIndex={-1}
           />
+          <p className="mt-1 text-xs text-muted-foreground">Website URL is managed by Legal Sandbox support.</p>
         </div>
         
         <div>
@@ -455,9 +433,12 @@ export default function CompanyEditForm({
             name="phone" 
             type="tel"
             defaultValue={company.phone || ""}
-            className="w-full rounded border px-3 py-2" 
+            className="w-full rounded border px-3 py-2 bg-muted/50" 
             placeholder={OFFICIAL_PHONE}
+            readOnly
+            tabIndex={-1}
           />
+          <p className="mt-1 text-xs text-muted-foreground">Phone number is managed by Legal Sandbox support.</p>
         </div>
         
         <div>
@@ -466,9 +447,12 @@ export default function CompanyEditForm({
             name="email" 
             type="email"
             defaultValue={company.email || ""}
-            className="w-full rounded border px-3 py-2" 
+            className="w-full rounded border px-3 py-2 bg-muted/50" 
             placeholder="contact@company.com"
+            readOnly
+            tabIndex={-1}
           />
+          <p className="mt-1 text-xs text-muted-foreground">Email is managed by Legal Sandbox support.</p>
         </div>
         
         <div className="md:col-span-2">

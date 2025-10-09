@@ -97,9 +97,6 @@ export default async function CompanyProfilePage({
     const history = String(formData.get('history') || '').trim() || null
     const history_en = String(formData.get('history_en') || '').trim() || null
     const history_ru = String(formData.get('history_ru') || '').trim() || null
-    const faq = String(formData.get('faq') || '').trim() || null
-    const faq_en = String(formData.get('faq_en') || '').trim() || null
-    const faq_ru = String(formData.get('faq_ru') || '').trim() || null
     const contactPrompt = String(formData.get('contactPrompt') || '').trim() || null
     const contactPrompt_en = String(formData.get('contactPrompt_en') || '').trim() || null
     const contactPrompt_ru = String(formData.get('contactPrompt_ru') || '').trim() || null
@@ -158,7 +155,6 @@ export default async function CompanyProfilePage({
           mission: mission || undefined,
           vision: vision || undefined,
           history: history || undefined,
-          faq: faq || undefined,
           contactPrompt: contactPrompt || undefined,
           socialLinks: socialLinks || undefined,
           metaTitle: metaTitle || undefined,
@@ -191,7 +187,6 @@ export default async function CompanyProfilePage({
             mission: mission_en || mission,
             vision: vision_en || vision,
             history: history_en || history,
-            faq: faq_en || faq,
             contactPrompt: contactPrompt_en || contactPrompt,
             metaTitle: enMetaTitle,
             metaDescription: enMetaDescription,
@@ -208,7 +203,6 @@ export default async function CompanyProfilePage({
             mission: mission_en || mission,
             vision: vision_en || vision,
             history: history_en || history,
-            faq: faq_en || faq,
             contactPrompt: contactPrompt_en || contactPrompt,
             metaTitle: enMetaTitle,
             metaDescription: enMetaDescription,
@@ -237,7 +231,6 @@ export default async function CompanyProfilePage({
             mission: mission_ru || mission,
             vision: vision_ru || vision,
             history: history_ru || history,
-            faq: faq_ru || faq,
             contactPrompt: contactPrompt_ru || contactPrompt,
             metaTitle: ruMetaTitle,
             metaDescription: ruMetaDescription,
@@ -254,7 +247,6 @@ export default async function CompanyProfilePage({
             mission: mission_ru || mission,
             vision: vision_ru || vision,
             history: history_ru || history,
-            faq: faq_ru || faq,
             contactPrompt: contactPrompt_ru || contactPrompt,
             metaTitle: ruMetaTitle,
             metaDescription: ruMetaDescription,
