@@ -353,7 +353,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <article className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
           {/* Cover Image */}
           {post.coverImage && (
-            <div className="aspect-video w-full overflow-hidden">
+            <div className="group aspect-video w-full overflow-hidden">
               <div className="relative h-full w-full">
                 <img
                   src={post.coverImage}
@@ -362,7 +362,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   loading="eager"
                   decoding="async"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 dark:bg-black/25" />
+                <div className="pointer-events-none absolute inset-0 bg-white/35 transition-opacity duration-300 dark:bg-black/25 group-hover:opacity-0" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
               </div>
             </div>
