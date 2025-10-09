@@ -32,6 +32,31 @@ function normalizeTeachingWritingInput(raw: FormDataEntryValue | null | undefine
   }
 }
 
+function normalizeStringListInput(raw: FormDataEntryValue | null | undefined): string | undefined {
+  if (raw === null || raw === undefined) return undefined;
+
+  const value = String(raw).trim();
+  if (!value) {
+    return "";
+  }
+
+  try {
+    JSON.parse(value);
+    return value;
+  } catch {
+    const entries = value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify(entries);
+  }
+}
+
 async function requireSuperAdmin() {
   const session = await getServerSession(authOptions);
   type AppUser = NonNullable<Session["user"]> & { role?: "SUPER_ADMIN" | "COMPANY" | "LAWYER" | "AUTHOR" };
@@ -71,8 +96,8 @@ async function updateSpecialist(formData: FormData) {
         )
       : undefined;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
-    const credentials = String(formData.get("credentials") || "").trim() || undefined;
-    const values = String(formData.get("values") || "").trim() || undefined;
+    const credentials = normalizeStringListInput(formData.get("credentials"));
+    const values = normalizeStringListInput(formData.get("values"));
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -163,8 +188,8 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').map((line) => line.trim()).filter(Boolean)) : undefined;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
-    const credentials = String(formData.get("credentials") || "").trim() || undefined;
-    const values = String(formData.get("values") || "").trim() || undefined;
+    const credentials = normalizeStringListInput(formData.get("credentials"));
+    const values = normalizeStringListInput(formData.get("values"));
     
     if (!id || !locale || !name || !slug) {
       return { error: "Missing required translation fields" };

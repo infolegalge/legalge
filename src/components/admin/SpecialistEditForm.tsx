@@ -154,11 +154,10 @@ export default function SpecialistEditForm({
 
     startTransition(async () => {
       try {
-        const focusAreasText = String(formData.get("focusAreas") || "").trim();
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
         const teachingWritingText = String(formData.get("teachingWriting") || "").trim();
-        const credentialsText = String(formData.get("credentials") || "").trim();
-        const valuesText = String(formData.get("values") || "").trim();
+        const credentialsText = String(formData.get("credentials") || "");
+        const valuesText = String(formData.get("values") || "");
 
         const toJsonArray = (value: string) =>
           JSON.stringify(
@@ -168,20 +167,8 @@ export default function SpecialistEditForm({
               .filter(Boolean),
           );
 
-        if (focusAreasText) {
-          formData.set("focusAreas", toJsonArray(focusAreasText));
-        } else {
-          formData.set("focusAreas", "");
-        }
-
-        if (representativeMattersText) {
-          formData.set("representativeMatters", toJsonArray(representativeMattersText));
-        } else {
-          formData.set("representativeMatters", "");
-        }
-
         const validateJson = (value: string | null | undefined, field: string) => {
-          if (!value) return;
+          if (!value || !value.trim()) return;
           try {
             JSON.parse(value);
           } catch {
@@ -189,9 +176,15 @@ export default function SpecialistEditForm({
           }
         };
 
+        if (representativeMattersText) {
+          formData.set("representativeMatters", toJsonArray(representativeMattersText));
+        } else {
+          formData.set("representativeMatters", "");
+        }
+
         validateJson(teachingWritingText, "Teaching & Writing");
-        validateJson(credentialsText, "Credentials");
-        validateJson(valuesText, "Values");
+        formData.set("credentials", toJsonArray(credentialsText));
+        formData.set("values", toJsonArray(valuesText));
 
         const translationId = formData.get("translationId") as string | null;
         if (!translationId) {
@@ -439,24 +432,6 @@ export default function SpecialistEditForm({
                   <input type="hidden" name="slug" value={specialist.slug} />
 
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Focus Areas</label>
-                    <textarea
-                      name="focusAreas"
-                      rows={6}
-                      defaultValue={specialist.focusAreas ? (() => {
-                        try {
-                          return JSON.parse(specialist.focusAreas).join("\n");
-                        } catch {
-                          return specialist.focusAreas;
-                        }
-                      })() : ""}
-                      className="w-full rounded border px-3 py-2 text-sm"
-                      placeholder="Enter each focus area on a new line"
-                    />
-                    <p className="mt-1 text-xs text-muted-foreground">Each line becomes an item in the JSON array.</p>
-                  </div>
-
-                  <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">Representative Matters</label>
                     <textarea
                       name="representativeMatters"
@@ -483,29 +458,43 @@ export default function SpecialistEditForm({
                       className="w-full rounded border px-3 py-2 font-mono text-sm"
                       placeholder='{"courses": ["Course"], "workshops": ["Workshop"], "topics": ["Topic"]}'
                     />
-                    <p className="mt-1 text-xs text-muted-foreground">Provide valid JSON structure.</p>
+                    <p className="mt-1 text-xs text-muted-foreground">JSON object with courses, workshops, and writing topics.</p>
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Credentials & Memberships (JSON)</label>
+                    <label className="mb-1 block text-sm font-medium">Credentials & Memberships</label>
                     <textarea
                       name="credentials"
                       rows={4}
-                      defaultValue={specialist.credentials || ""}
-                      className="w-full rounded border px-3 py-2 font-mono text-sm"
-                      placeholder='["Credential 1", "Credential 2"]'
+                      defaultValue={specialist.credentials ? (() => {
+                        try {
+                          return JSON.parse(specialist.credentials).join("\n");
+                        } catch {
+                          return specialist.credentials;
+                        }
+                      })() : ""}
+                      className="w-full rounded border px-3 py-2 text-sm"
+                      placeholder="Credential One\nCredential Two"
                     />
+                    <p className="mt-1 text-xs text-muted-foreground">Enter one credential per line. Saved as a list.</p>
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Values & How We Work (JSON)</label>
+                    <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
                     <textarea
                       name="values"
                       rows={6}
-                      defaultValue={specialist.values || ""}
-                      className="w-full rounded border px-3 py-2 font-mono text-sm"
-                      placeholder='{"Value": "Description"}'
+                      defaultValue={specialist.values ? (() => {
+                        try {
+                          return JSON.parse(specialist.values).join("\n");
+                        } catch {
+                          return specialist.values;
+                        }
+                      })() : ""}
+                      className="w-full rounded border px-3 py-2 text-sm"
+                      placeholder="Value name: description\nAnother value: description"
                     />
+                    <p className="mt-1 text-xs text-muted-foreground">Enter each value on a new line. Saved as a list.</p>
                   </div>
 
                   <div className="md:col-span-2">
@@ -645,17 +634,6 @@ export default function SpecialistEditForm({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Focus Areas</label>
-                      <textarea
-                        name="focusAreas"
-                        rows={4}
-                        defaultValue={translation?.focusAreas || ""}
-                        className="w-full rounded border px-3 py-2 text-sm"
-                        placeholder={`Enter each focus area on a new line (${loc.name}).`}
-                      />
-                    </div>
-
-                    <div>
                       <label className="mb-1 block text-sm font-medium">Representative Matters</label>
                       <textarea
                         name="representativeMatters"
@@ -671,31 +649,31 @@ export default function SpecialistEditForm({
                       <textarea
                         name="teachingWriting"
                         rows={4}
-                        defaultValue={translation?.teachingWriting || ""}
+                        defaultValue={translation?.teachingWriting || specialist.teachingWriting || ""}
                         className="w-full rounded border px-3 py-2 font-mono text-sm"
                         placeholder='{"courses": ["Course"], "workshops": ["Workshop"], "topics": ["Topic"]}'
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Credentials & Memberships (JSON)</label>
+                      <label className="mb-1 block text-sm font-medium">Credentials & Memberships</label>
                       <textarea
                         name="credentials"
                         rows={3}
-                        defaultValue={translation?.credentials || ""}
-                        className="w-full rounded border px-3 py-2 font-mono text-sm"
-                        placeholder='["Credential 1", "Credential 2"]'
+                        defaultValue={translation?.credentials || specialist.credentials || ""}
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each credential on a new line (${loc.name}).`}
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Values & How We Work (JSON)</label>
+                      <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
                       <textarea
                         name="values"
                         rows={4}
-                        defaultValue={translation?.values || ""}
-                        className="w-full rounded border px-3 py-2 font-mono text-sm"
-                        placeholder='{"Value": "Description"}'
+                        defaultValue={translation?.values || specialist.values || ""}
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each value on a new line (${loc.name}).`}
                       />
                     </div>
 

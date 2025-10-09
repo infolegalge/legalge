@@ -28,6 +28,31 @@ function normalizeTeachingWritingInput(raw: FormDataEntryValue | null | undefine
   }
 }
 
+const normalizeStringListInput = (raw: FormDataEntryValue | null | undefined): string | null => {
+  if (raw === null || raw === undefined) return null;
+  const value = String(raw).trim();
+
+  if (!value) {
+    return "";
+  }
+
+  try {
+    JSON.parse(value);
+    return value;
+  } catch {
+    const entries = value
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify(entries);
+  }
+};
+
 export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -52,8 +77,8 @@ export async function PATCH(request: NextRequest) {
     const representativeMattersText = String(formData.get('representativeMatters') || '').trim();
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : null;
     const teachingWriting = normalizeTeachingWritingInput(formData.get('teachingWriting'));
-    const credentials = String(formData.get('credentials') || '').trim() || null;
-    const values = String(formData.get('values') || '').trim() || null;
+    const credentials = normalizeStringListInput(formData.get('credentials'));
+    const values = normalizeStringListInput(formData.get('values'));
     const languagesArray = formData.getAll('languages') as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll('specializations') as string[];

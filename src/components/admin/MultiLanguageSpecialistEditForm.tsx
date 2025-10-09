@@ -127,6 +127,51 @@ const normalizeTeachingWriting = (value: string) => {
   }
 };
 
+const formatJsonListForTextarea = (value: string | null | undefined) => {
+  if (!value) return "";
+
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      return parsed.join("\n");
+    }
+
+    if (parsed && typeof parsed === "object") {
+      return Object.entries(parsed)
+        .map(([key, val]) => `${key}: ${String(val)}`)
+        .join("\n");
+    }
+  } catch {
+    // ignore parsing issues and fall back to raw value
+  }
+
+  return value;
+};
+
+const normalizeStringList = (value: string) => {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    JSON.parse(trimmed);
+    return trimmed;
+  } catch {
+    const entries = trimmed
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify(entries);
+  }
+};
+
 export default function MultiLanguageSpecialistEditForm({ 
   specialist, 
   services, 
@@ -152,15 +197,6 @@ export default function MultiLanguageSpecialistEditForm({
     () =>
       translations.map((translation) => ({
         ...translation,
-        focusAreas: translation.focusAreas
-          ? (() => {
-              try {
-                return JSON.parse(translation.focusAreas).join("\n");
-              } catch {
-                return translation.focusAreas ?? "";
-              }
-            })()
-          : "",
         representativeMatters: translation.representativeMatters
           ? (() => {
               try {
@@ -171,8 +207,8 @@ export default function MultiLanguageSpecialistEditForm({
             })()
           : "",
         teachingWriting: formatTeachingWritingForTextarea(translation.teachingWriting),
-        credentials: translation.credentials || "",
-        values: translation.values || "",
+        credentials: formatJsonListForTextarea(translation.credentials),
+        values: formatJsonListForTextarea(translation.values),
         philosophy: translation.philosophy || "",
       })),
     [translations],
@@ -218,8 +254,8 @@ export default function MultiLanguageSpecialistEditForm({
         const focusAreasText = String(formData.get("focusAreas") || "").trim();
         const representativeMattersText = String(formData.get("representativeMatters") || "").trim();
         const teachingWritingText = String(formData.get("teachingWriting") || "");
-        const credentialsText = String(formData.get("credentials") || "").trim();
-        const valuesText = String(formData.get("values") || "").trim();
+        const credentialsText = String(formData.get("credentials") || "");
+        const valuesText = String(formData.get("values") || "");
 
         if (focusAreasText) {
           formData.set(
@@ -252,23 +288,11 @@ export default function MultiLanguageSpecialistEditForm({
         const normalizedTeachingWriting = normalizeTeachingWriting(teachingWritingText);
         formData.set("teachingWriting", normalizedTeachingWriting);
 
-        if (credentialsText) {
-          try {
-            JSON.parse(credentialsText);
-            formData.set("credentials", credentialsText);
-          } catch {
-            throw new Error("Invalid JSON in Credentials field");
-          }
-        }
+        const normalizedCredentials = normalizeStringList(credentialsText);
+        formData.set("credentials", normalizedCredentials);
 
-        if (valuesText) {
-          try {
-            JSON.parse(valuesText);
-            formData.set("values", valuesText);
-          } catch {
-            throw new Error("Invalid JSON in Values field");
-          }
-        }
+        const normalizedValues = normalizeStringList(valuesText);
+        formData.set("values", normalizedValues);
 
         const translationId = formData.get("translationId") as string | null;
 
@@ -525,26 +549,6 @@ export default function MultiLanguageSpecialistEditForm({
                   <input type="hidden" name="slug" value={specialist.slug} />
                   
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Focus Areas</label>
-                    <textarea 
-                      name="focusAreas" 
-                      rows={6} 
-                      defaultValue={specialist.focusAreas ? (() => {
-                        try {
-                          return JSON.parse(specialist.focusAreas).join('\n');
-                        } catch {
-                          return specialist.focusAreas;
-                        }
-                      })() : ""}
-                      className="w-full rounded border px-3 py-2 text-sm" 
-                      placeholder="Startup & Corporate&#10;Employment & Incentives&#10;Privacy & Data Protection&#10;Disputes, ADR & Litigation Strategy"
-                    ></textarea>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Enter each focus area on a new line. They will be automatically formatted as a JSON array.
-                    </p>
-                  </div>
-                  
-                  <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">Representative Matters</label>
                     <textarea 
                       name="representativeMatters" 
@@ -579,30 +583,30 @@ export default function MultiLanguageSpecialistEditForm({
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Credentials & Memberships (JSON)</label>
+                    <label className="mb-1 block text-sm font-medium">Credentials & Memberships</label>
                     <textarea 
                       name="credentials" 
                       rows={4} 
-                      defaultValue={specialist.credentials || ""}
-                      className="w-full rounded border px-3 py-2 font-mono text-sm" 
-                      placeholder='["Georgian Bar Association (Attorney‑at‑Law)", "Arbitrator, Tbilisi International Tribunal", "Lecturer, Sulkhan‑Saba University"]'
+                      defaultValue={formatJsonListForTextarea(specialist.credentials)}
+                      className="w-full rounded border px-3 py-2 text-sm" 
+                      placeholder="Award One\nMembership Two\nCertification Three"
                     ></textarea>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      JSON array of professional credentials and memberships.
+                      Enter one credential per line. These will be stored as a list.
                     </p>
                   </div>
-                  
+
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium">Values & How We Work (JSON)</label>
+                    <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
                     <textarea 
                       name="values" 
                       rows={6} 
-                      defaultValue={specialist.values || ""}
-                      className="w-full rounded border px-3 py-2 font-mono text-sm" 
-                      placeholder='{"Clarity first": "Scope, timelines, and pricing are agreed before work starts.", "Speed with rigor": "Fast drafts (typically 3–5 business days) without cutting corners."}'
+                      defaultValue={formatJsonListForTextarea(specialist.values)}
+                      className="w-full rounded border px-3 py-2 text-sm" 
+                      placeholder="Value name: description\nAnother value: description"
                     ></textarea>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      JSON object with value names as keys and descriptions as values.
+                      Enter each value on a new line. These will be stored as a list.
                     </p>
                   </div>
                   
@@ -770,17 +774,6 @@ export default function MultiLanguageSpecialistEditForm({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Focus Areas</label>
-                      <textarea
-                        name="focusAreas"
-                        rows={4}
-                        defaultValue={translation?.focusAreas || ""}
-                        className="w-full rounded border px-3 py-2 text-sm"
-                        placeholder={`Enter each focus area on a new line (${loc.name}).`}
-                      />
-                    </div>
-
-                    <div>
                       <label className="mb-1 block text-sm font-medium">Representative Matters</label>
                       <textarea
                         name="representativeMatters"
@@ -803,24 +796,24 @@ export default function MultiLanguageSpecialistEditForm({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Credentials & Memberships (JSON)</label>
+                      <label className="mb-1 block text-sm font-medium">Credentials & Memberships</label>
                       <textarea
                         name="credentials"
                         rows={3}
                         defaultValue={translation?.credentials || ""}
-                        className="w-full rounded border px-3 py-2 font-mono text-sm"
-                        placeholder='["Credential 1", "Credential 2"]'
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each credential on a new line (${loc.name}).`}
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium">Values & How We Work (JSON)</label>
+                      <label className="mb-1 block text-sm font-medium">Values & How We Work</label>
                       <textarea
                         name="values"
                         rows={4}
                         defaultValue={translation?.values || ""}
-                        className="w-full rounded border px-3 py-2 font-mono text-sm"
-                        placeholder='{"Value": "Description"}'
+                        className="w-full rounded border px-3 py-2 text-sm"
+                        placeholder={`Enter each value on a new line (${loc.name}).`}
                       />
                     </div>
                     

@@ -33,6 +33,31 @@ function normalizeTeachingWritingInput(raw: FormDataEntryValue | null | undefine
   }
 }
 
+function normalizeStringListInput(raw: FormDataEntryValue | null | undefined): string | null {
+  if (raw === null || raw === undefined) return null;
+
+  const value = String(raw).trim();
+  if (!value) {
+    return "";
+  }
+
+  try {
+    JSON.parse(value);
+    return value;
+  } catch {
+    const entries = value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify(entries);
+  }
+}
+
 type SessionUserCompany = NonNullable<Session["user"]> & {
   role?: "SUPER_ADMIN" | "COMPANY" | "SPECIALIST" | "SUBSCRIBER";
   companyId?: string;
@@ -97,8 +122,8 @@ async function updateSpecialist(formData: FormData) {
         )
       : null;
     const teachingWriting = normalizeTeachingWritingInput(formData.get("teachingWriting"));
-    const credentials = String(formData.get("credentials") || "").trim() || null;
-    const values = String(formData.get("values") || "").trim() || null;
+    const credentials = normalizeStringListInput(formData.get("credentials"));
+    const values = normalizeStringListInput(formData.get("values"));
     const languagesArray = formData.getAll("languages") as string[];
     const languages = JSON.stringify(languagesArray);
     const specializationsArray = formData.getAll("specializations") as string[];
@@ -202,8 +227,8 @@ async function updateTranslation(formData: FormData): Promise<{ success?: boolea
     const focusAreas = String(formData.get("focusAreas") || "").trim() || null;
     const representativeMatters = String(formData.get("representativeMatters") || "").trim() || null;
     const teachingWriting = String(formData.get("teachingWriting") || "").trim() || null;
-    const credentials = String(formData.get("credentials") || "").trim() || null;
-    const values = String(formData.get("values") || "").trim() || null;
+    const credentials = normalizeStringListInput(formData.get("credentials"));
+    const values = normalizeStringListInput(formData.get("values"));
 
     if (!specialistProfileId || !locale || !name || !slug) {
       return { error: "Missing required translation fields" };
