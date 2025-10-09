@@ -3,6 +3,31 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth';
 import prisma from '@/lib/prisma';
 
+function normalizeTeachingWritingInput(raw: FormDataEntryValue | null | undefined): string | null {
+  if (raw === null || raw === undefined) return null;
+  const value = String(raw).trim();
+
+  if (!value) {
+    return "";
+  }
+
+  try {
+    JSON.parse(value);
+    return value;
+  } catch {
+    const entries = value
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (entries.length === 0) {
+      return "";
+    }
+
+    return JSON.stringify({ entries });
+  }
+}
+
 export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -26,7 +51,7 @@ export async function PATCH(request: NextRequest) {
     const focusAreas = focusAreasText ? JSON.stringify(focusAreasText.split('\n').filter(line => line.trim())) : null;
     const representativeMattersText = String(formData.get('representativeMatters') || '').trim();
     const representativeMatters = representativeMattersText ? JSON.stringify(representativeMattersText.split('\n').filter(line => line.trim())) : null;
-    const teachingWriting = String(formData.get('teachingWriting') || '').trim() || null;
+    const teachingWriting = normalizeTeachingWritingInput(formData.get('teachingWriting'));
     const credentials = String(formData.get('credentials') || '').trim() || null;
     const values = String(formData.get('values') || '').trim() || null;
     const languagesArray = formData.getAll('languages') as string[];
