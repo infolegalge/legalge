@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { locales, Locale } from "@/i18n/locales";
 import { trackEvent } from "@/lib/analytics";
 
@@ -12,6 +12,8 @@ export default function LocaleSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
   const [switching, setSwitching] = useState(false);
+  const buttonsRef = useRef<Array<HTMLButtonElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(() => locales.indexOf(current));
 
   async function switchTo(locale: Locale) {
     try {
@@ -43,18 +45,61 @@ export default function LocaleSwitcher() {
         router.push(nextPath);
       }
       trackEvent("language_switch", { from_locale: current, to_locale: locale });
+      setActiveIndex(locales.indexOf(locale));
     } finally {
       setSwitching(false);
     }
   }
 
+  const focusLocale = useCallback((index: number) => {
+    const total = locales.length;
+    const normalized = ((index % total) + total) % total;
+    setActiveIndex(normalized);
+    const target = buttonsRef.current[normalized];
+    if (target) target.focus();
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+      switch (event.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+          event.preventDefault();
+          focusLocale(index + 1);
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          event.preventDefault();
+          focusLocale(index - 1);
+          break;
+        case "Home":
+          event.preventDefault();
+          focusLocale(0);
+          break;
+        case "End":
+          event.preventDefault();
+          focusLocale(locales.length - 1);
+          break;
+        default:
+          break;
+      }
+    },
+    [focusLocale],
+  );
+
   return (
-    <div className="ml-2 flex items-center gap-2" aria-label={t("site.title")}>
+    <div className="ml-2 flex items-center gap-2" role="group" aria-label={t("site.title") + " language"}>
       {locales.map((locale) => (
         <button
           key={locale}
           onClick={() => switchTo(locale)}
           aria-current={current === locale ? "true" : undefined}
+          tabIndex={activeIndex === locales.indexOf(locale) ? 0 : -1}
+          ref={(el) => {
+            buttonsRef.current[locales.indexOf(locale)] = el;
+          }}
+          onFocus={() => setActiveIndex(locales.indexOf(locale))}
+          onKeyDown={(event) => handleKeyDown(event, locales.indexOf(locale))}
           className={
             current === locale
               ? "rounded border px-2 py-1 text-xs"

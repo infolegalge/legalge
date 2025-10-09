@@ -10,7 +10,7 @@ import ThemeToggle from "./ThemeToggle";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { LayoutDashboard, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 const AuthButtons = dynamic(() => import("./AuthButtons"), { ssr: false });
 
 export default function Header() {
@@ -27,6 +27,63 @@ export default function Header() {
     { href: `${base}/news`, label: t("nav.news") },
     { href: `${base}/contact`, label: t("nav.contact") },
   ];
+
+  const activeDesktopIndex = navItems.findIndex((item) => pathname?.startsWith(item.href));
+  const [rovingIndex, setRovingIndex] = useState(() => (activeDesktopIndex >= 0 ? activeDesktopIndex : 0));
+  const navRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  useEffect(() => {
+    const match = navItems.findIndex((item) => pathname?.startsWith(item.href));
+    setRovingIndex(match >= 0 ? match : 0);
+  }, [pathname, navItems.length]);
+
+  useEffect(() => {
+    const current = navRefs.current[rovingIndex];
+    if (current && document.activeElement && !navRefs.current.includes(document.activeElement as HTMLAnchorElement)) {
+      current.tabIndex = 0;
+    }
+  }, [rovingIndex]);
+
+  const moveFocus = useCallback(
+    (nextIndex: number) => {
+      const total = navItems.length;
+      const normalized = ((nextIndex % total) + total) % total;
+      setRovingIndex(normalized);
+      const target = navRefs.current[normalized];
+      if (target) {
+        target.focus();
+      }
+    },
+    [navItems.length],
+  );
+
+  const handleRovingKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLAnchorElement>, index: number) => {
+      switch (event.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+          event.preventDefault();
+          moveFocus(index + 1);
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          event.preventDefault();
+          moveFocus(index - 1);
+          break;
+        case "Home":
+          event.preventDefault();
+          moveFocus(0);
+          break;
+        case "End":
+          event.preventDefault();
+          moveFocus(navItems.length - 1);
+          break;
+        default:
+          break;
+      }
+    },
+    [moveFocus, navItems.length],
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -49,7 +106,7 @@ export default function Header() {
             priority
           />
         </Link>
-        <nav aria-label="Main" className="hidden items-center md:flex">
+        <nav role="navigation" aria-label="Main" className="hidden items-center md:flex">
           <ul className="flex items-center gap-2">
             {navItems.map((item, idx) => (
               <li key={item.href} className="flex items-center">
@@ -61,6 +118,13 @@ export default function Header() {
                       ? "bg-primary/10 text-foreground"
                       : "text-foreground/70 hover:bg-muted hover:text-foreground",
                   )}
+                  aria-current={pathname?.startsWith(item.href) ? "page" : undefined}
+                  tabIndex={rovingIndex === idx ? 0 : -1}
+                  ref={(el) => {
+                    navRefs.current[idx] = el;
+                  }}
+                  onFocus={() => setRovingIndex(idx)}
+                  onKeyDown={(event) => handleRovingKeyDown(event, idx)}
                 >
                   {item.label}
                 </Link>
@@ -81,6 +145,7 @@ export default function Header() {
                     ? "bg-primary/10 text-foreground"
                     : "text-foreground/70 hover:bg-muted hover:text-foreground",
                 )}
+                aria-current={pathname?.startsWith(`${base}/admin`) ? "page" : undefined}
               >
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 {t("header.cms")}
@@ -105,7 +170,7 @@ export default function Header() {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-background">
-          <nav className="px-4 py-4">
+          <nav role="navigation" aria-label="Mobile main" className="px-4 py-4">
             <ul className="space-y-2">
               {navItems.map((item) => (
                 <li key={item.href}>
@@ -118,6 +183,7 @@ export default function Header() {
                         : "text-foreground/70 hover:bg-muted hover:text-foreground",
                     )}
                     onClick={() => setMobileMenuOpen(false)}
+                    aria-current={pathname?.startsWith(item.href) ? "page" : undefined}
                   >
                     {item.label}
                   </Link>
@@ -134,6 +200,7 @@ export default function Header() {
                         : "text-foreground/70 hover:bg-muted hover:text-foreground",
                     )}
                     onClick={() => setMobileMenuOpen(false)}
+                    aria-current={pathname?.startsWith(`${base}/admin`) ? "page" : undefined}
                   >
                     <LayoutDashboard className="h-4 w-4" />
                     {t("header.cms")}
