@@ -8,6 +8,9 @@ import { ArrowLeft } from "lucide-react";
 import CompanyLandingPageSimple from "@/components/CompanyLandingPageSimple";
 import { createLocaleRouteMetadata } from "@/lib/metadata";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface CompanyPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
 }
