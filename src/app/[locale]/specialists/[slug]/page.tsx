@@ -402,33 +402,6 @@ export default async function SpecialistPage({ params }: SpecialistPageProps) {
         }
       })()}
 
-      {/* Values & How We Work */}
-      {specialist.values && (() => {
-        try {
-          const values = JSON.parse(specialist.values);
-          return Object.keys(values).length > 0 ? (
-            <div className="mb-8">
-              <h2 className="mb-4 text-xl font-semibold flex items-center gap-2">
-                <Heart className="h-5 w-5 text-primary" />
-                {specialistT("values")}
-              </h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                {Object.entries(values).map(([key, value]) => (
-                  <div key={key} className="rounded-lg border p-4">
-                    <h3 className="font-semibold mb-2 text-primary">{key}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {value as string}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null;
-        } catch {
-          return null;
-        }
-      })()}
-
       {/* Services */}
       {specialist.services.length > 0 && (
         <div className="mb-8">
