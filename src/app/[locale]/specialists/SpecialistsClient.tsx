@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Search, Filter, Building2, User, X } from "lucide-react";
 import SpecialistCard from "@/components/SpecialistCard";
@@ -61,6 +62,7 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
   // Separate filtered specialists by company affiliation
   const companySpecialists = filteredSpecialists.filter(s => s.company);
   const soloSpecialists = filteredSpecialists.filter(s => !s.company);
+  const uniqueCompanyCount = new Set(filteredSpecialists.filter(s => s.company).map(s => s.company!.id)).size;
 
   // Clear all filters
   const clearFilters = () => {
@@ -202,7 +204,7 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
       </div>
 
       {/* Statistics */}
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card p-4">
           <div className="flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />
@@ -229,6 +231,17 @@ export default function SpecialistsClient({ initialSpecialists, locale }: Specia
           </div>
           <p className="text-2xl font-bold text-foreground">{soloSpecialists.length}</p>
         </div>
+        <Link
+          href={`/${locale}/companies`}
+          className="rounded-lg border bg-card p-4 transition hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <div className="flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-primary" />
+            <span className="text-sm font-medium">{t("specialists.companies_count")}</span>
+          </div>
+          <p className="text-2xl font-bold text-foreground">{uniqueCompanyCount}</p>
+          <p className="text-xs text-primary mt-2">{t("specialists.view_companies", { default: "View Companies" })} →</p>
+        </Link>
       </div>
 
       {/* Results Summary */}

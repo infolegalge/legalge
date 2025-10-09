@@ -45,6 +45,8 @@
     "total_specialists": "Total Specialists",
     "company_specialists": "Company Specialists",
     "solo_practitioners": "Solo Practitioners",
+    "companies_count": "Companies",
+    "view_companies": "View Companies",
     "no_specialists": "No specialists found",
     "no_specialists_description": "We're working on adding our specialist profiles. Check back soon!",
     "no_company_results": "No company specialists match the current filters.",
