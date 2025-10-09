@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { fetchSpecialist } from "@/lib/specialists";
 import Image from "next/image";
@@ -59,9 +59,8 @@ export async function generateMetadata({ params }: SpecialistPageProps): Promise
 
 export default async function SpecialistPage({ params }: SpecialistPageProps) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations();
-  const specialistT = await getTranslations('specialist');
+  const t = await getTranslations({ locale, namespace: undefined });
+  const specialistT = await getTranslations({ locale, namespace: 'specialist' });
   
   const specialist = await fetchSpecialist(slug, locale);
   
