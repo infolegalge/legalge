@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
 import { fetchCompany } from "@/lib/specialists";
 import Link from "next/link";
@@ -38,8 +38,7 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
 
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
-  const t = await getTranslations();
+  const t = await getTranslations({ locale, namespace: undefined });
   
   const company = await fetchCompany(slug);
   
