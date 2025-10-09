@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function PracticeIndex({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations();
+  const t = await getTranslations("practice");
   const [areas, services] = await Promise.all([listPracticeAreasForLocale(locale), listServicesForLocale(locale)]);
   const imageFor = (title: string) => {
     const base = title
@@ -50,27 +50,27 @@ export default async function PracticeIndex({ params }: { params: Promise<{ loca
   };
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold">{t("practice.title")}</h1>
+      <h1 className="text-2xl font-semibold">{t("title")}</h1>
       <div className="mt-3">
         <PracticeSearch
           locale={locale}
           practices={areas}
           services={services}
-          inputLabel={t("practice.search_label")}
+          inputLabel={t("search_label")}
           headingLabels={{
-            practices: t("practice.search_practices"),
-            services: t("practice.search_services"),
-            noMatches: t("practice.search_no_matches"),
-            practiceTag: t("practice.search_practice_tag"),
-            serviceTag: t("practice.search_service_tag"),
-            servicesCount: t("practice.search_services_count"),
-            parentPractice: t("practice.parent_practice"),
+            practices: t("search_practices"),
+            services: t("search_services"),
+            noMatches: t("search_no_matches"),
+            practiceTag: t("search_practice_tag"),
+            serviceTag: t("search_service_tag"),
+            servicesCount: t("search_services_count"),
+            parentPractice: t("parent_practice"),
           }}
         />
       </div>
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {areas.length === 0 ? (
-          <p className="text-foreground/70">{t("practice.description")}</p>
+          <p className="text-foreground/70">{t("description")}</p>
         ) : (
           areas.map((a) => {
             const img = imageFor(a.baseSlug || a.title);
@@ -96,8 +96,8 @@ export default async function PracticeIndex({ params }: { params: Promise<{ loca
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-4">
                     <div className="font-medium text-white drop-shadow-sm">{a.title}</div>
-                    <div className="mt-1 text-xs text-white/90 drop-shadow-sm">
-                      {t("practice.services_count", { count: a.servicesCount })}
+                  <div className="mt-1 text-xs text-white/90 drop-shadow-sm">
+                    {t("services_count", { count: a.servicesCount ?? 0 })}
                     </div>
                   </div>
                 </div>

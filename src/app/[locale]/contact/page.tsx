@@ -17,14 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function ContactPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations();
+  const t = await getTranslations("contact");
 
-  const translations = {
-    name: t("contact.name"),
-    email: t("contact.email"),
-    message: t("contact.message"),
-    submit: t("contact.submit"),
-    submitting: t("contact.submitting"),
+  const formTranslations = {
+    name: t("name"),
+    email: t("email"),
+    message: t("message"),
+    submit: t("submit"),
+    submitting: t("submitting"),
   };
 
   const officeLocation = {
@@ -36,15 +36,15 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-semibold">{t("contact.title")}</h1>
-        <p className="mt-2 text-foreground/70">{t("contact.description")}</p>
+        <h1 className="text-3xl font-semibold">{t("title")}</h1>
+        <p className="mt-2 text-foreground/70">{t("description")}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="space-y-6">
           <div>
-            <h2 className="text-xl font-semibold mb-4">{t("contact.description")}</h2>
-            <ContactForm locale={locale} t={translations} />
+            <h2 className="mb-4 text-xl font-semibold">{t("form_heading", { defaultValue: t("description") })}</h2>
+            <ContactForm locale={locale} t={formTranslations} />
           </div>
         </div>
 
@@ -57,8 +57,8 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               longitude={officeLocation.longitude}
               address={officeLocation.address}
               companyName="LLC Legal Sandbox Georgia"
-              getDirectionsText={t("contact.get_directions")}
-              viewOnOsmText={t("contact.view_on_osm")}
+              getDirectionsText={t("get_directions")}
+              viewOnOsmText={t("view_on_osm")}
               className="h-80 w-full rounded-lg border"
             />
           </div>
