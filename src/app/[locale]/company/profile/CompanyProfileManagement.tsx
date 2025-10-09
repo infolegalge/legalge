@@ -22,6 +22,10 @@ interface CompanyProfile {
   mapLink: string | null;
   logoUrl: string | null;
   logoAlt: string | null;
+  mission: string | null;
+  vision: string | null;
+  history: string | null;
+  contactPrompt: string | null;
 }
 
 export default function CompanyProfileManagement({ locale }: CompanyProfileManagementProps) {
@@ -141,6 +145,33 @@ export default function CompanyProfileManagement({ locale }: CompanyProfileManag
                 {company.description}
               </div>
             )}
+
+            <dl className="space-y-3 text-sm">
+              {company.mission && (
+                <div>
+                  <dt className="font-semibold">Mission</dt>
+                  <dd className="text-muted-foreground whitespace-pre-line">{company.mission}</dd>
+                </div>
+              )}
+              {company.vision && (
+                <div>
+                  <dt className="font-semibold">Vision</dt>
+                  <dd className="text-muted-foreground whitespace-pre-line">{company.vision}</dd>
+                </div>
+              )}
+              {company.history && (
+                <div>
+                  <dt className="font-semibold">History</dt>
+                  <dd className="text-muted-foreground whitespace-pre-line">{company.history}</dd>
+                </div>
+              )}
+              {company.contactPrompt && (
+                <div>
+                  <dt className="font-semibold">Client Prompt</dt>
+                  <dd className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</dd>
+                </div>
+              )}
+            </dl>
 
             {company.mapLink && (
               <a

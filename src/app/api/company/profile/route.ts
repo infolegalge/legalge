@@ -98,9 +98,26 @@ export async function PATCH(request: NextRequest) {
       address,
       city,
       mapLink,
+      mission,
+      vision,
+      history,
+      contactPrompt,
+      socialLinks: socialLinksRaw,
       logoUrl,
-    logoAlt,
+      logoAlt,
     } = body;
+    let socialLinks: string | null = null;
+    if (typeof socialLinksRaw === 'string' && socialLinksRaw.trim().length > 0) {
+      try {
+        const parsed = JSON.parse(socialLinksRaw);
+        if (!Array.isArray(parsed)) {
+          return NextResponse.json({ error: 'Social links must be a JSON array.' }, { status: 400 });
+        }
+        socialLinks = JSON.stringify(parsed);
+      } catch {
+        return NextResponse.json({ error: 'Social links must be valid JSON.' }, { status: 400 });
+      }
+    }
     
     // Determine which company to update
     let companyId: string | undefined;
@@ -152,8 +169,13 @@ export async function PATCH(request: NextRequest) {
         address: address || undefined,
         city: city || undefined,
         mapLink: mapLink || undefined,
+        mission: mission || undefined,
+        vision: vision || undefined,
+        history: history || undefined,
+        contactPrompt: contactPrompt || undefined,
+        socialLinks: socialLinks || undefined,
         logoUrl: logoUrl || undefined,
-        logoAlt: (body.logoAlt as string | undefined)?.trim() || undefined,
+        logoAlt: (logoAlt as string | undefined)?.trim() || undefined,
       }
     });
     
