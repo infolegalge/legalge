@@ -171,7 +171,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       siteName: 'Legal Sandbox Georgia',
       publishedTime: post.publishedAt ? post.publishedAt.toISOString() : undefined,
       modifiedTime: post.updatedAt ? post.updatedAt.toISOString() : undefined,
-      authors: post.author?.name ? [post.author.name] : previousOpenGraph.authors,
       images: img
         ? [{ url: img, width: 1200, height: 630, alt: imgAlt }]
         : previousOpenGraph.images,
@@ -188,13 +187,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
     const publishedISO = post.publishedAt ? post.publishedAt.toISOString() : undefined;
     const modifiedISO = post.updatedAt ? post.updatedAt.toISOString() : undefined;
-    if (publishedISO || modifiedISO) {
-      metadata.other = {
-        ...(metadata.other ?? {}),
-        ...(publishedISO ? { 'article:published_time': publishedISO } : {}),
-        ...(modifiedISO ? { 'article:modified_time': modifiedISO } : {}),
-      };
+    const existingOtherEntries = metadata.other
+      ? Object.entries(metadata.other).filter(([, value]) => value !== undefined && value !== null)
+      : [];
+    const filteredOther = Object.fromEntries(existingOtherEntries) as Record<string, string | number | (string | number)[]>;
+    if (publishedISO) {
+      filteredOther['article:published_time'] = publishedISO;
     }
+    if (modifiedISO) {
+      filteredOther['article:modified_time'] = modifiedISO;
+    }
+    if (post.author?.name) {
+      filteredOther['article:author'] = post.author.name;
+    }
+    metadata.other = filteredOther;
 
     return metadata;
   } catch {
