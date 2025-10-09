@@ -5,7 +5,8 @@ import type { Locale } from "@/i18n/locales";
 import { fetchSpecialists } from "@/lib/specialists";
 import SpecialistsClient from "./SpecialistsClient";
 
-export const revalidate = 3600;
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
