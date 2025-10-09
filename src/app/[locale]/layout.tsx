@@ -56,13 +56,17 @@ export default async function LocaleLayout({
   }
 
   return (
-    <NextIntlClientProvider locale={(locale as Locale) ?? defaultLocale} messages={messages}>
+    <html lang={locale} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <NextIntlClientProvider locale={(locale as Locale) ?? defaultLocale} messages={messages}>
       <AuthSessionProvider>
         <Header />
         <main className="min-h-[calc(100vh-7rem)]">{children}</main>
         <Footer />
       </AuthSessionProvider>
-    </NextIntlClientProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
 

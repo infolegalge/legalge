@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     } catch {}
   })();`;
   return (
-    <html suppressHydrationWarning lang="ka">
+    <html suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <script
