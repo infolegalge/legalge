@@ -411,93 +411,95 @@ export default function CompanyEditForm({
         </div>
 
         <div className="space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-medium">Company Logo</label>
+          <div className="space-y-4 rounded border p-4">
+            <div>
+              <label className="mb-2 block text-sm font-medium">Company Logo</label>
+              <div className="space-y-3">
+                <ImageUpload
+                  onImageUploaded={(img) => {
+                    const nextValue = img.webpUrl || img.url;
+                    setLogoUrl(nextValue);
+                  }}
+                  defaultAlt={logoAlt}
+                  altValue={logoAlt}
+                  onAltChange={(value) => {
+                    setLogoAlt(value);
+                  }}
+                  altLabel="Logo alt text"
+                  onError={() => {}}
+                  maxSize={10 * 1024 * 1024}
+                />
+                <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
+                {company.logoUrl && (
+                  <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Provide a localized logo description for {activeLocale.toUpperCase()} users.
+                </p>
+              </div>
+            </div>
+
             <div className="space-y-3">
-              <ImageUpload
-                onImageUploaded={(img) => {
-                  const nextValue = img.webpUrl || img.url;
-                  setLogoUrl(nextValue);
-                }}
-                defaultAlt={logoAlt}
-                altValue={logoAlt}
-                onAltChange={(value) => {
-                  setLogoAlt(value);
-                }}
-                altLabel="Logo alt text"
-                onError={() => {}}
-                maxSize={10 * 1024 * 1024}
-              />
-              <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
-              {company.logoUrl && (
-                <div className="text-xs text-muted-foreground">Current: {company.logoUrl}</div>
-              )}
-              <p className="text-xs text-muted-foreground">
-                Provide a localized logo description for {activeLocale.toUpperCase()} users.
-              </p>
-            </div>
-          </div>
-          
-        <div className="space-y-3 rounded border p-4">
-            <h3 className="text-sm font-medium">Contact Information</h3>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Website</label>
-              <input 
-                name="website" 
-                type="url"
-                defaultValue={company.website || ""}
-                className="w-full rounded border px-3 py-2 bg-muted/50" 
-                placeholder="https://example.com"
-                readOnly
-                tabIndex={-1}
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Phone</label>
-              <input 
-                name="phone" 
-                type="tel"
-                defaultValue={company.phone || ""}
-                className="w-full rounded border px-3 py-2 bg-muted/50" 
-                placeholder={OFFICIAL_PHONE}
-                readOnly
-                tabIndex={-1}
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Email</label>
-              <input 
-                name="email" 
-                type="email"
-                defaultValue={company.email || ""}
-                className="w-full rounded border px-3 py-2 bg-muted/50" 
-                placeholder="contact@company.com"
-                readOnly
-                tabIndex={-1}
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Address</label>
-              <input 
-                name="address" 
-                defaultValue={company.address || ""}
-                className="w-full rounded border px-3 py-2" 
-                placeholder="Georgia, Tbilisi, Agmashnebeli alley N240, 0159"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Map Link</label>
-              <input 
-                name="mapLink" 
-                type="url"
-                defaultValue={company.mapLink || ""}
-                className="w-full rounded border px-3 py-2" 
-                placeholder="https://maps.google.com/..."
-              />
+              <h3 className="text-sm font-medium">Contact Information</h3>
+              <div>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Website</label>
+                <input 
+                  name="website" 
+                  type="url"
+                  defaultValue={company.website || ""}
+                  className="w-full rounded border px-3 py-2 bg-muted/50" 
+                  placeholder="https://example.com"
+                  readOnly
+                  tabIndex={-1}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Phone</label>
+                <input 
+                  name="phone" 
+                  type="tel"
+                  defaultValue={company.phone || ""}
+                  className="w-full rounded border px-3 py-2 bg-muted/50" 
+                  placeholder={OFFICIAL_PHONE}
+                  readOnly
+                  tabIndex={-1}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Email</label>
+                <input 
+                  name="email" 
+                  type="email"
+                  defaultValue={company.email || ""}
+                  className="w-full rounded border px-3 py-2 bg-muted/50" 
+                  placeholder="contact@company.com"
+                  readOnly
+                  tabIndex={-1}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Address</label>
+                <input 
+                  name="address" 
+                  defaultValue={company.address || ""}
+                  className="w-full rounded border px-3 py-2" 
+                  placeholder="Georgia, Tbilisi, Agmashnebeli alley N240, 0159"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Map Link</label>
+                <input 
+                  name="mapLink" 
+                  type="url"
+                  defaultValue={company.mapLink || ""}
+                  className="w-full rounded border px-3 py-2" 
+                  placeholder="https://maps.google.com/..."
+                />
+              </div>
             </div>
           </div>
 
-          <div className="space-y-3 rounded border p-4">
+          <div className="space-y-4 rounded border p-4">
             <h3 className="text-sm font-medium">Social Links</h3>
             {SOCIAL_NETWORKS.map((network) => (
               <div key={network}>
@@ -520,27 +522,7 @@ export default function CompanyEditForm({
               Paste full URLs. Leave blank to hide any network.
             </p>
           </div>
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">How We Work</label>
-          <textarea
-            name={activeLocale==='ka' ? 'contactPrompt' : `contactPrompt_${activeLocale}`}
-            rows={3}
-            value={copy[activeLocale].contactPrompt}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], contactPrompt: value } }));
-            }}
-            className="w-full rounded border px-3 py-2"
-            placeholder="Encourage visitors to reach out, ask questions, or request services"
-          ></textarea>
-        </div>
 
-
-        <div className="md:col-span-2">
           <div className="rounded border p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">SEO & OG Metadata</h3>
@@ -622,6 +604,24 @@ export default function CompanyEditForm({
             </div>
           </div>
         </div>
+        
+        <div className="md:col-span-2">
+          <label className="mb-1 block text-sm font-medium">How We Work</label>
+          <textarea
+            name={activeLocale==='ka' ? 'contactPrompt' : `contactPrompt_${activeLocale}`}
+            rows={3}
+            value={copy[activeLocale].contactPrompt}
+            onChange={(event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLTextAreaElement)) return;
+              const value = target.value ?? "";
+              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], contactPrompt: value } }));
+            }}
+            className="w-full rounded border px-3 py-2"
+            placeholder="Encourage visitors to reach out, ask questions, or request services"
+          ></textarea>
+        </div>
+
 
         <div className="md:col-span-2">
           <button 
