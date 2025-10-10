@@ -442,16 +442,6 @@ export default function CompanyEditForm({
             ></textarea>
           </div>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">Map Link</label>
-            <input 
-              name="mapLink" 
-              type="url"
-              defaultValue={company.mapLink || ""}
-              className="w-full rounded border px-3 py-2" 
-              placeholder="https://maps.google.com/..."
-            />
-          </div>
         </div>
 
         <div className="space-y-4">
@@ -527,6 +517,16 @@ export default function CompanyEditForm({
                 defaultValue={company.address || ""}
                 className="w-full rounded border px-3 py-2" 
                 placeholder="Georgia, Tbilisi, Agmashnebeli alley N240, 0159"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Map Link</label>
+              <input 
+                name="mapLink" 
+                type="url"
+                defaultValue={company.mapLink || ""}
+                className="w-full rounded border px-3 py-2" 
+                placeholder="https://maps.google.com/..."
               />
             </div>
           </div>
