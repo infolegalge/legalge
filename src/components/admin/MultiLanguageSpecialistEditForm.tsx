@@ -343,7 +343,7 @@ export default function MultiLanguageSpecialistEditForm({
         </div>
       )}
 
-      <Tabs defaultValue="profile" className="space-y-4">
+        <Tabs defaultValue="profile" className="space-y-4" onValueChange={() => setSuccess(null)}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
