@@ -55,7 +55,7 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
             
             {/* Tagline */}
             {company.shortDesc && (
-              <p className="text-xl text-muted-foreground mb-6">{company.shortDesc}</p>
+              <p className="text-xl text-muted-foreground mb-6 text-justify">{company.shortDesc}</p>
             )}
 
             {/* Contact Details */}
@@ -123,7 +123,7 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
       {company.longDesc && (
         <div className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">{t("companies.about")}</h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground whitespace-pre-line">
+          <div className="prose prose-lg max-w-none text-muted-foreground whitespace-pre-line text-justify">
             {company.longDesc}
           </div>
         </div>
@@ -139,26 +139,26 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
                   <Quote className="h-5 w-5 text-primary" />
                   {t("companies.mission") || "Mission"}
                 </h2>
-                <p className="text-muted-foreground whitespace-pre-line">{company.mission}</p>
+                <p className="text-muted-foreground whitespace-pre-line text-justify">{company.mission}</p>
               </div>
             )}
             {company.vision && (
               <div className="rounded-lg border bg-card p-6">
                 <h2 className="text-xl font-semibold mb-3">{t("companies.vision") || "Vision"}</h2>
-                <p className="text-muted-foreground whitespace-pre-line">{company.vision}</p>
+                <p className="text-muted-foreground whitespace-pre-line text-justify">{company.vision}</p>
               </div>
             )}
           </div>
           {company.history && (
             <div className="rounded-lg border bg-card p-6">
               <h2 className="text-xl font-semibold mb-3">{t("companies.history") || "History"}</h2>
-              <p className="text-muted-foreground whitespace-pre-line">{company.history}</p>
+              <p className="text-muted-foreground whitespace-pre-line text-justify">{company.history}</p>
             </div>
           )}
           {company.contactPrompt && (
             <div className="rounded-lg border bg-card p-6">
               <h2 className="text-xl font-semibold mb-3">{t("companies.contact_prompt") || "How we work"}</h2>
-              <p className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</p>
+              <p className="text-muted-foreground whitespace-pre-line text-justify">{company.contactPrompt}</p>
             </div>
           )}
           {company.socialLinks && (() => {
@@ -219,7 +219,7 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
               </Link>
             ))}
             {company.specialists.flatMap((s) => s.specializations ?? []).map((specialization, index) => (
-              <div key={`spec-${index}`} className="rounded-lg border p-4 bg-muted/40 text-muted-foreground">
+              <div key={`spec-${index}`} className="rounded-lg border p-4 bg-muted/40 text-muted-foreground text-justify">
                 {specialization}
               </div>
             ))}

@@ -488,6 +488,66 @@ export default function CompanyEditForm({
               ></textarea>
             </div>
           </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Mission Statement</label>
+            <textarea
+              name={activeLocale==='ka' ? 'mission' : `mission_${activeLocale}`}
+              rows={3}
+              value={copy[activeLocale].mission}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? '';
+                setCopy((prev) => ({
+                  ...prev,
+                  [activeLocale]: { ...prev[activeLocale], mission: value },
+                }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="Why your company exists and the impact you aim to make"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Vision / Values</label>
+            <textarea
+              name={activeLocale==='ka' ? 'vision' : `vision_${activeLocale}`}
+              rows={3}
+              value={copy[activeLocale].vision}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? '';
+                setCopy((prev) => ({
+                  ...prev,
+                  [activeLocale]: { ...prev[activeLocale], vision: value },
+                }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="What future you work toward and the values that guide you"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">History / Founding Story</label>
+            <textarea
+              name={activeLocale==='ka' ? 'history' : `history_${activeLocale}`}
+              rows={4}
+              value={copy[activeLocale].history}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? '';
+                setCopy((prev) => ({
+                  ...prev,
+                  [activeLocale]: { ...prev[activeLocale], history: value },
+                }));
+              }}
+              className="w-full rounded border px-3 py-2"
+              placeholder="Share origin details, milestones, or founding story"
+            ></textarea>
+          </div>
         </div>
 
         <div className="space-y-4">
