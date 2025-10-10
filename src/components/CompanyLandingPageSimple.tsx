@@ -118,10 +118,9 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
       {company.longDesc && (
         <div className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">{t("companies.about")}</h2>
-          <div 
-            className="prose prose-lg max-w-none text-muted-foreground"
-            dangerouslySetInnerHTML={{ __html: company.longDesc }}
-          />
+          <div className="prose prose-lg max-w-none text-muted-foreground whitespace-pre-line">
+            {company.longDesc}
+          </div>
         </div>
       )}
 

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: CompanyPageProps): Promise<Me
   }
 
   const title = `${company.name} – Legal Partner`;
-  const description = (company.shortDesc || company.description || `Meet ${company.name}, a trusted legal partner in Georgia.`).slice(0, 160);
+  const description = (company.description || company.longDesc || `Meet ${company.name}, a trusted legal partner in Georgia.`).slice(0, 160);
 
   return createLocaleRouteMetadata(locale, ["companies", company.slug], {
     title,
@@ -59,7 +59,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": company.name,
-            "description": company.shortDesc || company.description,
+            "description": company.description || company.longDesc,
             "url": company.website,
             "logo": company.logoUrl ? {
               "@type": "ImageObject",

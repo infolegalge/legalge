@@ -359,7 +359,24 @@ export default function CompanyEditForm({
         
         <div className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium">Description</label>
+            <label className="mb-1 block text-sm font-medium">Company Overview (კომპანიის შესახებ)</label>
+            <textarea 
+              name={activeLocale==='ka' ? 'longDesc' : `longDesc_${activeLocale}`}
+              rows={6}
+              value={copy[activeLocale].longDesc}
+              onChange={(event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLTextAreaElement)) return;
+                const value = target.value ?? "";
+                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], longDesc: value } }));
+              }}
+              className="w-full rounded border px-3 py-2" 
+              placeholder="Share the full story of the company..."
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Summary</label>
             <textarea 
               name={activeLocale==='ka' ? 'description' : `description_${activeLocale}`}
               rows={3}
@@ -371,12 +388,12 @@ export default function CompanyEditForm({
                 setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], description: value } }));
               }}
               className="w-full rounded border px-3 py-2" 
-              placeholder="Brief company description..."
+              placeholder="Brief introduction shown on public profile"
             ></textarea>
           </div>
-          
+
           <div>
-            <label className="mb-1 block text-sm font-medium">Short Description</label>
+            <label className="mb-1 block text-sm font-medium">Moto</label>
             <input 
               name={activeLocale==='ka' ? 'shortDesc' : `shortDesc_${activeLocale}`}
               value={copy[activeLocale].shortDesc}
@@ -387,59 +404,8 @@ export default function CompanyEditForm({
                 setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], shortDesc: value } }));
               }}
               className="w-full rounded border px-3 py-2" 
-              placeholder="One-line description for cards"
+              placeholder="Short motto or headline"
             />
-          </div>
-          
-          <div>
-            <label className="mb-1 block text-sm font-medium">Mission Statement</label>
-            <textarea
-              name={activeLocale==='ka' ? 'mission' : `mission_${activeLocale}`}
-              rows={3}
-              value={copy[activeLocale].mission}
-              onChange={(event) => {
-                const target = event.target;
-                if (!(target instanceof HTMLTextAreaElement)) return;
-                const value = target.value ?? "";
-                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], mission: value } }));
-              }}
-              className="w-full rounded border px-3 py-2"
-              placeholder="Why your company exists and the impact you aim to make"
-            ></textarea>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">Vision / Values</label>
-            <textarea
-              name={activeLocale==='ka' ? 'vision' : `vision_${activeLocale}`}
-              rows={3}
-              value={copy[activeLocale].vision}
-              onChange={(event) => {
-                const target = event.target;
-                if (!(target instanceof HTMLTextAreaElement)) return;
-                const value = target.value ?? "";
-                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], vision: value } }));
-              }}
-              className="w-full rounded border px-3 py-2"
-              placeholder="What future you work toward and the values that guide you"
-            ></textarea>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">History / Founding Story</label>
-            <textarea
-              name={activeLocale==='ka' ? 'history' : `history_${activeLocale}`}
-              rows={4}
-              value={copy[activeLocale].history}
-              onChange={(event) => {
-                const target = event.target;
-                if (!(target instanceof HTMLTextAreaElement)) return;
-                const value = target.value ?? "";
-                setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], history: value } }));
-              }}
-              className="w-full rounded border px-3 py-2"
-              placeholder="Share origin details, milestones, or founding story"
-            ></textarea>
           </div>
 
         </div>
@@ -472,7 +438,7 @@ export default function CompanyEditForm({
             </div>
           </div>
           
-          <div className="space-y-3 rounded border p-4">
+        <div className="space-y-3 rounded border p-4">
             <h3 className="text-sm font-medium">Contact Information</h3>
             <div>
               <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Website</label>
@@ -557,24 +523,7 @@ export default function CompanyEditForm({
         </div>
         
         <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Long Description</label>
-          <textarea 
-            name={activeLocale==='ka' ? 'longDesc' : `longDesc_${activeLocale}`}
-            rows={6}
-            value={copy[activeLocale].longDesc}
-            onChange={(event) => {
-              const target = event.target;
-              if (!(target instanceof HTMLTextAreaElement)) return;
-              const value = target.value ?? "";
-              setCopy((prev) => ({ ...prev, [activeLocale]: { ...prev[activeLocale], longDesc: value } }));
-            }}
-            className="w-full rounded border px-3 py-2" 
-            placeholder="Detailed company information, history, values, etc..."
-          ></textarea>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium">Client / Community Interaction Prompt</label>
+          <label className="mb-1 block text-sm font-medium">How We Work</label>
           <textarea
             name={activeLocale==='ka' ? 'contactPrompt' : `contactPrompt_${activeLocale}`}
             rows={3}
