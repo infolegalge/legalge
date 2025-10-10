@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import dynamic from 'next/dynamic';
 import slugify from 'slugify';
+import { makeSlug } from '@/lib/utils';
 const RichEditor = dynamic(() => import('@/components/admin/RichEditor'), { ssr: false, loading: () => null });
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -104,7 +105,6 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
         metaDescription: string;
         ogTitle: string;
         ogDescription: string;
-        coverImageAlt: string;
       }
     >
   >({
@@ -117,7 +117,6 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: post.metaDescription || '',
       ogTitle: post.ogTitle || '',
       ogDescription: post.ogDescription || '',
-      coverImageAlt: post.coverImageAlt || '',
     },
     en: {
       title: translations.find((t) => t.locale === 'en')?.title || '',
@@ -128,7 +127,6 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: translations.find((t) => t.locale === 'en')?.metaDescription || '',
       ogTitle: translations.find((t) => t.locale === 'en')?.ogTitle || '',
       ogDescription: translations.find((t) => t.locale === 'en')?.ogDescription || '',
-      coverImageAlt: translations.find((t) => t.locale === 'en')?.coverImageAlt || '',
     },
     ru: {
       title: translations.find((t) => t.locale === 'ru')?.title || '',
@@ -139,7 +137,6 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
       metaDescription: translations.find((t) => t.locale === 'ru')?.metaDescription || '',
       ogTitle: translations.find((t) => t.locale === 'ru')?.ogTitle || '',
       ogDescription: translations.find((t) => t.locale === 'ru')?.ogDescription || '',
-      coverImageAlt: translations.find((t) => t.locale === 'ru')?.coverImageAlt || '',
     },
   });
 
@@ -188,14 +185,7 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
     setFormData(prev => ({
       ...prev,
       coverImageUrl: imageData.url,
-      coverImageAlt: imageData.alt || prev.coverImageAlt,
-    }));
-    setTData((prev) => ({
-      ...prev,
-      [activeLocale]: {
-        ...prev[activeLocale],
-        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
-      },
+      coverImageAlt: imageData.alt && imageData.alt.trim() ? imageData.alt.trim() : prev.coverImageAlt,
     }));
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
@@ -211,16 +201,34 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
     try {
       const prepared = {
         ka: {
-          ...tData.ka,
-          slug: ensureSlug(tData.ka.slug, tData.ka.title, "ka"),
+          title: tData.ka.title,
+          slug: tData.ka.slug || ensureSlug(tData.ka.slug, tData.ka.title, 'ka'),
+          excerpt: tData.ka.excerpt,
+          body: tData.ka.body,
+          metaTitle: normalizeOptional(tData.ka.metaTitle),
+          metaDescription: normalizeOptional(tData.ka.metaDescription),
+          ogTitle: normalizeOptional(tData.ka.ogTitle),
+          ogDescription: normalizeOptional(tData.ka.ogDescription),
         },
         en: {
-          ...tData.en,
-          slug: ensureSlug(tData.en.slug, tData.en.title, "en"),
+          title: tData.en.title,
+          slug: tData.en.slug || ensureSlug(tData.en.slug, tData.en.title, 'en'),
+          excerpt: tData.en.excerpt,
+          body: tData.en.body,
+          metaTitle: normalizeOptional(tData.en.metaTitle),
+          metaDescription: normalizeOptional(tData.en.metaDescription),
+          ogTitle: normalizeOptional(tData.en.ogTitle),
+          ogDescription: normalizeOptional(tData.en.ogDescription),
         },
         ru: {
-          ...tData.ru,
-          slug: ensureSlug(tData.ru.slug, tData.ru.title, "ru"),
+          title: tData.ru.title,
+          slug: tData.ru.slug || ensureSlug(tData.ru.slug, tData.ru.title, 'ru'),
+          excerpt: tData.ru.excerpt,
+          body: tData.ru.body,
+          metaTitle: normalizeOptional(tData.ru.metaTitle),
+          metaDescription: normalizeOptional(tData.ru.metaDescription),
+          ogTitle: normalizeOptional(tData.ru.ogTitle),
+          ogDescription: normalizeOptional(tData.ru.ogDescription),
         },
       };
 
@@ -228,50 +236,33 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: prepared.ka.title,
-          slug: prepared.ka.slug,
-          excerpt: prepared.ka.excerpt,
-          content: prepared.ka.body,
+          title: prepared[activeLocale].title,
+          slug: prepared[activeLocale].slug,
+          excerpt: prepared[activeLocale].excerpt,
+          content: prepared[activeLocale].body,
           coverImage: formData.coverImageUrl,
-          coverImageAlt: formData.coverImageAlt || null,
+          coverImageAlt: formData.coverImageAlt.trim() || null,
           status,
-          date: formData.date ? new Date(formData.date).toISOString() : null,
           categoryIds: selectedCategoryIds,
-          metaTitle: normalizeOptional(prepared.ka.metaTitle),
-          metaDescription: normalizeOptional(prepared.ka.metaDescription),
-          ogTitle: normalizeOptional(prepared.ka.ogTitle),
-          ogDescription: normalizeOptional(prepared.ka.ogDescription),
-          translations: [
-            {
-              locale: 'en',
-              title: prepared.en.title,
-              slug: prepared.en.slug,
-              excerpt: prepared.en.excerpt,
-              body: prepared.en.body,
-              metaTitle: normalizeOptional(prepared.en.metaTitle),
-              metaDescription: normalizeOptional(prepared.en.metaDescription),
-              ogTitle: normalizeOptional(prepared.en.ogTitle),
-              ogDescription: normalizeOptional(prepared.en.ogDescription),
-              coverImageAlt: prepared.en.coverImageAlt || null,
-            },
-            {
-              locale: 'ru',
-              title: prepared.ru.title,
-              slug: prepared.ru.slug,
-              excerpt: prepared.ru.excerpt,
-              body: prepared.ru.body,
-              metaTitle: normalizeOptional(prepared.ru.metaTitle),
-              metaDescription: normalizeOptional(prepared.ru.metaDescription),
-              ogTitle: normalizeOptional(prepared.ru.ogTitle),
-              ogDescription: normalizeOptional(prepared.ru.ogDescription),
-              coverImageAlt: prepared.ru.coverImageAlt || null,
-            },
-          ],
-          coverImageAltTranslations: [
-            { locale: 'ka', alt: prepared.ka.coverImageAlt },
-            { locale: 'en', alt: prepared.en.coverImageAlt },
-            { locale: 'ru', alt: prepared.ru.coverImageAlt },
-          ].filter((item) => item.alt && item.alt.trim().length > 0),
+          metaTitle: prepared[activeLocale].metaTitle,
+          metaDescription: prepared[activeLocale].metaDescription,
+          ogTitle: prepared[activeLocale].ogTitle,
+          ogDescription: prepared[activeLocale].ogDescription,
+          translations: (
+            ['ka', 'en', 'ru'] as const
+          )
+            .filter((loc) => loc !== activeLocale)
+            .map((loc) => ({
+              locale: loc,
+              title: prepared[loc].title,
+              slug: prepared[loc].slug,
+              excerpt: prepared[loc].excerpt,
+              body: prepared[loc].body,
+              metaTitle: normalizeOptional(prepared[loc].metaTitle ?? ''),
+              metaDescription: normalizeOptional(prepared[loc].metaDescription ?? ''),
+              ogTitle: normalizeOptional(prepared[loc].ogTitle ?? ''),
+              ogDescription: normalizeOptional(prepared[loc].ogDescription ?? ''),
+            })),
         }),
       });
 
@@ -667,18 +658,10 @@ export default function AdminEditPostForm({ locale, post, translations = [] }: A
                   onError={handleImageError}
                   maxSize={10 * 1024 * 1024}
                   disabled={loading}
-                  defaultAlt={tData[activeLocale].coverImageAlt}
-                  altValue={tData[activeLocale].coverImageAlt}
-                  onAltChange={(value) =>
-                    setTData((prev) => ({
-                      ...prev,
-                      [activeLocale]: {
-                        ...prev[activeLocale],
-                        coverImageAlt: value,
-                      },
-                    }))
-                  }
-                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                  defaultAlt={formData.coverImageAlt}
+                  altValue={formData.coverImageAlt}
+                  onAltChange={(value) => setFormData(prev => ({ ...prev, coverImageAlt: value }))}
+                  altLabel="Cover image alt"
                 />
                 {formData.coverImageUrl && (
                   <p className="text-xs text-muted-foreground">Current image URL: {formData.coverImageUrl}</p>

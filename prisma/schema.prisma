@@ -317,6 +317,7 @@ model PostTranslation {
   metaDescription String?
   ogTitle         String?
   ogDescription   String?
+  coverImageAlt   String?
   post            Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, locale])

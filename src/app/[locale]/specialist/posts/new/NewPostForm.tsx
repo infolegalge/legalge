@@ -33,6 +33,23 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
 
+  const blankLocaleState = {
+    title: '',
+    slug: '',
+    excerpt: '',
+    body: '',
+    metaTitle: '',
+    metaDescription: '',
+    ogTitle: '',
+    ogDescription: '',
+  };
+
+  const [translationsState, setTranslationsState] = useState<Record<'ka'|'en'|'ru', typeof blankLocaleState>>({
+    ka: { ...blankLocaleState },
+    en: { ...blankLocaleState },
+    ru: { ...blankLocaleState },
+  });
+
   const [formData, setFormData] = useState({
     coverImageUrl: '',
     coverImageId: '',
@@ -42,11 +59,6 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   const [allCategories, setAllCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>(['ka', 'en', 'ru'].includes(locale) ? (locale as 'ka'|'en'|'ru') : 'ka');
-  const [translationsState, setTranslationsState] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string; coverImageAlt: string }>>({
-    ka: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
-    en: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
-    ru: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
-  });
 
   const localeOptions: Array<{ code: 'ka' | 'en' | 'ru'; label: string }> = [
     { code: 'ka', label: 'ქართული' },
@@ -66,7 +78,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
     })();
   }, []);
 
-  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: keyof typeof translationsState['ka'], value: string) => {
+  const updateLocaleField = (loc: 'ka'|'en'|'ru', key: keyof typeof blankLocaleState, value: string) => {
     setTranslationsState((prev) => ({
       ...prev,
       [loc]: {
@@ -101,37 +113,42 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
       }))
       .filter(({ data }) => data.title.trim() || data.body.trim());
 
+    const payload = {
+      title: base.title,
+      excerpt: base.excerpt,
+      body: base.body,
+      coverImage: formData.coverImageUrl || null,
+      coverImageAlt: formData.coverImageAlt.trim() || null,
+      status,
+      slug,
+      locale,
+      authorType: 'SPECIALIST',
+      scope: 'specialist',
+      categoryIds: selectedCategoryIds,
+      metaTitle: translationsState.ka.metaTitle,
+      metaDescription: translationsState.ka.metaDescription,
+      ogTitle: translationsState.ka.ogTitle,
+      ogDescription: translationsState.ka.ogDescription,
+      translations: translationsPayload.map(({ locale: loc, data }) => ({
+        locale: loc,
+        title: data.title,
+        slug: ensureSlug(data.slug, data.title, loc as 'en' | 'ru'),
+        excerpt: data.excerpt,
+        body: data.body,
+        metaTitle: data.metaTitle,
+        metaDescription: data.metaDescription,
+        ogTitle: data.ogTitle,
+        ogDescription: data.ogDescription,
+      })),
+    };
+
       const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({
-          title: base.title,
-          excerpt: base.excerpt,
-          body: base.body,
-          coverImage: formData.coverImageUrl || null,
-          coverImageAlt: translationsState.ka.coverImageAlt || formData.coverImageAlt || null,
-          status,
-          slug,
-          locale,
-          authorType: 'SPECIALIST',
-          scope: 'specialist',
-          categoryIds: selectedCategoryIds,
-        translations: translationsPayload.map(({ locale: loc, data }) => ({
-          locale: loc,
-          title: data.title,
-          slug: ensureSlug(data.slug, data.title, loc as 'en' | 'ru'),
-          excerpt: data.excerpt,
-          body: data.body,
-          coverImageAlt: data.coverImageAlt || null,
-        })),
-        coverImageAltTranslations: (
-          ['ka', 'en', 'ru'] as const
-        ).map((loc) => ({ locale: loc, alt: translationsState[loc].coverImageAlt }))
-          .filter(({ alt }) => !!alt?.trim()),
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -172,14 +189,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
       ...prev,
       coverImageUrl: imageData.url,
       coverImageId: imageData.id,
-      coverImageAlt: imageData.alt || prev.coverImageAlt,
-    }));
-    setTranslationsState((prev) => ({
-      ...prev,
-      [activeLocale]: {
-        ...prev[activeLocale],
-        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
-      },
+      coverImageAlt: imageData.alt && imageData.alt.trim() ? imageData.alt.trim() : prev.coverImageAlt,
     }));
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
@@ -402,18 +412,10 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
                   onError={handleImageError}
                   maxSize={10 * 1024 * 1024}
                   disabled={loading}
-                  defaultAlt={translationsState[activeLocale].coverImageAlt}
-                  altValue={translationsState[activeLocale].coverImageAlt}
-                  onAltChange={(value) =>
-                    setTranslationsState((prev) => ({
-                      ...prev,
-                      [activeLocale]: {
-                        ...prev[activeLocale],
-                        coverImageAlt: value,
-                      },
-                    }))
-                  }
-                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                  defaultAlt={formData.coverImageAlt}
+                  altValue={formData.coverImageAlt}
+                  onAltChange={(value) => handleFormDataChange('coverImageAlt', value)}
+                  altLabel="Cover image alt"
                 />
                 {formData.coverImageUrl && (
                   <div className="text-xs text-muted-foreground">Current image: {formData.coverImageUrl}</div>

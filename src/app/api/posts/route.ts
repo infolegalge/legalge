@@ -275,7 +275,8 @@ export async function POST(request: NextRequest) {
       date,
       metaTitle,
       metaDescription,
-      coverImageAltTranslations,
+      ogTitle,
+      ogDescription,
     } = body;
 
     if (!title || !contentBody) {
@@ -352,6 +353,8 @@ export async function POST(request: NextRequest) {
       .filter(Boolean).length;
     const readingTime = Math.max(1, Math.round(wordCount / 200));
 
+    const normalizedCoverAlt = typeof coverImageAlt === 'string' && coverImageAlt.trim().length ? coverImageAlt.trim() : null;
+
     const post = await prisma.post.create({
       data: {
         title,
@@ -359,13 +362,15 @@ export async function POST(request: NextRequest) {
         excerpt: excerpt || null,
         body: contentBody,
         coverImage: coverImage || null,
-        coverImageAlt: coverImageAlt || null,
+        coverImageAlt: normalizedCoverAlt,
         status: status as any,
         authorType: userRole === 'SUPER_ADMIN' && !authorType ? ('SUPER_ADMIN' as any) : authorType,
         locale,
         publishedAt: status === 'PUBLISHED' ? (date ? new Date(date) : new Date()) : null,
         metaTitle: metaTitle ?? null,
         metaDescription: metaDescription ?? null,
+        ogTitle: ogTitle ?? null,
+        ogDescription: ogDescription ?? null,
         readingTime,
         author: { connect: { id: (session.user as any).id } },
         ...(finalCompanyId
@@ -387,10 +392,9 @@ export async function POST(request: NextRequest) {
                     body: t.body ?? null,
                     metaTitle: t.metaTitle ?? null,
                     metaDescription: t.metaDescription ?? null,
-                    coverImageAlt:
-                      (coverImageAltTranslations || []).find((alt: any) => alt?.locale === t.locale)?.alt ??
-                      coverImageAlt ??
-                      null,
+                    ogTitle: t.ogTitle ?? null,
+                    ogDescription: t.ogDescription ?? null,
+                    coverImageAlt: normalizedCoverAlt,
                   })),
               },
             }

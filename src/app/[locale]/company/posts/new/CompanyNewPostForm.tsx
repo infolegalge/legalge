@@ -31,7 +31,6 @@ type LocalePayload = {
   metaDescription: string;
   ogTitle: string;
   ogDescription: string;
-  coverImageAlt: string;
 };
 
 type LocaleField = keyof LocalePayload;
@@ -59,7 +58,6 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
     metaDescription: '',
     ogTitle: '',
     ogDescription: '',
-    coverImageAlt: '',
   };
 
   const [tData, setTData] = useState<Record<Locale, LocalePayload>>({
@@ -67,6 +65,7 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
     en: { ...blankLocale },
     ru: { ...blankLocale },
   });
+  const [coverImageAlt, setCoverImageAlt] = useState('');
 
   const updateLocaleField = (loc: Locale, key: LocaleField, value: string) => {
     setTData((prev) => ({ ...prev, [loc]: { ...prev[loc], [key]: value } }));
@@ -129,13 +128,15 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
           ogDescription: data.ogDescription,
         }));
 
+      const normalizedCoverAlt = coverImageAlt.trim();
+
       const payload = {
         title: base.title,
         slug: ensureSlug(base.slug, base.title, baseLoc),
         excerpt: base.excerpt,
         body: base.body,
         coverImage: '',
-        coverImageAlt: base.coverImageAlt || null,
+        coverImageAlt: normalizedCoverAlt ? normalizedCoverAlt : null,
         status,
         locale: baseLoc,
         authorType: 'COMPANY',
@@ -146,10 +147,6 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
         ogTitle: base.ogTitle,
         ogDescription: base.ogDescription,
         translations: translationsPayload,
-        coverImageAltTranslations: (
-          ['ka','en','ru'] as const
-        ).map((loc) => ({ locale: loc, alt: tData[loc].coverImageAlt }))
-          .filter(({ alt }) => !!alt?.trim()),
       };
 
       const res = await fetch('/api/posts', {
@@ -184,13 +181,9 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
   };
 
   const handleImageUploaded = (imageData: { id: string; url: string; webpUrl: string; filename: string; width: number; height: number; alt: string; }) => {
-    setTData((prev) => ({
-      ...prev,
-      [activeLocale]: {
-        ...prev[activeLocale],
-        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
-      },
-    }));
+    if (imageData.alt && imageData.alt.trim()) {
+      setCoverImageAlt(imageData.alt.trim());
+    }
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
 
@@ -387,17 +380,9 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
                   onError={handleImageError}
                   maxSize={10 * 1024 * 1024} // 10MB
                   disabled={loading}
-                  defaultAlt={tData[activeLocale].coverImageAlt}
-                  altValue={tData[activeLocale].coverImageAlt}
-                  onAltChange={(value) =>
-                    setTData((prev) => ({
-                      ...prev,
-                      [activeLocale]: {
-                        ...prev[activeLocale],
-                        coverImageAlt: value,
-                      },
-                    }))
-                  }
+                  defaultAlt={coverImageAlt}
+                  altValue={coverImageAlt}
+                  onAltChange={(value) => setCoverImageAlt(value)}
                   altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
                 />
               </div>

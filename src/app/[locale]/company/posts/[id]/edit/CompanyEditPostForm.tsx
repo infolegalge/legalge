@@ -104,7 +104,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'ka' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ka')?.metaDescription || ''),
       ogTitle: locale === 'ka' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ka')?.ogTitle || ''),
       ogDescription: locale === 'ka' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ka')?.ogDescription || ''),
-      coverImageAlt: locale === 'ka' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'ka')?.coverImageAlt || ''),
+      coverImageAlt: '',
     },
     en: {
       ...blankLocale,
@@ -116,7 +116,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'en' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'en')?.metaDescription || ''),
       ogTitle: locale === 'en' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'en')?.ogTitle || ''),
       ogDescription: locale === 'en' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'en')?.ogDescription || ''),
-      coverImageAlt: locale === 'en' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'en')?.coverImageAlt || ''),
+      coverImageAlt: '',
     },
     ru: {
       ...blankLocale,
@@ -128,7 +128,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
       metaDescription: locale === 'ru' ? (post.metaDescription || '') : (translations.find(t => t.locale === 'ru')?.metaDescription || ''),
       ogTitle: locale === 'ru' ? (post.ogTitle || '') : (translations.find(t => t.locale === 'ru')?.ogTitle || ''),
       ogDescription: locale === 'ru' ? (post.ogDescription || '') : (translations.find(t => t.locale === 'ru')?.ogDescription || ''),
-      coverImageAlt: locale === 'ru' ? (post.coverImageAlt || '') : (translations.find(t => t.locale === 'ru')?.coverImageAlt || ''),
+      coverImageAlt: '',
     },
   });
   const updateLocaleField = (loc: SupportedLocale, key: LocaleFieldKey, value: string) => {
@@ -138,6 +138,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
   const [statusValue, setStatusValue] = useState(post.status);
   const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(post.categories?.map((c) => c.id) ?? []);
+  const [coverImageAlt, setCoverImageAlt] = useState(post.coverImageAlt || '');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -154,13 +155,9 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
     alt: string;
   }) => {
     setCoverImageUrl(imageData.url);
-    setTData((prev) => ({
-      ...prev,
-      [activeLocale]: {
-        ...prev[activeLocale],
-        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
-      },
-    }));
+    if (imageData.alt && imageData.alt.trim()) {
+      setCoverImageAlt(imageData.alt.trim());
+    }
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
 
@@ -185,7 +182,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
           excerpt: tData[activeLocale].excerpt,
           content: tData[activeLocale].body,
           coverImage: coverImageUrl,
-          coverImageAlt: tData[activeLocale].coverImageAlt || null,
+          coverImageAlt: coverImageAlt.trim() || null,
           status: statusValue,
           categoryIds: selectedCategoryIds,
           metaTitle: tData[activeLocale].metaTitle,
@@ -204,12 +201,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
               metaDescription: tData[loc].metaDescription,
               ogTitle: tData[loc].ogTitle,
               ogDescription: tData[loc].ogDescription,
-              coverImageAlt: tData[loc].coverImageAlt || null,
             })),
-          coverImageAltTranslations: (
-            ['ka','en','ru'] as const
-          ).map((loc) => ({ locale: loc, alt: tData[loc].coverImageAlt }))
-            .filter(({ alt }) => !!alt?.trim()),
         }),
       });
 
@@ -517,24 +509,16 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
                 onError={handleImageError}
                 maxSize={10 * 1024 * 1024}
                 disabled={loading}
-                defaultAlt={tData[activeLocale].coverImageAlt}
-                altValue={tData[activeLocale].coverImageAlt}
-                onAltChange={(value) =>
-                  setTData((prev) => ({
-                    ...prev,
-                    [activeLocale]: {
-                      ...prev[activeLocale],
-                      coverImageAlt: value,
-                    },
-                  }))
-                }
-                altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                defaultAlt={coverImageAlt}
+                altValue={coverImageAlt}
+                onAltChange={(value) => setCoverImageAlt(value)}
+                altLabel="Cover image alt"
               />
               {coverImageUrl && (
                 <div className="space-y-2">
                   <img
                     src={coverImageUrl}
-                    alt={tData[activeLocale].coverImageAlt || 'Cover'}
+                    alt={coverImageAlt || 'Cover'}
                     className="w-full rounded-lg border"
                     loading="lazy"
                     decoding="async"

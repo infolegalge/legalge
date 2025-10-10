@@ -35,11 +35,12 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
   const [allCategories, setAllCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [activeLocale, setActiveLocale] = useState<'ka'|'en'|'ru'>('ka');
-  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string; coverImageAlt: string }>>({
-    ka: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
-    en: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
-    ru: { title: '', slug: '', excerpt: '', body: '', coverImageAlt: '' },
+  const [tData, setTData] = useState<Record<'ka'|'en'|'ru', { title: string; slug: string; excerpt: string; body: string; metaTitle: string; metaDescription: string; ogTitle: string; ogDescription: string }>>({
+    ka: { title: '', slug: '', excerpt: '', body: '', metaTitle: '', metaDescription: '', ogTitle: '', ogDescription: '' },
+    en: { title: '', slug: '', excerpt: '', body: '', metaTitle: '', metaDescription: '', ogTitle: '', ogDescription: '' },
+    ru: { title: '', slug: '', excerpt: '', body: '', metaTitle: '', metaDescription: '', ogTitle: '', ogDescription: '' },
   });
+  const [coverImageAlt, setCoverImageAlt] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -59,7 +60,8 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
     content: '',
     coverImageUrl: '',
     coverImageId: '',
-    status: 'DRAFT' as 'DRAFT' | 'PUBLISHED'
+    status: 'DRAFT' as 'DRAFT' | 'PUBLISHED',
+    scheduledDate: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -84,13 +86,9 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
       coverImageUrl: imageData.url,
       coverImageId: imageData.id
     }));
-    setTData((prev) => ({
-      ...prev,
-      [activeLocale]: {
-        ...prev[activeLocale],
-        coverImageAlt: imageData.alt || prev[activeLocale].coverImageAlt,
-      },
-    }));
+    if (imageData.alt && imageData.alt.trim()) {
+      setCoverImageAlt(imageData.alt.trim());
+    }
     setMessage({ type: 'success', text: 'Image uploaded successfully!' });
   };
 
@@ -113,20 +111,40 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
           excerpt: tData.ka.excerpt,
           body: tData.ka.body,
           coverImage: formData.coverImageUrl || null,
-          coverImageAlt: tData.ka.coverImageAlt || null,
+          coverImageAlt: coverImageAlt.trim() || null,
           status: status,
           locale: locale,
           slug: makeSlug(tData.ka.title as string, locale as any),
           categoryIds: selectedCategoryIds,
           translations: [
-            { locale: 'en', title: tData.en.title, slug: makeSlug(tData.en.title || tData.ka.title, 'en' as any), excerpt: tData.en.excerpt, body: tData.en.body, coverImageAlt: tData.en.coverImageAlt },
-            { locale: 'ru', title: tData.ru.title, slug: makeSlug(tData.ru.title || tData.ka.title, 'ru' as any), excerpt: tData.ru.excerpt, body: tData.ru.body, coverImageAlt: tData.ru.coverImageAlt },
+            {
+              locale: 'en',
+              title: tData.en.title,
+              slug: makeSlug(tData.en.title || tData.ka.title, 'en' as any),
+              excerpt: tData.en.excerpt,
+              body: tData.en.body,
+              metaTitle: tData.en.metaTitle,
+              metaDescription: tData.en.metaDescription,
+              ogTitle: tData.en.ogTitle,
+              ogDescription: tData.en.ogDescription,
+            },
+            {
+              locale: 'ru',
+              title: tData.ru.title,
+              slug: makeSlug(tData.ru.title || tData.ka.title, 'ru' as any),
+              excerpt: tData.ru.excerpt,
+              body: tData.ru.body,
+              metaTitle: tData.ru.metaTitle,
+              metaDescription: tData.ru.metaDescription,
+              ogTitle: tData.ru.ogTitle,
+              ogDescription: tData.ru.ogDescription,
+            },
           ],
-          coverImageAltTranslations: [
-            { locale: 'ka', alt: tData.ka.coverImageAlt },
-            { locale: 'en', alt: tData.en.coverImageAlt },
-            { locale: 'ru', alt: tData.ru.coverImageAlt },
-          ].filter((item) => item.alt && item.alt.trim().length > 0),
+          metaTitle: tData.ka.metaTitle,
+          metaDescription: tData.ka.metaDescription,
+          ogTitle: tData.ka.ogTitle,
+          ogDescription: tData.ka.ogDescription,
+          date: status === 'PUBLISHED' && formData.scheduledDate ? formData.scheduledDate : undefined,
         }),
       });
 
@@ -264,6 +282,44 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
               </div>
 
               <div className="space-y-2">
+                <Label>Meta Title ({activeLocale.toUpperCase()})</Label>
+                <Input
+                  value={tData[activeLocale].metaTitle}
+                  onChange={(e)=> setTData(prev=>({ ...prev, [activeLocale]: { ...prev[activeLocale], metaTitle: e.target.value } }))}
+                  placeholder="SEO title for search results"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Meta Description ({activeLocale.toUpperCase()})</Label>
+                <Textarea
+                  value={tData[activeLocale].metaDescription}
+                  onChange={(e)=> setTData(prev=>({ ...prev, [activeLocale]: { ...prev[activeLocale], metaDescription: e.target.value } }))}
+                  placeholder="Short summary for search engines"
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>OG Title ({activeLocale.toUpperCase()})</Label>
+                <Input
+                  value={tData[activeLocale].ogTitle}
+                  onChange={(e)=> setTData(prev=>({ ...prev, [activeLocale]: { ...prev[activeLocale], ogTitle: e.target.value } }))}
+                  placeholder="Title for social sharing"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>OG Description ({activeLocale.toUpperCase()})</Label>
+                <Textarea
+                  value={tData[activeLocale].ogDescription}
+                  onChange={(e)=> setTData(prev=>({ ...prev, [activeLocale]: { ...prev[activeLocale], ogDescription: e.target.value } }))}
+                  placeholder="Description for social sharing"
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label>Content ({activeLocale.toUpperCase()}) *</Label>
                 {previewMode ? (
                   <div className="min-h-[400px] rounded-md border border-input bg-background p-4">
@@ -302,18 +358,10 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
                   onError={handleImageError}
                   maxSize={10 * 1024 * 1024}
                   disabled={loading}
-                  defaultAlt={tData[activeLocale].coverImageAlt}
-                  altValue={tData[activeLocale].coverImageAlt}
-                  onAltChange={(value) =>
-                    setTData((prev) => ({
-                      ...prev,
-                      [activeLocale]: {
-                        ...prev[activeLocale],
-                        coverImageAlt: value,
-                      },
-                    }))
-                  }
-                  altLabel={`Cover image alt (${activeLocale.toUpperCase()})`}
+                  defaultAlt={coverImageAlt}
+                  altValue={coverImageAlt}
+                  onAltChange={(value) => setCoverImageAlt(value)}
+                  altLabel="Cover image alt"
                 />
                 {formData.coverImageUrl && (
                   <p className="text-xs text-muted-foreground">Current image URL: {formData.coverImageUrl}</p>
@@ -343,10 +391,23 @@ export default function AdminNewPostForm({ locale }: AdminNewPostFormProps) {
                       onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'DRAFT' | 'PUBLISHED' }))}
                       className="rounded border-gray-300"
                     />
-                    <span className="text-sm">Publish Immediately</span>
+                    <span className="text-sm">Publish</span>
                   </label>
                 </div>
               </div>
+
+              {formData.status === 'PUBLISHED' && (
+                <div className="space-y-2">
+                  <Label>Publication Date & Time</Label>
+                  <Input
+                    type="datetime-local"
+                    value={formData.scheduledDate}
+                    max={new Date().toISOString().slice(0, 16)}
+                    onChange={(e) => setFormData(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Choose a past or present date. Leave empty to use the current time.</p>
+                </div>
+              )}
 
               {/* Categories */}
               <div className="space-y-2">
