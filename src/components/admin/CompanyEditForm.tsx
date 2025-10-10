@@ -408,6 +408,86 @@ export default function CompanyEditForm({
             />
           </div>
 
+          <div className="rounded border p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">SEO & OG Metadata</h3>
+              <span className="text-xs text-muted-foreground">Displayed on search & social</span>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Meta Title</label>
+              <input
+                name={activeLocale==='ka' ? 'metaTitle' : `metaTitle_${activeLocale}`}
+                value={copy[activeLocale].metaTitle}
+                onChange={(event) => {
+                  const target = event.target;
+                  if (!(target instanceof HTMLInputElement)) return;
+                  const value = target.value ?? '';
+                  setCopy((prev) => ({
+                    ...prev,
+                    [activeLocale]: { ...prev[activeLocale], metaTitle: value },
+                  }));
+                }}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Optimized title for search engines"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Meta Description</label>
+              <textarea
+                name={activeLocale==='ka' ? 'metaDescription' : `metaDescription_${activeLocale}`}
+                rows={2}
+                value={copy[activeLocale].metaDescription}
+                onChange={(event) => {
+                  const target = event.target;
+                  if (!(target instanceof HTMLTextAreaElement)) return;
+                  const value = target.value ?? '';
+                  setCopy((prev) => ({
+                    ...prev,
+                    [activeLocale]: { ...prev[activeLocale], metaDescription: value },
+                  }));
+                }}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Summary shown in search results"
+              ></textarea>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">OG Title</label>
+              <input
+                name={activeLocale==='ka' ? 'ogTitle' : `ogTitle_${activeLocale}`}
+                value={copy[activeLocale].ogTitle}
+                onChange={(event) => {
+                  const target = event.target;
+                  if (!(target instanceof HTMLInputElement)) return;
+                  const value = target.value ?? '';
+                  setCopy((prev) => ({
+                    ...prev,
+                    [activeLocale]: { ...prev[activeLocale], ogTitle: value },
+                  }));
+                }}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Title for social previews"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">OG Description</label>
+              <textarea
+                name={activeLocale==='ka' ? 'ogDescription' : `ogDescription_${activeLocale}`}
+                rows={3}
+                value={copy[activeLocale].ogDescription}
+                onChange={(event) => {
+                  const target = event.target;
+                  if (!(target instanceof HTMLTextAreaElement)) return;
+                  const value = target.value ?? '';
+                  setCopy((prev) => ({
+                    ...prev,
+                    [activeLocale]: { ...prev[activeLocale], ogDescription: value },
+                  }));
+                }}
+                className="w-full rounded border px-3 py-2"
+                placeholder="Description for social sharing previews"
+              ></textarea>
+            </div>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -426,7 +506,8 @@ export default function CompanyEditForm({
                     setLogoAlt(value);
                   }}
                   altLabel="Logo alt text"
-                  onError={() => {}}
+                  onError={() => {}
+                }
                   maxSize={10 * 1024 * 1024}
                 />
                 <input type="hidden" name="logoUrl" value={logoUrl} readOnly />
@@ -521,87 +602,6 @@ export default function CompanyEditForm({
             <p className="text-xs text-muted-foreground">
               Paste full URLs. Leave blank to hide any network.
             </p>
-          </div>
-
-          <div className="rounded border p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">SEO & OG Metadata</h3>
-              <span className="text-xs text-muted-foreground">Displayed on search & social</span>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Meta Title</label>
-              <input
-                name={activeLocale==='ka' ? 'metaTitle' : `metaTitle_${activeLocale}`}
-                value={copy[activeLocale].metaTitle}
-                onChange={(event) => {
-                  const target = event.target;
-                  if (!(target instanceof HTMLInputElement)) return;
-                  const value = target.value ?? '';
-                  setCopy((prev) => ({
-                    ...prev,
-                    [activeLocale]: { ...prev[activeLocale], metaTitle: value },
-                  }));
-                }}
-                className="w-full rounded border px-3 py-2"
-                placeholder="Optimized title for search engines"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">Meta Description</label>
-              <textarea
-                name={activeLocale==='ka' ? 'metaDescription' : `metaDescription_${activeLocale}`}
-                rows={2}
-                value={copy[activeLocale].metaDescription}
-                onChange={(event) => {
-                  const target = event.target;
-                  if (!(target instanceof HTMLTextAreaElement)) return;
-                  const value = target.value ?? '';
-                  setCopy((prev) => ({
-                    ...prev,
-                    [activeLocale]: { ...prev[activeLocale], metaDescription: value },
-                  }));
-                }}
-                className="w-full rounded border px-3 py-2"
-                placeholder="Summary shown in search results"
-              ></textarea>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">OG Title</label>
-              <input
-                name={activeLocale==='ka' ? 'ogTitle' : `ogTitle_${activeLocale}`}
-                value={copy[activeLocale].ogTitle}
-                onChange={(event) => {
-                  const target = event.target;
-                  if (!(target instanceof HTMLInputElement)) return;
-                  const value = target.value ?? '';
-                  setCopy((prev) => ({
-                    ...prev,
-                    [activeLocale]: { ...prev[activeLocale], ogTitle: value },
-                  }));
-                }}
-                className="w-full rounded border px-3 py-2"
-                placeholder="Title for social previews"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wide">OG Description</label>
-              <textarea
-                name={activeLocale==='ka' ? 'ogDescription' : `ogDescription_${activeLocale}`}
-                rows={3}
-                value={copy[activeLocale].ogDescription}
-                onChange={(event) => {
-                  const target = event.target;
-                  if (!(target instanceof HTMLTextAreaElement)) return;
-                  const value = target.value ?? '';
-                  setCopy((prev) => ({
-                    ...prev,
-                    [activeLocale]: { ...prev[activeLocale], ogDescription: value },
-                  }));
-                }}
-                className="w-full rounded border px-3 py-2"
-                placeholder="Description for social sharing previews"
-              ></textarea>
-            </div>
           </div>
         </div>
         

@@ -11,6 +11,10 @@ import {
   Globe, 
   MapPin, 
   ExternalLink,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
   Calendar,
   ArrowRight,
   Quote
@@ -157,34 +161,46 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
               <p className="text-muted-foreground whitespace-pre-line">{company.contactPrompt}</p>
             </div>
           )}
-          {company.socialLinks && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="text-xl font-semibold mb-3">{t("companies.social_links") || "On the web"}</h2>
-              <div className="flex flex-wrap gap-3">
-                {(() => {
-                  try {
-                    const parsed = JSON.parse(company.socialLinks as string) as Array<{ label?: string; url?: string }>;
-                    return parsed
-                      .filter((link) => link?.url)
-                      .map((link, index) => (
-                  <a
-                    key={index}
-                        href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-muted"
-                  >
-                    <ExternalLink className="h-4 w-4 text-primary" />
-                    {link.label || link.url}
-                  </a>
-                      ));
-                  } catch {
-                    return null;
-                  }
-                })()}
-              </div>
-            </div>
-          )}
+          {company.socialLinks && (() => {
+            try {
+              const parsed = JSON.parse(company.socialLinks) as Array<{ label?: string; url?: string }>;
+              const links = parsed.filter((link) => link?.url);
+              if (!links.length) return null;
+
+              const renderIcon = (label?: string, url?: string) => {
+                const value = `${label || url || ""}`.toLowerCase();
+                if (value.includes("facebook")) return <Facebook className="h-4 w-4" />;
+                if (value.includes("instagram")) return <Instagram className="h-4 w-4" />;
+                if (value.includes("linkedin")) return <Linkedin className="h-4 w-4" />;
+                if (value.includes("twitter") || value.includes("x.com")) return <Twitter className="h-4 w-4" />;
+                if (value.includes("mail")) return <Mail className="h-4 w-4" />;
+                if (value.includes("phone")) return <Phone className="h-4 w-4" />;
+                return <ExternalLink className="h-4 w-4" />;
+              };
+
+              return (
+                <div className="rounded-lg border bg-card p-6">
+                  <h2 className="text-xl font-semibold mb-3">{t("companies.social_links") || "On the web"}</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {links.map((link, index) => (
+                      <a
+                        key={`${link.url}-${index}`}
+                        href={link.url!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm text-primary hover:bg-primary/10"
+                      >
+                        {renderIcon(link.label, link.url)}
+                        <span className="font-medium">{link.label || link.url}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            } catch {
+              return null;
+            }
+          })()}
         </div>
       )}
 
