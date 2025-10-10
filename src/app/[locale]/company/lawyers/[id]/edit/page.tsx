@@ -508,6 +508,7 @@ export default async function EditCompanySpecialist({
         updateTranslationAction={updateTranslation}
         assignServicesAction={assignServices}
         isCompanyAdmin={user.role === "COMPANY"}
+        canAssignCompany={user.role === "SUPER_ADMIN"}
       />
     </div>
   );

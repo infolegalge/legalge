@@ -81,6 +81,7 @@ interface SpecialistEditFormProps {
   assignServicesAction: (formData: FormData) => Promise<ActionResult | void>;
   updateTranslationAction: (formData: FormData) => Promise<void>;
   isCompanyAdmin?: boolean;
+  canAssignCompany?: boolean;
 }
 
 export default function SpecialistEditForm({
@@ -91,6 +92,7 @@ export default function SpecialistEditForm({
   assignServicesAction,
   updateTranslationAction,
   isCompanyAdmin = false,
+  canAssignCompany = false,
 }: SpecialistEditFormProps) {
   const [selectedServices, setSelectedServices] = useState<string[]>(
     specialist.services.map((service) => service.id),
@@ -312,33 +314,29 @@ export default function SpecialistEditForm({
                     />
                   </div>
 
-                  <div>
-                    <label className="mb-1 block text-sm font-medium">Company</label>
-                    {isCompanyAdmin ? (
-                      <div className="w-full rounded border px-3 py-2 bg-muted text-muted-foreground">
-                        {specialist.company?.name || "Solo Practitioner"}
-                        <input type="hidden" name="companyId" value={specialist.companyId || ""} />
+                  {canAssignCompany && (
+                    <div>
+                      <label className="mb-1 block text-sm font-medium">Company</label>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-foreground">Assign Company</label>
+                        <select
+                          name="companyId"
+                          defaultValue={specialist.companyId || ''}
+                          className="w-full rounded border px-3 py-2"
+                        >
+                          <option value="">No company</option>
+                          {companies.map((company) => (
+                            <option key={company.id} value={company.id}>
+                              {company.name}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="text-xs text-muted-foreground">
+                          Assign the specialist to a company (optional)
+                        </p>
                       </div>
-                    ) : (
-                      <select
-                        name="companyId"
-                        className="w-full rounded border px-3 py-2"
-                        defaultValue={specialist.companyId || ""}
-                      >
-                        <option value="">Solo Practitioner</option>
-                        {companies.map((company) => (
-                          <option key={company.id} value={company.id}>
-                            {company.name}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                    {isCompanyAdmin && (
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Company assignment can only be changed by super admins.
-                      </p>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="mb-1 block text-sm font-medium">Contact Email</label>

@@ -123,12 +123,7 @@ export default function CompanyLawyersManagement({ locale }: CompanyLawyersManag
           <h1 className="text-2xl font-semibold">Manage Specialists</h1>
           <p className="text-muted-foreground">Manage your team of legal specialists</p>
         </div>
-        <Link href={`/${locale}/company/lawyers/new`}>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Lawyer
-          </Button>
-        </Link>
+        <div />
       </div>
 
       {/* Search */}

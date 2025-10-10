@@ -76,6 +76,7 @@ interface MultiLanguageSpecialistEditFormProps {
   updateTranslationAction: (formData: FormData) => Promise<{ success?: boolean; error?: string }>;
   assignServicesAction: (formData: FormData) => Promise<{ success?: boolean; error?: string }>;
   isCompanyAdmin?: boolean;
+  canAssignCompany?: boolean;
 }
 
 const locales = [
@@ -180,7 +181,8 @@ export default function MultiLanguageSpecialistEditForm({
   updateAction,
   updateTranslationAction,
   assignServicesAction,
-  isCompanyAdmin = false
+  isCompanyAdmin = false,
+  canAssignCompany = false
 }: MultiLanguageSpecialistEditFormProps) {
   
   const [selectedServices, setSelectedServices] = useState<string[]>(
@@ -408,7 +410,7 @@ export default function MultiLanguageSpecialistEditForm({
                         {specialist.company?.name || "Solo Practitioner"}
                         <input type="hidden" name="companyId" value={specialist.companyId || ""} />
                       </div>
-                    ) : (
+                    ) : canAssignCompany ? (
                       <select 
                         name="companyId" 
                         className="w-full rounded border px-3 py-2"
@@ -424,6 +426,11 @@ export default function MultiLanguageSpecialistEditForm({
                           </option>
                         ))}
                       </select>
+                    ) : (
+                      <div className="w-full rounded border px-3 py-2 bg-gray-50 text-gray-600">
+                        {specialist.company?.name || "Solo Practitioner"}
+                        <input type="hidden" name="companyId" value={specialist.companyId || ""} />
+                      </div>
                     )}
                     {isCompanyAdmin && (
                       <p className="mt-1 text-xs text-muted-foreground">
