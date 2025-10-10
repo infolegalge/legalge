@@ -3,7 +3,6 @@ import { authOptions } from '@/auth'
 import type { Locale } from '@/i18n/locales'
 import prisma from '@/lib/prisma'
 import CompanyEditForm from '@/components/admin/CompanyEditForm'
-import CompanyProfileManagement from './CompanyProfileManagement'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
@@ -337,19 +336,8 @@ export default async function CompanyProfilePage({
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Company Profile</h1>
-      <div className="grid gap-6 lg:grid-cols-[2fr_1fr] items-start">
-        <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
-            <CompanyEditForm company={resolvedCompany} translations={translations as any} updateAction={updateCompany} />
-          </div>
-        </div>
-        <CompanyProfileManagement
-          name={resolvedCompany.name}
-          slug={resolvedCompany.slug}
-          shortDesc={resolvedCompany.shortDesc}
-          logoUrl={resolvedCompany.logoUrl}
-          logoAlt={resolvedCompany.logoAlt}
-        />
+      <div className="rounded-lg border bg-card p-6">
+        <CompanyEditForm company={resolvedCompany} translations={translations as any} updateAction={updateCompany} />
       </div>
     </div>
   )
