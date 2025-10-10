@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Company } from "@/lib/specialists";
+import { collectCompanyServiceSlugs } from "@/lib/specialists";
 import type { Locale } from "@/i18n/locales";
 import { 
   Building2, 
@@ -188,20 +189,27 @@ export default function CompanyLandingPageSimple({ company, locale, t }: Company
       )}
 
       {/* Practice Areas Section */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-6">{t("companies.practice_areas")}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from(new Set(company.specialists.flatMap(s => s.specializations))).map((specialization, index) => (
-            <Link
-              key={index}
-              href={`/${locale}/practice#${specialization.toLowerCase().replace(/\s+/g, '-')}`}
-              className="rounded-lg border p-4 hover:bg-muted transition-colors"
-            >
-              <h3 className="font-medium text-foreground">{specialization}</h3>
-            </Link>
-          ))}
+      {(company.specialists.some((s) => s.specializations?.length) || collectCompanyServiceSlugs(company).length > 0) && (
+        <div className="mb-12 space-y-4">
+          <h2 className="text-2xl font-semibold">{t("companies.practice_areas")}</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {collectCompanyServiceSlugs(company).map((serviceSlug) => (
+              <Link
+                key={serviceSlug}
+                href={`/${locale}/services/${serviceSlug}`}
+                className="rounded-lg border p-4 hover:bg-muted transition-colors"
+              >
+                <h3 className="font-medium text-foreground">{serviceSlug.replace(/-/g, ' ')}</h3>
+              </Link>
+            ))}
+            {company.specialists.flatMap((s) => s.specializations ?? []).map((specialization, index) => (
+              <div key={`spec-${index}`} className="rounded-lg border p-4 bg-muted/40 text-muted-foreground">
+                {specialization}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 3. Specialists Block */}
       <div className="mb-12">

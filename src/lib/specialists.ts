@@ -72,7 +72,6 @@ export interface Company {
   history?: string | null;
   contactPrompt?: string | null;
   socialLinks?: string | null;
-  specialists: SpecialistProfile[];
   posts: Array<{
     id: string;
     slug: string;
@@ -82,6 +81,53 @@ export interface Company {
     coverImageAlt?: string | null;
     publishedAt?: Date | null;
   }>;
+  specialists: Array<{
+    id: string;
+    slug: string;
+    name: string;
+    role?: string | null;
+    bio?: string | null;
+    avatarUrl?: string | null;
+    languages: string[];
+    specializations: string[];
+    contactEmail?: string | null;
+    contactPhone?: string | null;
+    city?: string | null;
+    companyId?: string | null;
+    philosophy?: string | null;
+    focusAreas?: string | null;
+    representativeMatters?: string | null;
+    teachingWriting?: string | null;
+    credentials?: string | null;
+    values?: string | null;
+    translations?: SpecialistTranslation[];
+    company?: {
+      id: string;
+      slug: string;
+      name: string;
+      logoUrl?: string | null;
+      logoAlt?: string | null;
+      website?: string | null;
+      city?: string | null;
+    };
+    services: Array<{
+      id: string;
+      slug: string;
+      title: string;
+    }>;
+  }>;
+}
+
+export function collectCompanyServiceSlugs(company: Company): string[] {
+  const slugs = new Set<string>();
+  company.specialists.forEach((specialist) => {
+    specialist.services?.forEach((service) => {
+      if (service.slug) {
+        slugs.add(service.slug);
+      }
+    });
+  });
+  return Array.from(slugs);
 }
 
 export async function fetchSpecialists(): Promise<SpecialistProfile[]> {
