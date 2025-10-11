@@ -319,6 +319,16 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
               </CardDescription>
             </CardHeader>
             <CardContent>
+              <div className="mb-6">
+                <Tabs value={activeLocale} onValueChange={(value) => setActiveLocale(value as SupportedLocale)}>
+                  <TabsList className="grid w-full max-w-md grid-cols-3">
+                    <TabsTrigger value="ka">KA</TabsTrigger>
+                    <TabsTrigger value="en">EN</TabsTrigger>
+                    <TabsTrigger value="ru">RU</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
