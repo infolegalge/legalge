@@ -14,9 +14,8 @@ export interface FetchNewsDataResult {
   nextCursor: string | null;
 }
 
-export async function fetchNewsData(locale: Locale, rawSearchParams: Record<string, any>): Promise<FetchNewsDataResult> {
-  const { category, author, authorId, company, search, cursor } = rawSearchParams ?? {};
-
+function buildPostQuery(locale: Locale, rawSearchParams: Record<string, any> | undefined) {
+  const { category, author, authorId, company, search } = rawSearchParams ?? {};
   const where: any = {
     status: 'PUBLISHED',
   };
@@ -47,9 +46,9 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
 
   if (search) {
     const searchConditions = [
-      { title: { contains: search } },
-      { excerpt: { contains: search } },
-      { body: { contains: search } },
+      { title: { contains: search, mode: 'insensitive' } },
+      { excerpt: { contains: search, mode: 'insensitive' } },
+      { body: { contains: search, mode: 'insensitive' } },
     ];
 
     if (where.OR) {
@@ -60,59 +59,85 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
     }
   }
 
+  return where;
+}
+
+export async function fetchNewsData(locale: Locale, rawSearchParams: Record<string, any>): Promise<FetchNewsDataResult> {
+  const where = buildPostQuery(locale, rawSearchParams);
+  const cursor = rawSearchParams?.cursor;
   const take = 20;
-  const posts = await prisma.post.findMany({
-    where,
-    include: {
-      company: { select: { id: true, name: true, slug: true, logoUrl: true } },
-      author: {
-        select: {
-          id: true,
-          name: true,
-          company: { select: { id: true, name: true, slug: true } },
+
+  const [authorRecords, categoryGroups, posts] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      distinct: ['authorId'],
+      select: {
+        authorId: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            company: { select: { name: true } },
+          },
         },
       },
-      categories: { include: { category: { select: { id: true, name: true, slug: true } } } },
-      tags: { select: { tag: true } },
-    },
-    orderBy: { publishedAt: 'desc' },
-    take,
-    skip: cursor ? 1 : 0,
-    ...(cursor
-      ? {
-          cursor: {
-            id: cursor,
+    }),
+    prisma.postCategory.groupBy({
+      by: ['categoryId'],
+      where: {
+        post: where,
+      },
+      _count: { categoryId: true },
+      orderBy: {
+        _count: { categoryId: 'desc' },
+      },
+      take: 12,
+    }),
+    prisma.post.findMany({
+      where,
+      include: {
+        company: { select: { id: true, name: true, slug: true, logoUrl: true } },
+        author: {
+          select: {
+            id: true,
+            name: true,
+            company: { select: { id: true, name: true, slug: true } },
           },
-        }
-      : {}),
-  });
+        },
+        categories: { include: { category: { select: { id: true, name: true, slug: true } } } },
+        tags: { select: { tag: true } },
+      },
+      orderBy: { publishedAt: 'desc' },
+      take,
+      skip: cursor ? 1 : 0,
+      ...(cursor
+        ? {
+            cursor: { id: cursor },
+          }
+        : {}),
+    }),
+  ]);
 
-  const categoriesAgg = await prisma.postCategory.groupBy({
-    by: ['categoryId'],
-    _count: { categoryId: true },
-    orderBy: { _count: { categoryId: 'desc' } },
-    take: 4,
-  });
-  const categoryIds = categoriesAgg.map((c) => c.categoryId);
+  const categoryIds = categoryGroups.map((group) => group.categoryId);
   const categories = categoryIds.length
     ? await prisma.category.findMany({
         where: { id: { in: categoryIds } },
         select: { id: true, name: true, slug: true, type: true },
+        orderBy: { name: 'asc' },
       })
     : [];
 
   const postIds = posts.map((post) => post.id);
-  let translations: Array<{ postId: string; title: string | null; excerpt: string | null; slug: string | null }> = [];
-  if (postIds.length) {
-    translations = await prisma.postTranslation.findMany({
-      where: { postId: { in: postIds }, locale },
-      select: { postId: true, title: true, excerpt: true, slug: true },
-    });
-  }
-  const translationsMap = new Map(translations.map((t) => [t.postId, t]));
+  const translations = postIds.length
+    ? await prisma.postTranslation.findMany({
+        where: { postId: { in: postIds }, locale },
+        select: { postId: true, title: true, excerpt: true, slug: true },
+      })
+    : [];
+  const translationMap = new Map(translations.map((translation) => [translation.postId, translation]));
 
   const mappedPosts = posts.map((post) => {
-    const translation = translationsMap.get(post.id);
+    const translation = translationMap.get(post.id);
     return {
       ...post,
       title: translation?.title || post.title,
@@ -124,31 +149,15 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
   const hasMore = posts.length === take;
   const nextCursor = hasMore ? posts[posts.length - 1].id : null;
 
-  const authors = await prisma.user.findMany({
-    where: {
-      posts: {
-        some: {
-          status: 'PUBLISHED',
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      company: { select: { name: true } },
-    },
-    orderBy: { name: 'asc' },
-  });
-
   const authorOptions: AuthorOption[] = [];
-  const seenAuthorIds = new Set<string>();
-  for (const authorRecord of authors) {
-    if (!authorRecord.id || seenAuthorIds.has(authorRecord.id)) continue;
-    const label = authorRecord.name || authorRecord.company?.name;
-    if (!label) continue;
-    authorOptions.push({ id: authorRecord.id, name: label });
-    seenAuthorIds.add(authorRecord.id);
+  const seen = new Set<string>();
+  for (const record of authorRecords) {
+    if (!record.authorId || !record.author?.name || seen.has(record.authorId)) continue;
+    authorOptions.push({ id: record.authorId, name: record.author.name });
+    seen.add(record.authorId);
   }
+
+  authorOptions.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
   return {
     posts: mappedPosts,
