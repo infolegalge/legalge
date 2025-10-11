@@ -67,32 +67,13 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
   const cursor = rawSearchParams?.cursor;
   const take = 20;
 
-  const [authorRecords, categoryGroups, posts] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      distinct: ['authorId'],
-      select: {
-        authorId: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-            company: { select: { name: true } },
-          },
-        },
-      },
-    }),
-    prisma.postCategory.groupBy({
-      by: ['categoryId'],
-      where: {
-        post: where,
-      },
-      _count: { categoryId: true },
-      orderBy: {
-        _count: { categoryId: 'desc' },
-      },
-      take: 12,
-    }),
+  const categoryFilterWhere = { ...where };
+  delete categoryFilterWhere.categories;
+
+  const authorFilterWhere = { ...where };
+  delete authorFilterWhere.authorId;
+
+  const [posts, categoriesRaw, authorsRaw] = await Promise.all([
     prisma.post.findMany({
       where,
       include: {
@@ -104,7 +85,7 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
             company: { select: { id: true, name: true, slug: true } },
           },
         },
-        categories: { include: { category: { select: { id: true, name: true, slug: true } } } },
+        categories: { include: { category: { select: { id: true, name: true, slug: true, type: true } } } },
         tags: { select: { tag: true } },
       },
       orderBy: { publishedAt: 'desc' },
@@ -116,16 +97,27 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
           }
         : {}),
     }),
+    prisma.category.findMany({
+      where: {
+        posts: {
+          some: {
+            post: categoryFilterWhere,
+          },
+        },
+      },
+      select: { id: true, name: true, slug: true, type: true },
+      orderBy: { name: 'asc' },
+    }),
+    prisma.user.findMany({
+      where: {
+        posts: {
+          some: authorFilterWhere,
+        },
+      },
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    }),
   ]);
-
-  const categoryIds = categoryGroups.map((group) => group.categoryId);
-  const categories = categoryIds.length
-    ? await prisma.category.findMany({
-        where: { id: { in: categoryIds } },
-        select: { id: true, name: true, slug: true, type: true },
-        orderBy: { name: 'asc' },
-      })
-    : [];
 
   const postIds = posts.map((post) => post.id);
   const translations = postIds.length
@@ -149,22 +141,18 @@ export async function fetchNewsData(locale: Locale, rawSearchParams: Record<stri
   const hasMore = posts.length === take;
   const nextCursor = hasMore ? posts[posts.length - 1].id : null;
 
-  const authorOptions: AuthorOption[] = [];
-  const seen = new Set<string>();
-  for (const record of authorRecords) {
-    if (!record.authorId || !record.author?.name || seen.has(record.authorId)) continue;
-    authorOptions.push({ id: record.authorId, name: record.author.name });
-    seen.add(record.authorId);
-  }
+  const categories = categoriesRaw.map((category) => ({
+    ...category,
+    type: (category.type ?? 'GLOBAL') as 'GLOBAL' | 'COMPANY',
+  }));
 
-  authorOptions.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
+  const authorOptions: AuthorOption[] = authorsRaw
+    .filter((author) => author.id && author.name)
+    .map((author) => ({ id: author.id, name: author.name! }));
 
   return {
     posts: mappedPosts,
-    categories: categories.map((category) => ({
-      ...category,
-      type: (category.type ?? 'GLOBAL') as 'GLOBAL' | 'COMPANY',
-    })),
+    categories,
     authorOptions,
     hasMore,
     nextCursor,
