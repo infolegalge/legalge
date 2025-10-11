@@ -12,17 +12,24 @@ interface Category {
   type: 'GLOBAL' | 'COMPANY';
 }
 
+interface AuthorOption {
+  id: string;
+  name: string;
+}
+
 interface NewsSidebarProps {
   categories: Category[];
   locale: string;
   searchParams: any;
+  authorOptions: AuthorOption[];
 }
 
-export default function NewsSidebar({ categories, locale, searchParams }: NewsSidebarProps) {
+export default function NewsSidebar({ categories, locale, searchParams, authorOptions }: NewsSidebarProps) {
   const router = useRouter();
   const searchParamsHook = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.search || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.category || '');
+  const [selectedAuthor, setSelectedAuthor] = useState(searchParams.authorId || '');
   const [dateFrom, setDateFrom] = useState(searchParams.dateFrom || '');
   const [dateTo, setDateTo] = useState(searchParams.dateTo || '');
 
@@ -32,6 +39,7 @@ export default function NewsSidebar({ categories, locale, searchParams }: NewsSi
     
     if (searchQuery) params.set('search', searchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedAuthor) params.set('authorId', selectedAuthor);
     if (dateFrom) params.set('dateFrom', dateFrom);
     if (dateTo) params.set('dateTo', dateTo);
     
@@ -41,12 +49,13 @@ export default function NewsSidebar({ categories, locale, searchParams }: NewsSi
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('');
+    setSelectedAuthor('');
     setDateFrom('');
     setDateTo('');
     router.push(`/${locale}/news`);
   };
 
-  const hasActiveFilters = searchQuery || selectedCategory || dateFrom || dateTo;
+  const hasActiveFilters = searchQuery || selectedCategory || selectedAuthor || dateFrom || dateTo;
 
   return (
     <div className="space-y-6">
@@ -101,6 +110,27 @@ export default function NewsSidebar({ categories, locale, searchParams }: NewsSi
               {categories.map((category) => (
                 <option key={category.id} value={category.slug}>
                   {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Author Filter */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              {locale === 'ka' ? 'ავტორი' : locale === 'ru' ? 'Автор' : 'Author'}
+            </label>
+            <select
+              value={selectedAuthor}
+              onChange={(e) => setSelectedAuthor(e.target.value)}
+              className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
+            >
+              <option value="">
+                {locale === 'ka' ? 'ყველა ავტორი' : locale === 'ru' ? 'Все авторы' : 'All Authors'}
+              </option>
+              {authorOptions.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.name}
                 </option>
               ))}
             </select>

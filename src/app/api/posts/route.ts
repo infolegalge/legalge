@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const statusParam = searchParams.get('status');
     const category = searchParams.get('category');
     const author = searchParams.get('author');
+    const authorId = searchParams.get('authorId');
     const company = searchParams.get('company');
     const companySlugParam = searchParams.get('companySlug');
     const search = searchParams.get('search');
@@ -43,6 +44,10 @@ export async function GET(request: NextRequest) {
       where.company = {
         slug: author
       };
+    }
+
+    if (authorId) {
+      where.authorId = authorId;
     }
 
     // Add company filter

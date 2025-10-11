@@ -8,6 +8,7 @@ import NewsSidebar from './NewsSidebar';
 import type { Metadata } from 'next';
 import { createLocaleRouteMetadata } from '@/lib/metadata';
 import { buildBreadcrumbLd } from '@/lib/structuredData';
+import { fetchNewsData } from './data';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -45,115 +46,18 @@ interface NewsPageProps {
   searchParams: Promise<{
     category?: string;
     author?: string;
+    authorId?: string;
     company?: string;
     search?: string;
     cursor?: string;
   }>;
 }
 
-async function getNewsData(locale: Locale, searchParams: any) {
-  const { category, author, company, search, cursor } = searchParams;
-  
-  // Build where clause
-  const where: any = {
-    status: 'PUBLISHED',
-  };
-
-  // Category filter
-  if (category) {
-    where.categories = { some: { category: { slug: category } } };
-  }
-
-  // Add author filter
-  if (author) {
-    where.company = {
-      slug: author
-    };
-  }
-
-  // Add company filter
-  if (company) {
-    where.company = {
-      slug: company
-    };
-  }
-
-  // Add search filter
-  if (search) {
-    where.OR = [
-      { title: { contains: search } },
-      { excerpt: { contains: search } },
-      { content: { contains: search } }
-    ];
-  }
-
-  // Get posts with pagination
-  const posts = await prisma.post.findMany({
-    where,
-    include: {
-      categories: { include: { category: { select: { id: true, name: true, slug: true } } } },
-      tags: { select: { tag: true } },
-      author: { select: { id: true, name: true, company: { select: { id: true, name: true, slug: true } } } }
-    },
-    orderBy: {
-      publishedAt: 'desc'
-    },
-    take: 20,
-    skip: cursor ? 1 : 0,
-    ...(cursor && {
-      cursor: {
-        id: cursor
-      }
-    })
-  });
-
-  // Get top 4 categories by post count for the sidebar block
-  const categoriesAgg = await prisma.postCategory.groupBy({
-    by: ['categoryId'],
-    _count: { categoryId: true },
-    orderBy: { _count: { categoryId: 'desc' } },
-    take: 4,
-  });
-  const categoryIds = categoriesAgg.map(c => c.categoryId);
-  const categories = await prisma.category.findMany({
-    where: { id: { in: categoryIds } },
-    select: { id: true, name: true, slug: true, type: true },
-  });
-
-  // Fetch translations for these posts for requested locale and map
-  const postIds = posts.map((p) => p.id);
-  let translations: any[] = [];
-  try {
-    const client: any = prisma as any;
-    if (postIds.length && client.postTranslation && typeof client.postTranslation.findMany === 'function') {
-      translations = await client.postTranslation.findMany({
-        where: { postId: { in: postIds }, locale },
-        select: { postId: true, title: true, excerpt: true },
-      });
-    }
-  } catch {}
-  const tByPostId = new Map<string, any>(translations.map((t: any) => [t.postId, t]));
-  const mappedPosts = posts.map((p: any) => {
-    const t = tByPostId.get(p.id);
-    return t ? { ...p, title: t.title || p.title, excerpt: t.excerpt || p.excerpt } : p;
-  });
-
-  return {
-    posts: mappedPosts,
-    categories: categories.map((category) => ({
-      ...category,
-      type: (category.type ?? 'GLOBAL') as 'GLOBAL' | 'COMPANY',
-    })),
-    hasMore: posts.length === 20,
-    nextCursor: posts.length === 20 ? posts[posts.length - 1].id : null
-  };
-}
-
 export default async function NewsPage({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
   
-  const { posts, categories, hasMore, nextCursor } = await getNewsData(locale, resolvedSearchParams);
+  const { posts, categories, authorOptions, hasMore, nextCursor } = await fetchNewsData(locale, resolvedSearchParams);
 
   const breadcrumbLd = buildBreadcrumbLd([
     { name: 'Home', url: 'https://www.legal.ge' },
@@ -218,6 +122,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
                 categories={categories}
                 locale={locale}
                 searchParams={resolvedSearchParams}
+                authorOptions={authorOptions}
               />
             </Suspense>
           </div>
