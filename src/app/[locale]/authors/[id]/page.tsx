@@ -1,6 +1,7 @@
 import type { Locale } from '@/i18n/locales';
 import { fetchNewsData } from '../../news/data';
 import NewsFeed from '../../news/NewsFeed';
+import NewsSidebar from '../../news/NewsSidebar';
 import { notFound } from 'next/navigation';
 import { buildBreadcrumbLd } from '@/lib/structuredData';
 import Link from 'next/link';
@@ -76,16 +77,33 @@ export default async function AuthorPostsPage({ params, searchParams }: AuthorPo
             <span>/</span>
             <span className="text-foreground">{author.name ?? 'Author'}</span>
           </nav>
-          <h1 className="text-3xl font-bold text-foreground">{author.name ?? 'Author'}</h1>
-          <p className="mt-2 text-muted-foreground">All posts written by {author.name ?? 'this author'}.</p>
+          <h1 className="text-3xl font-bold text-foreground">
+            {author.name ?? 'Author'}
+          </h1>
+          <p className="mt-2 text-muted-foreground">
+            All posts written by {author.name ?? 'this author'}.
+          </p>
         </div>
-        <NewsFeed
-          initialPosts={posts}
-          hasMore={hasMore}
-          nextCursor={nextCursor}
-          locale={locale}
-          searchParams={{ ...resolvedSearchParams, authorId: id }}
-        />
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          <div className="lg:col-span-3">
+            <NewsFeed
+              initialPosts={posts}
+              hasMore={hasMore}
+              nextCursor={nextCursor}
+              locale={locale}
+              searchParams={{ ...resolvedSearchParams, authorId: id }}
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <NewsSidebar
+              categories={categories}
+              locale={locale}
+              searchParams={{ ...resolvedSearchParams, authorId: id }}
+              authorOptions={authorOptions}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
