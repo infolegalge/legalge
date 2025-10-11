@@ -13,6 +13,10 @@ const VALID_EXTS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 const EXCLUDED_SINGLETONS = new Set(['_app', '_document', '_error']);
 const EXCLUDED_DIRS = ['api', 'admin'];
 const EXCLUDED_FILES = new Set(['favicon.ico']);
+const EXCLUDED_LOC_PATTERNS: RegExp[] = [
+  /\/admin(\/|$)/,
+  /\/subscriber\/settings(?:$|\/)/,
+];
 
 function isDirectory(filePath: string) {
   try {
@@ -198,7 +202,9 @@ function writeSitemap(content: string) {
 }
 
 function main() {
-  const pages = collectRoutes();
+  const pages = collectRoutes().filter(({ loc }) => {
+    return !EXCLUDED_LOC_PATTERNS.some((pattern) => pattern.test(new URL(loc).pathname));
+  });
   const xml = buildXml(pages);
   writeSitemap(xml);
   console.log(`[sitemap] Generated ${pages.length} entries at ${OUTPUT_FILE}`);
