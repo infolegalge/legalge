@@ -129,10 +129,17 @@ export default function NewsFeed({
   };
 
   const getAuthorDisplay = (post: Post) => {
-    const display: { authorName?: string; companyName?: string } = {};
-    if (post.author?.name) display.authorName = post.author.name;
-    if (post.author?.company?.name) display.companyName = post.author.company.name;
-    return display.authorName || display.companyName ? display : null;
+    const authorName = post.author?.name ?? post.author?.company?.name ?? null;
+    if (!authorName) return null;
+
+    const isCompanyAuthor = Boolean(!post.author?.name && post.author?.company?.slug);
+
+    return {
+      authorName,
+      authorId: post.author?.id ?? null,
+      companySlug: post.author?.company?.slug ?? null,
+      isCompanyAuthor,
+    };
   };
 
   if (loading && posts.length === 0) {
@@ -217,33 +224,31 @@ export default function NewsFeed({
                 const authorInfo = getAuthorDisplay(post);
                 if (!authorInfo) return null;
 
+                const Icon = authorInfo.isCompanyAuthor ? Building2 : User;
+                const href = authorInfo.isCompanyAuthor && authorInfo.companySlug
+                  ? `/${locale}/companies/${authorInfo.companySlug}/posts`
+                  : authorInfo.authorId
+                  ? `/${locale}/authors/${authorInfo.authorId}`
+                  : null;
+
+                if (!href) {
+                  return (
+                    <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                      <Icon className="h-3.5 w-3.5" />
+                      <span>{authorInfo.authorName}</span>
+                    </div>
+                  );
+                }
+
                 return (
                   <div className="text-xs text-muted-foreground mb-2">
-                    <div className="flex items-center gap-2">
-                      {authorInfo.authorName && post.author?.id && (
-                        <Link
-                          href={`/${locale}/authors/${post.author.id}`}
-                          className="inline-flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400"
-                        >
-                          <User className="h-3.5 w-3.5" />
-                          <span>{authorInfo.authorName}</span>
-                        </Link>
-                      )}
-
-                      {authorInfo.authorName && authorInfo.companyName && (
-                        <span className="text-muted-foreground">·</span>
-                      )}
-
-                      {authorInfo.companyName && post.author?.company?.slug && (
-                        <Link
-                          href={`/${locale}/companies/${post.author.company.slug}/posts`}
-                          className="inline-flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400"
-                        >
-                          <Building2 className="h-3.5 w-3.5" />
-                          <span>{authorInfo.companyName}</span>
-                        </Link>
-                      )}
-                    </div>
+                    <Link
+                      href={href}
+                      className="inline-flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                      <span>{authorInfo.authorName}</span>
+                    </Link>
                   </div>
                 );
               })()}
