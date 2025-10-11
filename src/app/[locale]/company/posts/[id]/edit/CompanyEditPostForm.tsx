@@ -265,7 +265,7 @@ export default function CompanyEditPostForm({ locale, post, translations = [] }:
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/company/categories?includeGlobal=true&postId=' + encodeURIComponent(post.id), { credentials: 'include' });
+        const res = await fetch('/api/company/categories?postId=' + encodeURIComponent(post.id), { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setCategories(data.categories || []);

@@ -307,6 +307,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
+    let sanitizedCategoryIds: string[] = [];
+    if (Array.isArray(categoryIds) && categoryIds.length) {
+      const dbCategories = await prisma.category.findMany({
+        where: { id: { in: categoryIds } },
+        select: { id: true, type: true, companyId: true },
+      });
+
+      if (dbCategories.length !== categoryIds.length) {
+        return NextResponse.json({ error: 'One or more categories are invalid.' }, { status: 400 });
+      }
+
+      for (const category of dbCategories) {
+        if (category.type === 'GLOBAL') {
+          sanitizedCategoryIds.push(category.id);
+          continue;
+        }
+
+        if (category.type === 'COMPANY') {
+          if (!finalCompanyId || category.companyId !== finalCompanyId) {
+            return NextResponse.json({ error: 'You cannot use categories that belong to another company.' }, { status: 403 });
+          }
+          sanitizedCategoryIds.push(category.id);
+          continue;
+        }
+
+        return NextResponse.json({ error: 'Unsupported category type.' }, { status: 400 });
+      }
+    }
+
     // Ensure slug uniqueness per locale
     let finalSlug = slug;
     try {
@@ -376,8 +405,8 @@ export async function POST(request: NextRequest) {
         ...(finalCompanyId
           ? { company: { connect: { id: finalCompanyId } } }
           : {}),
-        ...(Array.isArray(categoryIds) && categoryIds.length
-          ? { categories: { create: categoryIds.map((cid: string) => ({ categoryId: cid })) } }
+        ...(sanitizedCategoryIds.length
+          ? { categories: { create: sanitizedCategoryIds.map((cid: string) => ({ categoryId: cid })) } }
           : {}),
         ...(Array.isArray(translations) && translations.length
           ? {

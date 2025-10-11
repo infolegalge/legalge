@@ -69,7 +69,7 @@ export default function NewPostForm({ locale }: NewPostFormProps) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/admin/categories');
+        const res = await fetch('/api/specialist/categories', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setAllCategories(data.categories || []);

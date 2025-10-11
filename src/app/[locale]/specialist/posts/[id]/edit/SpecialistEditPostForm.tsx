@@ -67,7 +67,7 @@ export default function SpecialistEditPostForm({ locale, post }: SpecialistEditP
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/admin/categories');
+        const res = await fetch('/api/specialist/categories', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setCategories(data.categories || []);

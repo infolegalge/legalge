@@ -77,7 +77,7 @@ export default function CompanyNewPostForm({ locale }: CompanyNewPostFormProps) 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/company/categories?includeGlobal=true', { credentials: 'include' });
+        const res = await fetch('/api/company/categories', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setCategories(data.categories || []);

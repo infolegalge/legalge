@@ -95,7 +95,19 @@ export async function PATCH(
     // Check if post exists and user has permission
     const existingPost = await prisma.post.findUnique({
       where: { id },
-      select: { id: true, title: true, authorId: true, companyId: true, status: true, coverImageAlt: true },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        body: true,
+        excerpt: true,
+        coverImage: true,
+        coverImageAlt: true,
+        status: true,
+        authorId: true,
+        companyId: true,
+        locale: true,
+      },
     });
 
     if (!existingPost) {
@@ -114,7 +126,9 @@ export async function PATCH(
       where: { id: (session.user as any).id },
       select: { companyId: true },
     });
-    
+
+    let effectiveCompanyId = existingPost.companyId ?? user?.companyId ?? null;
+
     // Check if user's company matches post's company
     const isSameCompany = user?.companyId && existingPost.companyId && user.companyId === existingPost.companyId;
     
@@ -177,6 +191,42 @@ export async function PATCH(
       updateData.slug = finalSlug;
     }
 
+    let finalCompanyId: string | null = null;
+
+    if (Array.isArray(categoryIds)) {
+      if (!finalCompanyId && existingPost.companyId) {
+        finalCompanyId = existingPost.companyId;
+      }
+
+      if (!finalCompanyId && user?.companyId) {
+        finalCompanyId = user.companyId;
+      }
+
+      const dbCategories = await prisma.category.findMany({
+        where: { id: { in: categoryIds } },
+        select: { id: true, type: true, companyId: true },
+      });
+
+      if (dbCategories.length !== categoryIds.length) {
+        return NextResponse.json({ error: 'One or more categories are invalid.' }, { status: 400 });
+      }
+
+      for (const category of dbCategories) {
+        if (category.type === 'GLOBAL') {
+          continue;
+        }
+
+        if (category.type === 'COMPANY') {
+          if (!finalCompanyId || category.companyId !== finalCompanyId) {
+            return NextResponse.json({ error: 'You cannot use categories that belong to another company.' }, { status: 403 });
+          }
+          continue;
+        }
+
+        return NextResponse.json({ error: 'Unsupported category type.' }, { status: 400 });
+      }
+    }
+
     const post = await prisma.post.update({
       where: { id },
       data: {
@@ -184,7 +234,6 @@ export async function PATCH(
         ...(Array.isArray(categoryIds)
           ? {
               categories: {
-                // reset and set new
                 deleteMany: {},
                 create: categoryIds.map((cid) => ({ categoryId: cid })),
               },
